@@ -1,0 +1,11 @@
+name = "ai-affiliate-builder"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# KV Namespace binding
+[[kv_namespaces]]
+binding = "AFFILIATE_SITES"
+id = "will-be-created"
+
+# Secret pour Groq API (à configurer avec wrangler secret put)
+# wrangler secret put GROQ_API_KEY
