@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription réussie - AffiliationPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #2B0F3A 50%, #0B1F3A 100%); color: white; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    
+    .container { max-width: 500px; width: 100%; text-align: center; }
+    
+    .success-icon { font-size: 5rem; margin-bottom: 20px; }
+    h1 { font-size: 2rem; margin-bottom: 15px; }
+    p { color: #a5b4fc; margin-bottom: 30px; line-height: 1.6; }
+    
+    .card { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; border: 1px solid rgba(16,185,129,0.3); margin-bottom: 20px; }
+    
+    .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #a5b4fc; }
+    .info-value { font-weight: 600; }
+    
+    .btn { display: inline-block; padding: 14px 30px; border: none; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: 600; text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="success-icon">🎉</div>
+    <h1>Inscription réussie!</h1>
+    <p>Votre compte AffiliationPro a été créé avec succès. Vous pouvez maintenant accéder à votre tableau de bord.</p>
+    
+    <div class="card">
+      <div class="info-row">
+        <span class="info-label">Slug</span>
+        <span class="info-value" id="slugValue">-</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">URL de connexion</span>
+        <span class="info-value" id="loginUrl">-</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">URL publique</span>
+        <span class="info-value" id="publicUrl">-</span>
+      </div>
+    </div>
+    
+    <a href="#" id="dashboardLink" class="btn btn-primary">📊 Accéder au tableau de bord</a>
+  </div>
+  
+  <script>
+    const slug = localStorage.getItem('saas_slug') || 'monbusiness';
+    const baseUrl = 'https://www.publicationcashflow.com';
+    
+    document.getElementById('slugValue').textContent = slug;
+    document.getElementById('loginUrl').textContent = baseUrl + '/saas/' + slug + '/admin';
+    document.getElementById('publicUrl').textContent = baseUrl + '/saas/' + slug + '/join';
+    document.getElementById('dashboardLink').href = '/saas/' + slug + '/admin';
+  </script>
+</body>
+</html>

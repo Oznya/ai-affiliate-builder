@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  password      String?
+  
+  // Subscription
+  plan          String   @default("free") // free, starter, pro, enterprise
+  stripeCustomerId String?
+  stripeSubscriptionId String?
+  subscriptionStatus String? // active, canceled, past_due
+  subscriptionEndsAt DateTime?
+  
+  // Limits based on plan
+  sitesLimit    Int      @default(3)
+  sitesCreated  Int      @default(0)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  sites         AffiliateSite[]
+}
+
+model AffiliateSite {
+  id          String   @id @default(cuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name        String
+  slug        String   @unique
+  productName String
+  productUrl  String
+  affiliateUrl String
+  niche       String?
+  
+  // Generated content
+  headline       String?
+  subheadline    String?
+  description    String?
+  features       String?  // JSON array of features
+  benefits       String?  // JSON array of benefits
+  pros           String?  // JSON array of pros
+  cons           String?  // JSON array of cons
+  faq            String?  // JSON array of Q&A
+  callToAction   String?
+  imageUrl       String?
+  customImageUrl String?  // User uploaded custom image
+  
+  // Template & styling
+  template      String   @default("modern") // modern, classic, minimal, dark
+  primaryColor  String   @default("#6366f1") // Blue-violet default
+  accentColor   String   @default("#a855f7")
+  
+  // Stats
+  views         Int      @default(0)
+  clicks        Int      @default(0)
+  
+  // Publishing
+  isPublished   Boolean  @default(true)
+  customDomain  String?
+  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  pages        AffiliatePage[]
+}
+
+model AffiliatePage {
+  id          String   @id @default(cuid())
+  siteId      String
+  site        AffiliateSite @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  
+  title       String
+  slug        String
+  content     String?  // HTML content
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([siteId, slug])
+}
+
+model SubscriptionPlan {
+  id          String   @id @default(cuid())
+  name        String   @unique // free, starter, pro, enterprise
+  displayName String
+  price       Float
+  priceYearly Float?
+  currency    String   @default("EUR")
+  
+  // Features
+  sitesLimit     Int
+  customDomains  Boolean @default(false)
+  analytics      Boolean @default(false)
+  removeBranding Boolean @default(false)
+  templates      String  @default("modern") // comma-separated template names
+  priority       Int     @default(0)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

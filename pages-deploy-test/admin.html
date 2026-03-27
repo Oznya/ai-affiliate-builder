@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Publication Facebook</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A, #1a1a2e); color: white; padding: 20px; }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 { text-align: center; margin-bottom: 10px; font-size: 1.8rem; }
+    .subtitle { text-align: center; opacity: 0.7; margin-bottom: 30px; }
+    .card { background: rgba(255,255,255,0.08); border-radius: 16px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+    .card h2 { margin-bottom: 15px; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+    .card h2::before { content: ''; width: 4px; height: 20px; background: linear-gradient(135deg, #1877f2, #166fe5); border-radius: 2px; }
+    button { padding: 14px 24px; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600; transition: all 0.2s; width: 100%; margin: 8px 0; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: linear-gradient(135deg, #1877f2, #166fe5); color: white; }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(24,119,242,0.4); }
+    .btn-success { background: linear-gradient(135deg, #4CAF50, #43A047); color: white; }
+    .btn-success:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(76,175,80,0.4); }
+    .btn-warning { background: linear-gradient(135deg, #ff9800, #f57c00); color: white; }
+    .btn-warning:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(255,152,0,0.4); }
+    .info { background: rgba(24,119,242,0.15); padding: 15px; border-radius: 10px; margin: 10px 0; font-size: 14px; border-left: 3px solid #1877f2; }
+    .success { background: rgba(76,175,80,0.15); border-left-color: #4CAF50; }
+    .error { background: rgba(244,67,54,0.15); border-left-color: #f44336; }
+    .warning { background: rgba(255,152,0,0.15); border-left-color: #ff9800; }
+    #status { margin-top: 15px; }
+    #connected-list { margin: 10px 0; }
+    .site-item { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin: 10px 0; display: flex; justify-content: space-between; align-items: center; }
+    .site-item .left { display: flex; align-items: center; gap: 12px; }
+    .site-item .fb-icon { width: 40px; height: 40px; background: #1877f2; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .site-item .name { font-weight: 600; }
+    .site-item .date { opacity: 0.5; font-size: 12px; margin-top: 3px; }
+    .site-item .status-badge { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .status-active { background: rgba(76,175,80,0.2); color: #4CAF50; }
+    .status-inactive { background: rgba(255,152,0,0.2); color: #ff9800; }
+    .btn-row { display: flex; gap: 10px; }
+    .btn-row button { flex: 1; }
+    .result-box { background: rgba(0,0,0,0.2); border-radius: 10px; padding: 15px; margin-top: 10px; max-height: 300px; overflow-y: auto; }
+    .result-item { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px; }
+    .result-item:last-child { border-bottom: none; }
+    .result-item.success { color: #4CAF50; }
+    .result-item.error { color: #f44336; }
+    .result-item.skipped { color: #ff9800; }
+    .back-link { display: inline-block; margin-bottom: 20px; color: #a5b4fc; text-decoration: none; }
+    .back-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">← Retour au générateur</a>
+    
+    <h1>📊 Tableau de bord</h1>
+    <p class="subtitle">Gestion de la publication Facebook</p>
+
+    <div class="card">
+      <h2>Pages Facebook connectées</h2>
+      <div id="connected-list">
+        <div class="info">Chargement...</div>
+      </div>
+      <a href="/" style="text-decoration: none;"><button class="btn-primary">+ Connecter une nouvelle Page</button></a>
+    </div>
+
+    <div class="card">
+      <h2>Publication manuelle</h2>
+      <p style="opacity: 0.7; margin-bottom: 15px; font-size: 14px;">Publiez immédiatement sur toutes les pages connectées.</p>
+      <div class="btn-row">
+        <button class="btn-success" id="publishBtn" onclick="publishAll()">🚀 Publier maintenant</button>
+        <button class="btn-warning" id="testBtn" onclick="testGenerate()">🧪 Tester l'IA</button>
+      </div>
+      <div id="status"></div>
+    </div>
+  </div>
+
+  <script>
+    async function loadConnected() {
+      const list = document.getElementById('connected-list');
+      
+      try {
+        const r = await fetch('/api/fb-status');
+        const data = await r.json();
+
+        if (!data.connected || !data.sites || data.sites.length === 0) {
+          list.innerHTML = '<div class="info warning">Aucune Page connectée. Connectez votre Page Facebook depuis le générateur.</div>';
+          return;
+        }
+
+        let html = '';
+        for (const site of data.sites) {
+          const today = new Date().toISOString().split('T')[0];
+          const lastPost = site.lastPostDate || null;
+          const isToday = lastPost === today;
+          
+          html += `
+            <div class="site-item">
+              <div class="left">
+                <div class="fb-icon">f</div>
+                <div>
+                  <div class="name">${site.pageName}</div>
+                  <div class="date">Connectée le ${new Date(site.connectedAt).toLocaleDateString('fr-FR')}</div>
+                </div>
+              </div>
+              <span class="status-badge ${isToday ? 'status-active' : 'status-inactive'}">
+                ${isToday ? 'Publié aujourd\'hui' : 'En attente'}
+              </span>
+            </div>
+          `;
+        }
+        list.innerHTML = html;
+
+      } catch (e) {
+        list.innerHTML = '<div class="info error">Erreur: ' + e.message + '</div>';
+      }
+    }
+
+    async function testGenerate() {
+      const status = document.getElementById('status');
+      const btn = document.getElementById('testBtn');
+      
+      btn.disabled = true;
+      status.innerHTML = '<div class="info">Génération en cours...</div>';
+
+      try {
+        const r = await fetch('/api/test-generate?product=Mon%20Produit');
+        const result = await r.json();
+
+        status.innerHTML = `
+          <div class="info success">
+            <strong>Contenu généré par l'IA :</strong><br><br>
+            "${result.message}"
+          </div>
+        `;
+
+      } catch (e) {
+        status.innerHTML = '<div class="info error">Erreur: ' + e.message + '</div>';
+      }
+
+      btn.disabled = false;
+    }
+
+    loadConnected();
+  </script>
+</body>
+</html>

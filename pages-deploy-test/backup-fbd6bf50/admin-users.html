@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Utilisateurs - PublicationCashflow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #2B0F3A 50%, #0B1F3A 100%); color: white; padding: 20px; }
+    
+    .container { max-width: 1000px; margin: 0 auto; }
+    
+    .nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(139, 92, 246, 0.2); }
+    .nav h1 { font-size: 1.5rem; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links { display: flex; gap: 15px; }
+    .nav-links a { color: #a5b4fc; text-decoration: none; font-size: 14px; }
+    .nav-links a:hover { color: white; }
+    
+    .card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(139, 92, 246, 0.2); }
+    .card h2 { margin-bottom: 20px; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+    
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .stat-box { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; text-align: center; }
+    .stat-number { font-size: 2rem; font-weight: 700; color: #a855f7; }
+    .stat-label { font-size: 12px; color: #a5b4fc; margin-top: 5px; }
+    
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    th { color: #a5b4fc; font-weight: 500; font-size: 13px; text-transform: uppercase; }
+    td { font-size: 14px; }
+    tr:hover { background: rgba(255,255,255,0.03); }
+    
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-admin { background: rgba(168,85,247,0.3); color: #f0abfc; }
+    .badge-user { background: rgba(99,102,241,0.3); color: #a5b4fc; }
+    
+    .password-cell { font-family: monospace; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 5px; font-size: 12px; cursor: pointer; }
+    .password-cell:hover { background: rgba(168,85,247,0.2); }
+    
+    .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, #6366f1, #a855f7); color: white; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(99,102,241,0.4); }
+    .btn-danger { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+    .btn-danger:hover { background: rgba(239,68,68,0.3); }
+    
+    .test-section { background: rgba(76,175,80,0.1); border: 1px solid rgba(76,175,80,0.3); border-radius: 12px; padding: 20px; margin-top: 20px; }
+    .test-section h3 { color: #4ade80; margin-bottom: 15px; }
+    
+    .form-row { display: flex; gap: 10px; margin-bottom: 10px; }
+    .form-row input { flex: 1; padding: 10px 15px; border: 1px solid rgba(139,92,246,0.3); border-radius: 8px; background: rgba(0,0,0,0.3); color: white; font-size: 14px; }
+    .form-row input::placeholder { color: #6b7280; }
+    .form-row input:focus { outline: none; border-color: #a855f7; }
+    
+    .info { background: rgba(99,102,241,0.1); border-left: 3px solid #6366f1; padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0; font-size: 14px; color: #c4b5fd; }
+    .success { background: rgba(76,175,80,0.1); border-left-color: #4ade80; color: #a7f3d0; }
+    .error { background: rgba(239,68,68,0.1); border-left-color: #f87171; color: #fca5a5; }
+    
+    .webhook-url { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 10px; font-family: monospace; font-size: 13px; word-break: break-all; color: #a5b4fc; }
+    
+    .empty { text-align: center; padding: 40px; color: #6b7280; }
+    .empty-icon { font-size: 3rem; margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav">
+      <h1>👥 Gestion des Clients</h1>
+      <div class="nav-links">
+        <a href="/admin-affiliates">Affiliés</a>
+        <a href="/home">← Retour</a>
+      </div>
+    </div>
+    
+    <div class="stats" id="stats">
+      <div class="stat-box">
+        <div class="stat-number" id="totalUsers">-</div>
+        <div class="stat-label">Total utilisateurs</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="newToday">-</div>
+        <div class="stat-label">Nouveaux aujourd'hui</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="adminCount">-</div>
+        <div class="stat-label">Admins</div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2>➕ Créer un compte client</h2>
+      <p style="color: #a5b4fc; margin-bottom: 15px; font-size: 14px;">
+        👉 Utilise ceci si un client n'a pas reçu ses identifiants par email.
+      </p>
+      <div class="form-row">
+        <input type="email" id="clientEmail" placeholder="📧 Email du client (ex: client@gmail.com)">
+        <input type="text" id="clientName" placeholder="👤 Prénom du client">
+      </div>
+      <button class="btn btn-primary" onclick="createClientAccount()">🚀 CRÉER LE COMPTE</button>
+      <p style="color: #6b7280; font-size: 12px; margin-top: 10px;">
+        ⚡ Le client recevra automatiquement un email avec ses identifiants de connexion.
+      </p>
+      <div id="createResult"></div>
+    </div>
+    
+    <div class="card">
+      <h2>📋 Liste des clients</h2>
+      <p style="color: #a5b4fc; margin-bottom: 15px; font-size: 14px;">
+        👉 Clique sur un mot de passe pour le copier et l'envoyer au client.
+      </p>
+      <div id="usersList">
+        <div class="empty">
+          <div class="empty-icon">⏳</div>
+          <p>Chargement...</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h2>🔗 Webhook Systeme.io</h2>
+      <p style="color: #a5b4fc; margin-bottom: 15px; font-size: 14px;">
+        Configure ce webhook dans Systeme.io pour créer automatiquement les comptes :
+      </p>
+      <div class="webhook-url">
+        POST https://www.publicationcashflow.com/api/webhook/purchase?secret=a83dbea14b2ee7105afcc3181c979cf04e2b7de85fe81bd6869177e1894c5349
+      </div>
+      <div class="info" style="margin-top: 15px;">
+        💡 <strong>Comment configurer :</strong><br>
+        1. Va dans Systeme.io → Paramètres → Webhooks<br>
+        2. Ajoute un nouveau webhook<br>
+        3. URL : celle ci-dessus<br>
+        4. Événement : "Nouvelle vente" ou "Nouveau contact"
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadUsers() {
+      try {
+        const res = await fetch('/api/admin/users');
+        const data = await res.json();
+        
+        if (!data.success) {
+          document.getElementById('usersList').innerHTML = '<div class="info error">Erreur: ' + data.error + '</div>';
+          return;
+        }
+        
+        const users = data.users || {};
+        const entries = Object.entries(users);
+        
+        document.getElementById('totalUsers').textContent = entries.length;
+        
+        const today = new Date().toISOString().split('T')[0];
+        const newTodayCount = entries.filter(([_, u]) => u.createdAt && u.createdAt.startsWith(today)).length;
+        document.getElementById('newToday').textContent = newTodayCount;
+        
+        const adminCount = entries.filter(([_, u]) => u.role === 'admin').length;
+        document.getElementById('adminCount').textContent = adminCount;
+        
+        if (entries.length === 0) {
+          document.getElementById('usersList').innerHTML = '<div class="empty"><div class="empty-icon">📭</div><p>Aucun client pour le moment</p><p style="font-size: 12px; margin-top: 10px;">Les clients apparaîtront ici automatiquement après un achat.</p></div>';
+          return;
+        }
+        
+        let html = '<table><thead><tr><th>📧 Email</th><th>👤 Nom</th><th>🔑 Mot de passe</th><th>📅 Créé le</th><th>❌</th></tr></thead><tbody>';
+        
+        for (const [email, user] of entries) {
+          const createdAt = user.createdAt ? new Date(user.createdAt).toLocaleDateString('fr-FR') : '-';
+          html += '<tr><td>' + email + '</td><td>' + (user.name || '-') + '</td><td><span class="password-cell" onclick="copyPassword(\'' + user.password + '\')" title="Cliquer pour copier">📋 Copier</span></td><td>' + createdAt + '</td><td><button class="btn btn-danger" onclick="deleteUser(\'' + email + '\')">🗑️</button></td></tr>';
+        }
+        
+        html += '</tbody></table>';
+        document.getElementById('usersList').innerHTML = html;
+        
+      } catch (e) {
+        document.getElementById('usersList').innerHTML = '<div class="info error">Erreur: ' + e.message + '</div>';
+      }
+    }
+    
+    async function createClientAccount() {
+      const email = document.getElementById('clientEmail').value.trim();
+      const name = document.getElementById('clientName').value.trim();
+      const resultDiv = document.getElementById('createResult');
+      
+      if (!email) {
+        resultDiv.innerHTML = '<div class="info error">❌ Email requis</div>';
+        return;
+      }
+      
+      resultDiv.innerHTML = '<div class="info">⏳ Création du compte et envoi de l\'email...</div>';
+      
+      try {
+        const res = await fetch('/api/webhook/purchase?secret=a83dbea14b2ee7105afcc3181c979cf04e2b7de85fe81bd6869177e1894c5349', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contact: { email: email, firstName: name },
+            product_name: 'PublicationCashflow'
+          })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          resultDiv.innerHTML = '<div class="info success">✅ COMPTE CRÉÉ !<br><br>📧 Email: ' + data.email + '<br>🔑 Mot de passe: <code style="background: rgba(168,85,247,0.3); padding: 3px 8px; border-radius: 5px;">' + data.password + '</code><br><br>' + (data.emailSent ? '✉️ Email envoyé au client !' : '⚠️ Email non envoyé - donne le mot de passe manuellement') + '</div>';
+          document.getElementById('clientEmail').value = '';
+          document.getElementById('clientName').value = '';
+          loadUsers();
+        } else {
+          resultDiv.innerHTML = '<div class="info error">❌ ' + (data.error || data.message) + '</div>';
+        }
+      } catch (e) {
+        resultDiv.innerHTML = '<div class="info error">❌ Erreur: ' + e.message + '</div>';
+      }
+    }
+    
+    function copyPassword(password) {
+      navigator.clipboard.writeText(password);
+      alert('Mot de passe copié !');
+    }
+    
+    async function deleteUser(email) {
+      if (!confirm('Supprimer le compte ' + email + ' ?')) return;
+      
+      try {
+        const res = await fetch('/api/admin/users/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          loadUsers();
+        } else {
+          alert('Erreur: ' + data.error);
+        }
+      } catch (e) {
+        alert('Erreur: ' + e.message);
+      }
+    }
+    
+    loadUsers();
+  </script>
+</body>
+</html>

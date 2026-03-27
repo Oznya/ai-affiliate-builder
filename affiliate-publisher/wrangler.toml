@@ -1,0 +1,16 @@
+name = "affiliate-publisher"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Bindings KV
+[[kv_namespaces]]
+binding = "AFFILIATE_SITES"
+id = "d12c4c59c9124f3e8e2bc8f6c2e5fb12"
+
+# Variables d'environnement
+[vars]
+GROQ_API_KEY = "YOUR_GROQ_API_KEY"
+
+# Cron Trigger - 8h00 Paris = 7h00 UTC (après changement d'heure)
+[triggers]
+crons = ["0 7 * * *"]

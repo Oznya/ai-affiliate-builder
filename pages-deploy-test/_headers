@@ -1,0 +1,51 @@
+# Headers pour Cloudflare Pages
+# Cache désactivé pour toutes les pages HTML
+
+/*
+  X-Frame-Options: ALLOWALL
+  Content-Security-Policy: frame-ancestors 'self' https://systeme.io https://*.systeme.io https://publication-web.com https://*.publication-web.com;
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# Pages admin - jamais en cache
+/admin-saas
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/admin-saas.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/admin-users
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/admin-users.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/admin-affiliates
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/admin-affiliates.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/home
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/login
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/calendar
+  X-Frame-Options: ALLOWALL
+  Content-Security-Policy: frame-ancestors 'self' https://systeme.io https://*.systeme.io;
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/publication
+  X-Frame-Options: ALLOWALL
+  Content-Security-Policy: frame-ancestors 'self' https://systeme.io https://*.systeme.io;
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/affiliation
+  X-Frame-Options: ALLOWALL
+  Content-Security-Policy: frame-ancestors 'self' https://systeme.io https://*.systeme.io;
+  Cache-Control: no-cache, no-store, must-revalidate
+
+# SAAS pages
+/saas/*
+  Cache-Control: no-cache, no-store, must-revalidate

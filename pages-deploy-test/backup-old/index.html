@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publication-Web - Votre site d'affiliation en 60 secondes avec l'IA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, #0B1F3A 0%, #1a1a2e 50%, #2B0F3A 100%);
+      color: white;
+      min-height: 100vh;
+    }
+    
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(11, 31, 58, 0.95);
+      backdrop-filter: blur(15px);
+      z-index: 100;
+      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    }
+    
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    
+    .nav-logo img {
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    }
+    
+    .nav-logo-text {
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6366f1, #a855f7, #c4b5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    
+    .nav-links a {
+      color: #a5b4fc;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    
+    .nav-links a:hover {
+      color: white;
+    }
+    
+    /* Bouton Connexion */
+    .btn-login {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+    
+    /* Boutons Réseaux Sociaux avec Glow */
+    .social-buttons {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    
+    .social-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      position: relative;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .social-btn::before {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--glow-color-1), var(--glow-color-2));
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.3s ease;
+      filter: blur(8px);
+    }
+    
+    .social-btn:hover::before {
+      opacity: 0.7;
+    }
+    
+    .social-btn:hover {
+      transform: translateY(-3px) scale(1.1);
+      background: linear-gradient(135deg, var(--glow-color-1), var(--glow-color-2));
+      border-color: transparent;
+    }
+    
+    .social-btn.web { --glow-color-1: #6366f1; --glow-color-2: #a855f7; color: #c4b5fd; }
+    .social-btn.web:hover { color: white; }
+    .social-btn.facebook { --glow-color-1: #1877f2; --glow-color-2: #4267B2; color: #a5b4fc; }
+    .social-btn.facebook:hover { color: white; }
+    .social-btn.instagram { --glow-color-1: #E1306C; --glow-color-2: #F77737; color: #f9a8d4; }
+    .social-btn.instagram:hover { color: white; }
+    .social-btn.tiktok { --glow-color-1: #00f2ea; --glow-color-2: #ff0050; color: #a5b4fc; }
+    .social-btn.tiktok:hover { color: white; }
+    
+    .social-btn svg { width: 20px; height: 20px; fill: currentColor; }
+    
+    /* === HERO SECTION PRINCIPALE === */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 100px 20px 60px;
+    }
+    
+    .hero-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+      align-items: center;
+    }
+    
+    .hero-content {
+      text-align: left;
+    }
+    
+    .hero-badge {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3));
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-size: 14px;
+      color: #c4b5fd;
+      margin-bottom: 25px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(168, 85, 247, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(168, 85, 247, 0.5); }
+    }
+    
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 25px;
+      line-height: 1.2;
+    }
+    
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, #6366f1, #a855f7, #c4b5fd);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .hero h1 .white {
+      color: white;
+    }
+    
+    .hero-tagline {
+      font-size: 1.3rem;
+      color: #e0e7ff;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+    
+    .hero-tagline strong {
+      color: #a855f7;
+    }
+    
+    .hero-advantages {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 35px;
+    }
+    
+    .advantage-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(76, 175, 80, 0.15);
+      border: 1px solid rgba(76, 175, 80, 0.3);
+      padding: 10px 18px;
+      border-radius: 50px;
+      font-size: 14px;
+      color: #4ade80;
+    }
+    
+    .hero-cta {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .btn {
+      padding: 16px 35px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: white;
+      box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 50px rgba(99, 102, 241, 0.5);
+    }
+    
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .hero-image {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .hero-image img {
+      max-width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 25px 80px rgba(139, 92, 246, 0.3);
+      border: 2px solid rgba(139, 92, 246, 0.3);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    
+    .hero-image img:hover {
+      transform: scale(1.03) translateY(-5px);
+      box-shadow: 0 35px 100px rgba(139, 92, 246, 0.45);
+    }
+    
+    /* === SECTION PERSONNELLE "JE TE PARLE" === */
+    .personal-section {
+      padding: 100px 20px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(0,0,0,0.2) 100%);
+    }
+    
+    .personal-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    
+    .personal-content h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #c4b5fd;
+      font-style: italic;
+      text-align: center;
+    }
+    
+    /* Layout alterné texte + image */
+    .content-block {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      margin: 40px 0;
+    }
+    
+    .content-block.reverse {
+      flex-direction: row-reverse;
+    }
+    
+    .content-block .text-side {
+      flex: 1;
+    }
+    
+    .content-block .image-side {
+      flex: 0 0 350px;
+    }
+    
+    .content-block .image-side img {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 25px 60px rgba(139, 92, 246, 0.35);
+      border: 3px solid rgba(139, 92, 246, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .content-block .image-side img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 30px 80px rgba(139, 92, 246, 0.45);
+    }
+    
+    .personal-content .intro {
+      font-size: 1.1rem;
+      color: #e0e7ff;
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+    
+    .personal-content .highlight-box {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 16px;
+      padding: 25px;
+      margin: 25px 0;
+    }
+    
+    .personal-content .highlight-box p {
+      color: #e0e7ff;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+    
+    .personal-content .highlight-box strong {
+      color: #c4b5fd;
+    }
+    
+    .personal-content .pain-points {
+      margin: 25px 0;
+      padding: 20px;
+      background: rgba(244, 67, 54, 0.1);
+      border-left: 4px solid #f44336;
+      border-radius: 0 12px 12px 0;
+    }
+    
+    .personal-content .pain-points p {
+      color: #fca5a5;
+      font-size: 1rem;
+      line-height: 1.7;
+      font-style: italic;
+    }
+    
+    .personal-content .steps {
+      margin: 30px 0;
+    }
+    
+    .personal-content .steps h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: #4ade80;
+    }
+    
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s;
+    }
+    
+    .step-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(139, 92, 246, 0.3);
+    }
+    
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    
+    .step-text {
+      font-size: 1.1rem;
+      color: #e0e7ff;
+      line-height: 1.5;
+      padding-top: 8px;
+    }
+    
+    .step-text strong {
+      color: #c4b5fd;
+    }
+    
+    .personal-content .ai-features {
+      margin: 30px 0;
+    }
+    
+    .ai-feature-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .ai-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 15px;
+      background: rgba(139, 92, 246, 0.1);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      color: #c4b5fd;
+    }
+    
+    .ai-feature .emoji {
+      font-size: 1.2rem;
+    }
+    
+    .personal-content .real-life {
+      margin: 30px 0;
+      padding: 25px;
+      background: rgba(76, 175, 80, 0.1);
+      border-radius: 16px;
+      border: 1px solid rgba(76, 175, 80, 0.2);
+    }
+    
+    .personal-content .real-life h4 {
+      color: #4ade80;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    
+    .personal-content .real-life ul {
+      list-style: none;
+    }
+    
+    .personal-content .real-life li {
+      padding: 8px 0;
+      color: #a7f3d0;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .personal-content .cta-box {
+      margin-top: 30px;
+      padding: 30px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+      border-radius: 16px;
+      border: 2px solid rgba(168, 85, 247, 0.4);
+      text-align: center;
+    }
+    
+    .personal-content .cta-box p {
+      font-size: 1.15rem;
+      color: #e0e7ff;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    
+    .personal-content .cta-box strong {
+      color: #c4b5fd;
+    }
+    
+    .personal-image {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .personal-image-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+    
+    .personal-image-grid .main-image {
+      width: 100%;
+      border-radius: 20px;
+      box-shadow: 0 25px 60px rgba(139, 92, 246, 0.35);
+      border: 3px solid rgba(139, 92, 246, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .personal-image-grid .main-image:hover {
+      transform: scale(1.02);
+      box-shadow: 0 30px 80px rgba(139, 92, 246, 0.45);
+    }
+    
+    .personal-image-grid .side-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+    
+    .personal-image-grid .side-image {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 15px 40px rgba(139, 92, 246, 0.25);
+      border: 2px solid rgba(139, 92, 246, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .personal-image-grid .side-image:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 20px 50px rgba(139, 92, 246, 0.35);
+    }
+    
+    .personal-image img {
+      max-width: 100%;
+      border-radius: 24px;
+      box-shadow: 0 30px 100px rgba(139, 92, 246, 0.3);
+      border: 3px solid rgba(139, 92, 246, 0.3);
+    }
+    
+    /* Features Section */
+    .features {
+      padding: 80px 20px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Ambassador Section */
+    .ambassador-section {
+      padding: 100px 20px;
+      background: linear-gradient(180deg, 
+        rgba(168, 85, 247, 0.1) 0%, 
+        rgba(139, 92, 246, 0.15) 50%, 
+        rgba(168, 85, 247, 0.1) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .ambassador-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    
+    .ambassador-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .ambassador-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(236, 72, 153, 0.3));
+      border: 1px solid rgba(168, 85, 247, 0.5);
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-size: 14px;
+      color: #f0abfc;
+      margin: 0 auto 25px;
+      display: flex;
+      justify-content: center;
+      animation: pulse-glow 2s ease-in-out infinite;
+    }
+    
+    .ambassador-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 15px;
+      line-height: 1.3;
+    }
+    
+    .ambassador-subtitle {
+      text-align: center;
+      color: #c4b5fd;
+      font-size: 1.15rem;
+      margin-bottom: 50px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+    
+    .ambassador-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 25px;
+      margin-bottom: 50px;
+    }
+    
+    .ambassador-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 20px;
+      padding: 35px 25px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .ambassador-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(168, 85, 247, 0.4);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px rgba(168, 85, 247, 0.2);
+    }
+    
+    .ambassador-icon {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+    
+    .ambassador-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: white;
+    }
+    
+    .ambassador-card p {
+      color: #a5b4fc;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+    
+    .ambassador-explanation {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+      padding: 35px;
+      margin-bottom: 40px;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
+    
+    .explanation-content h4 {
+      font-size: 1.2rem;
+      margin-bottom: 25px;
+      color: #f0abfc;
+      text-align: center;
+    }
+    
+    .explanation-steps {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .exp-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      flex: 1;
+      min-width: 250px;
+    }
+    
+    .exp-number {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    
+    .exp-text {
+      color: #e0e7ff;
+      font-size: 1rem;
+      line-height: 1.6;
+      padding-top: 8px;
+    }
+    
+    .ambassador-values {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .ambassador-values p {
+      font-size: 1.2rem;
+      color: #c4b5fd;
+      line-height: 1.8;
+    }
+    
+    .ambassador-values em {
+      font-style: italic;
+    }
+    
+    .ambassador-values strong {
+      color: #f0abfc;
+    }
+    
+    .ambassador-cta {
+      text-align: center;
+    }
+    
+    .ambassador-cta p {
+      color: #a5b4fc;
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+    }
+    
+    @media (max-width: 900px) {
+      .ambassador-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .ambassador-title {
+        font-size: 1.7rem;
+      }
+      
+      .explanation-steps {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .exp-step {
+        max-width: 350px;
+      }
+    }
+    
+    /* Comparison Table */
+    .comparison-section {
+      padding: 80px 20px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(139, 92, 246, 0.05) 100%);
+    }
+    
+    .comparison-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .comparison-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    
+    .comparison-subtitle {
+      text-align: center;
+      color: #a5b4fc;
+      margin-bottom: 40px;
+      font-size: 1.1rem;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.15);
+    }
+    
+    .comparison-table th {
+      padding: 20px 25px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    }
+    
+    .comparison-table th:first-child {
+      background: rgba(0, 0, 0, 0.3);
+      width: 35%;
+    }
+    
+    .comparison-table th:nth-child(2) {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+      text-align: center;
+      border-left: 1px solid rgba(139, 92, 246, 0.2);
+    }
+    
+    .comparison-table th:nth-child(3) {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3));
+      color: white;
+      text-align: center;
+      border-left: 1px solid rgba(139, 92, 246, 0.2);
+    }
+    
+    .comparison-table td {
+      padding: 18px 25px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .comparison-table td:first-child {
+      color: #c4b5fd;
+      font-weight: 500;
+    }
+    
+    .comparison-table td:nth-child(2) {
+      text-align: center;
+      border-left: 1px solid rgba(139, 92, 246, 0.1);
+      background: rgba(239, 68, 68, 0.03);
+    }
+    
+    .comparison-table td:nth-child(3) {
+      text-align: center;
+      border-left: 1px solid rgba(139, 92, 246, 0.1);
+      background: rgba(99, 102, 241, 0.05);
+    }
+    
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .comparison-table .check {
+      color: #4ade80;
+      font-size: 1.3rem;
+    }
+    
+    .comparison-table .cross {
+      color: #f87171;
+      font-size: 1.3rem;
+    }
+    
+    .comparison-table .highlight {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+      border-radius: 8px;
+      padding: 5px 12px;
+      display: inline-block;
+    }
+    
+    .comparison-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #a855f7, #6366f1);
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+      text-transform: uppercase;
+    }
+    
+    .comparison-footer {
+      text-align: center;
+      margin-top: 30px;
+    }
+    
+    .comparison-footer p {
+      color: #a5b4fc;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    
+    @media (max-width: 600px) {
+      .comparison-table th,
+      .comparison-table td {
+        padding: 12px 10px;
+        font-size: 13px;
+      }
+      
+      .comparison-title {
+        font-size: 1.5rem;
+      }
+    }
+    
+    .section-title {
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    
+    .section-subtitle {
+      text-align: center;
+      color: #a5b4fc;
+      margin-bottom: 50px;
+      font-size: 1.1rem;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .feature-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 20px;
+      padding: 35px;
+      transition: all 0.3s;
+    }
+    
+    .feature-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(139, 92, 246, 0.4);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+    }
+    
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .feature-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      color: white;
+    }
+    
+    .feature-card p {
+      color: #a5b4fc;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    
+    /* Testimonials */
+    .testimonials {
+      padding: 80px 20px;
+    }
+    
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .testimonial-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s;
+    }
+    
+    .testimonial-card:hover {
+      border-color: rgba(139, 92, 246, 0.3);
+      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);
+    }
+    
+    .testimonial-stars {
+      color: #fbbf24;
+      margin-bottom: 15px;
+    }
+    
+    .testimonial-text {
+      color: #e0e7ff;
+      line-height: 1.7;
+      margin-bottom: 15px;
+      font-style: italic;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+    
+    .testimonial-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+    
+    .testimonial-role {
+      font-size: 12px;
+      color: #a5b4fc;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+      padding: 100px 20px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+    }
+    
+    .cta-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 60px;
+    }
+    
+    .cta-content {
+      flex: 1;
+      text-align: left;
+    }
+    
+    .cta-content h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    
+    .cta-content p {
+      color: #a5b4fc;
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      max-width: 500px;
+    }
+    
+    .cta-image {
+      flex: 0 0 400px;
+    }
+    
+    .cta-image img {
+      width: 100%;
+      border-radius: 24px;
+      box-shadow: 
+        0 0 40px rgba(139, 92, 246, 0.4),
+        0 0 80px rgba(99, 102, 241, 0.2),
+        0 30px 60px rgba(0, 0, 0, 0.3);
+      border: 3px solid rgba(139, 92, 246, 0.4);
+      transition: all 0.4s ease;
+    }
+    
+    .cta-image img:hover {
+      transform: scale(1.03) translateY(-5px);
+      box-shadow: 
+        0 0 50px rgba(139, 92, 246, 0.5),
+        0 0 100px rgba(99, 102, 241, 0.3),
+        0 40px 80px rgba(0, 0, 0, 0.4);
+    }
+    
+    /* Partner Slider */
+    .slider-logos {
+      --animation-duration: 25s;
+      background: linear-gradient(90deg, #1a1a2e, #2B0F3A, #1a1a2e);
+      padding: 30px 0;
+      overflow: hidden;
+      position: relative;
+      white-space: nowrap;
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+      margin: 60px 0;
+    }
+    
+    .slider-title {
+      text-align: center;
+      color: #c4b5fd;
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    
+    .slider-logos .logo-track {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scroll-logo var(--animation-duration) linear infinite;
+    }
+    
+    .slider-logos .logo-track img {
+      height: 45px;
+      margin: 0 25px;
+      transition: transform 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+      filter: brightness(0) invert(1) drop-shadow(0 0 5px rgba(168, 85, 247, 0.4));
+      opacity: 0.7;
+      vertical-align: middle;
+    }
+    
+    .slider-logos .logo-track img:hover {
+      transform: scale(1.15);
+      filter: brightness(1.1) invert(1) drop-shadow(0 0 15px #a855f7);
+      opacity: 1;
+    }
+    
+    @keyframes scroll-logo {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    
+    /* Footer */
+    .footer {
+      padding: 40px 20px;
+      text-align: center;
+      border-top: 1px solid rgba(139, 92, 246, 0.2);
+    }
+    
+    .footer-social {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .footer-links a {
+      color: #a5b4fc;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    
+    .footer-links a:hover {
+      color: #c4b5fd;
+    }
+    
+    .footer-copy {
+      color: #6b7280;
+      font-size: 14px;
+    }
+    
+    @media (max-width: 900px) {
+      .hero-container,
+      .personal-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      
+      .hero-content,
+      .personal-content {
+        text-align: center;
+        order: 2;
+      }
+      
+      .hero-image,
+      .personal-image {
+        order: 1;
+      }
+      
+      .hero h1 { font-size: 1.9rem; }
+      .hero-tagline { font-size: 1.05rem; }
+      .hero-advantages { justify-content: center; }
+      .hero-cta { justify-content: center; }
+      
+      .personal-content h2 { font-size: 1.6rem; }
+      .ai-feature-list { grid-template-columns: 1fr; }
+      .step-item { justify-content: center; }
+      
+      .content-block,
+      .content-block.reverse {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .content-block .image-side {
+        flex: 0 0 auto;
+        max-width: 350px;
+        margin: 0 auto;
+      }
+      
+      .cta-container {
+        flex-direction: column-reverse;
+        text-align: center;
+      }
+      
+      .cta-content {
+        text-align: center;
+      }
+      
+      .cta-content h2 { font-size: 1.8rem; }
+      
+      .cta-image {
+        flex: 0 0 auto;
+        max-width: 350px;
+        margin: 0 auto;
+      }
+      
+      .nav-links a:not(.btn-login):not(.social-buttons a) {
+        display: none;
+      }
+      
+      .btn-login {
+        padding: 8px 16px;
+        font-size: 13px;
+      }
+      
+      .social-buttons { gap: 8px; }
+      .social-btn { width: 36px; height: 36px; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="https://www.publication-web.com" target="_blank" class="nav-logo">
+      <img src="/publication-cashflow.png" alt="Publication-Cashflow" style="height: 45px; width: auto; border-radius: 8px;">
+    </a>
+    <div class="nav-links">
+      <a href="#personal">Mon Histoire</a>
+      <a href="#ambassador">Ambassadeur</a>
+      <a href="#features">Avantages</a>
+      <a href="#testimonials">Témoignages</a>
+      
+      <a href="/login" class="btn-login">
+        🔐 Connexion
+      </a>
+      
+      <div class="social-buttons">
+        <a href="https://www.publication-web.com" target="_blank" class="social-btn web" title="Site Web">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </a>
+        <a href="https://www.facebook.com/PublicationWeb" target="_blank" class="social-btn facebook" title="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://www.instagram.com/publication.web/" target="_blank" class="social-btn instagram" title="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@publicationweb" target="_blank" class="social-btn tiktok" title="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span>🤖</span> Propulsé par l'Intelligence Artificielle
+        </div>
+        
+        <h1>
+          <span class="gradient">L'IA crée votre site d'affiliation en 60 secondes.</span><br>
+          <span class="white">Puis elle publie automatiquement du contenu 24h/24 et 7j/7...</span>
+        </h1>
+        
+        <p class="hero-tagline">
+          Gagnez du temps et de l'argent grâce à notre <strong>IA</strong> qui travaille pour vous en permanence.
+        </p>
+        
+        <div class="hero-advantages">
+          <div class="advantage-item">
+            <span>✅</span>
+            <span>Aucune compétence technique requise</span>
+          </div>
+          <div class="advantage-item">
+            <span>✅</span>
+            <span>Aucune expérience requise</span>
+          </div>
+          <div class="advantage-item">
+            <span>✅</span>
+            <span>Aucune publicité</span>
+          </div>
+        </div>
+        
+        <div class="hero-cta">
+          <a href="https://www.publication-web.com/affiliation/paiement" target="_blank" class="btn btn-primary">
+            <span>🚀</span> Commencer maintenant
+          </a>
+          <a href="#personal" class="btn btn-secondary">
+            <span>✨</span> Mon histoire
+          </a>
+        </div>
+      </div>
+      
+      <div class="hero-image">
+        <img src="/pagevente-hero.png" alt="Site d'affiliation créé en 60 secondes par l'IA">
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Personnelle "Je te parle" -->
+  <section class="personal-section" id="personal">
+    <div class="personal-container">
+      <div class="personal-content">
+        <h2>"Tu penses que c'est trop compliqué pour toi ?"</h2>
+        
+        <!-- Bloc 1: Introduction + Image 1 -->
+        <div class="content-block">
+          <div class="text-side">
+            <p class="intro">
+              Si tu pars de zéro… <br>
+              <em>sans compétence… sans expérience… sans savoir par où commencer…</em>
+            </p>
+            
+            <p class="intro">
+              Alors ce que tu vas lire va vraiment te <strong>soulager</strong>.
+            </p>
+            
+            <div class="highlight-box">
+              <p>
+                Parce que j'ai créé cette application <strong>pour ça</strong>.<br>
+                Pas pour les experts.<br>
+                Pas pour les "déjà avancés".<br><br>
+                👉 <strong>Pour celles et ceux qui se sentent bloqués devant tout ce qui est technique.</strong>
+              </p>
+            </div>
+          </div>
+          <div class="image-side">
+            <img src="/section-personnelle.png" alt="Publication-Web - Solution simple pour entrepreneurs">
+          </div>
+        </div>
+        
+        <!-- Bloc 2: Pain points + Image 2 (inversé) -->
+        <div class="content-block reverse">
+          <div class="text-side">
+            <div class="pain-points">
+              <p>
+                Je sais exactement ce que ça fait. Être devant son écran… voir les autres dire "c'est simple"… et toi… ne rien comprendre à la technique, aux sites, au contenu, au trafic. Avoir cette sensation de tourner en rond.
+              </p>
+            </div>
+            
+            <p class="intro">
+              Alors j'ai fait l'inverse de tout ça.<br>
+              J'ai créé quelque chose de <strong>ridiculement simple</strong>.<br>
+              Aussi facile que <strong>1 - 2 - 3</strong>
+            </p>
+          </div>
+          <div class="image-side">
+            <img src="/personal-image-1.png" alt="Générez du contenu automatiquement">
+          </div>
+        </div>
+        
+        <!-- Bloc 3: Steps + AI Features + Image 3 -->
+        <div class="content-block">
+          <div class="text-side">
+            <div class="steps">
+              <div class="step-list">
+                <div class="step-item">
+                  <div class="step-number">1</div>
+                  <div class="step-text">Tu prends un <strong>lien</strong>.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-number">2</div>
+                  <div class="step-text">Tu le <strong>colles</strong>.</div>
+                </div>
+                <div class="step-item">
+                  <div class="step-number">3</div>
+                  <div class="step-text">Tu <strong>cliques</strong>.</div>
+                </div>
+              </div>
+            </div>
+            
+            <p class="intro" style="font-size: 1.3rem; margin-top: 25px;">
+              Et… c'est tout. ✨ <strong style="color: #a855f7;">L'IA fait le reste.</strong>
+            </p>
+          </div>
+          <div class="image-side">
+            <img src="/personal-image-2.png" alt="Laissez l'IA travailler pour vous">
+          </div>
+        </div>
+        
+        <!-- Section AI Features (pleine largeur) -->
+        <div class="ai-features">
+          <div class="ai-feature-list">
+            <div class="ai-feature"><span class="emoji">⚡</span> Elle crée ton site d'affiliation</div>
+            <div class="ai-feature"><span class="emoji">📝</span> Elle rédige ton contenu</div>
+            <div class="ai-feature"><span class="emoji">📅</span> Elle publie automatiquement</div>
+            <div class="ai-feature"><span class="emoji">🌙</span> Jour et nuit, sans pause</div>
+            <div class="ai-feature"><span class="emoji">🎯</span> Elle attire du trafic sans pub</div>
+            <div class="ai-feature"><span class="emoji">💰</span> Elle génère des ventes naturellement</div>
+          </div>
+        </div>
+        
+        <!-- Real Life + CTA -->
+        <div class="real-life">
+          <h4>🛋️ Pendant que toi…</h4>
+          <ul>
+            <li>✓ tu es en consultation</li>
+            <li>✓ tu t'amuses avec ta famille</li>
+            <li>✓ tu continues ta vie</li>
+            <li>✓ <strong>et même quand tu dors !</strong></li>
+          </ul>
+        </div>
+        
+        <p class="intro" style="text-align: center;">
+          L'IA travaille pour toi <strong style="color: #a855f7;">24h/24 et 7j/7</strong><br><br>
+          Et tu regardes les premières commissions apparaître… tout en voyant ton agenda se remplir naturellement.
+        </p>
+        
+        <div class="cta-box">
+          <p>
+            Tu n'as pas besoin d'être "prêt(e)".<br>
+            Tu n'as pas besoin de comprendre.<br>
+            Tu n'as pas besoin d'apprendre.<br><br>
+            👉 <strong>Si tu sais copier-coller et cliquer… tu as déjà tout ce qu'il faut pour réussir!</strong>
+          </p>
+          <a href="https://www.publication-web.com/affiliation/paiement" target="_blank" class="btn btn-primary" style="margin-top: 20px;">
+            🚀 Commencer maintenant
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programme Ambassadeur Section -->
+  <section class="ambassador-section" id="ambassador">
+    <div class="ambassador-container">
+      <div class="ambassador-badge">
+        <span>💜</span> Nouveau : Programme Ambassadeur
+      </div>
+      
+      <h2 class="ambassador-title">
+        Partagez ce qui vous a transformée...<br>
+        <span style="background: linear-gradient(135deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">et continuez de recevoir en retour</span>
+      </h2>
+      
+      <p class="ambassador-subtitle">
+        Parce que quand on a trouvé quelque chose qui fonctionne vraiment, c'est naturel d'en faire profiter les personnes qui nous font confiance.
+      </p>
+      
+      <div class="ambassador-grid">
+        <div class="ambassador-card">
+          <div class="ambassador-icon">💝</div>
+          <h3>Partagez en toute sincérité</h3>
+          <p>Vous avez vécu la transformation. Maintenant, aidez d'autres coachs, thérapeutes et entrepreneurs à vivre la même chose. Simple. Authentique. Aligné.</p>
+        </div>
+        
+        <div class="ambassador-card">
+          <div class="ambassador-icon">🤝</div>
+          <h3>Formez votre équipe</h3>
+          <p>Accompagnez ceux qui vous font confiance. Partagez vos conseils, votre expérience. Créez une communauté qui grandit ensemble, dans l'entraide mutuelle.</p>
+        </div>
+        
+        <div class="ambassador-card">
+          <div class="ambassador-icon">💰</div>
+          <h3>Rémunération juste</h3>
+          <p>Votre partage est valorisé : <strong style="color:#4ade80;">25%</strong> sur vos recommandations directes. Et quand ceux que vous accompagnez en recommandent d'autres à leur tour ? Vous continuez à percevoir <strong style="color:#f0abfc;">10%</strong>, puis <strong style="color:#f9a8d4;">5%</strong>. Naturellement.</p>
+        </div>
+      </div>
+      
+      <div class="ambassador-explanation">
+        <div class="explanation-content">
+          <h4>✨ Comment ça fonctionne simplement :</h4>
+          <div class="explanation-steps">
+            <div class="exp-step">
+              <div class="exp-number">1</div>
+              <div class="exp-text">Vous partagez votre lien unique aux personnes qui vous font confiance</div>
+            </div>
+            <div class="exp-step">
+              <div class="exp-number">2</div>
+              <div class="exp-text">Elles vous rejoignent et vous les accompagnez dans leur parcours</div>
+            </div>
+            <div class="exp-step">
+              <div class="exp-number">3</div>
+              <div class="exp-text">Quand elles génèrent des résultats, vous êtes rémunéré(e) pour votre soutien</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="ambassador-values">
+        <p>
+          <em>"C'est pas du 'niveau', c'est de la <strong>transmission</strong>.<br>
+          C'est pas du 'recrutement', c'est de l'<strong>accompagnement</strong>.<br>
+          C'est pas de la 'vente', c'est du <strong>partage</strong>."</em>
+        </p>
+      </div>
+      
+      <div class="ambassador-cta">
+        <p>Prêt(e) à construire votre équipe et être rémunéré(e) pour votre accompagnement ?</p>
+        <a href="/affiliate" class="btn btn-primary" style="font-size: 16px; padding: 16px 35px;">
+          💜 Devenir Ambassadeur
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Table Section -->
+  <section class="comparison-section" id="comparison">
+    <div class="comparison-container">
+      <h2 class="comparison-title">Pourquoi <span style="background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Publication-Cashflow</span> est le meilleur choix ?</h2>
+      <p class="comparison-subtitle">Comparez et vous comprendrez pourquoi des centaines d'entrepreneurs nous font confiance</p>
+      
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Fonctionnalité</th>
+            <th>🥉 Concurrents</th>
+            <th>💜 Publication-Cashflow</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>🌐 Nombre de sites</td>
+            <td><span class="cross">✗</span> 1 seul</td>
+            <td><span class="check">✓</span> <span class="highlight">Illimités</span></td>
+          </tr>
+          <tr>
+            <td>💰 Vos commissions</td>
+            <td><span class="cross">✗</span> Ils prennent une part</td>
+            <td><span class="check">✓</span> <span class="highlight">100% pour vous</span></td>
+          </tr>
+          <tr>
+            <td>🤖 IA automatisée</td>
+            <td><span class="cross">✗</span> Limitée</td>
+            <td><span class="check">✓</span> 24h/24 7j/7</td>
+          </tr>
+          <tr>
+            <td>📘 Publication Facebook</td>
+            <td><span class="cross">✗</span> Manuelle</td>
+            <td><span class="check">✓</span> Automatique</td>
+          </tr>
+          <tr>
+            <td>📅 Calendrier éditorial</td>
+            <td><span class="cross">✗</span> Non</td>
+            <td><span class="check">✓</span> Inclus</td>
+          </tr>
+          <tr>
+            <td>🎨 Templates design</td>
+            <td><span class="cross">✗</span> Peu de choix</td>
+            <td><span class="check">✓</span> <span class="highlight">12+ designs</span></td>
+          </tr>
+          <tr>
+            <td>⚡ Vitesse de création</td>
+            <td><span class="cross">✗</span> Long et complexe</td>
+            <td><span class="check">✓</span> <span class="highlight">60 secondes</span></td>
+          </tr>
+          <tr>
+            <td>🎯 Compétences requises</td>
+            <td><span class="cross">✗</span> Technique</td>
+            <td><span class="check">✓</span> Zéro compétence</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="comparison-footer">
+        <p>💡 Le choix est simple : libérez votre potentiel avec Publication-Cashflow</p>
+        <a href="https://www.publication-web.com/affiliation/paiement" target="_blank" class="btn btn-primary" style="font-size: 16px; padding: 16px 35px;">
+          🚀 Commencer maintenant
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features" id="features">
+    <h2 class="section-title">Pourquoi choisir Publication-Web ?</h2>
+    <p class="section-subtitle">Tout ce dont vous avez besoin pour réussir en ligne, sans effort</p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>Rapide comme l'éclair</h3>
+        <p>Notre IA génère votre contenu en quelques secondes. Plus besoin de passer des heures à rédiger vos posts.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🤖</div>
+        <h3>100% Automatisé</h3>
+        <p>L'IA rédige vos posts, choisit les meilleurs mots-clés et publie aux heures optimales. Vous n'avez rien à faire.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📘</div>
+        <h3>Intégration Facebook</h3>
+        <p>Connectez vos pages Facebook en 1 clic et publiez directement. Gérez plusieurs pages simultanément.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <h3>Designs Professionnels</h3>
+        <p>Plusieurs templates modernes et élégants pour tous les styles. Look professionnel instantané.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📅</div>
+        <h3>Calendrier Éditorial</h3>
+        <p>Planifiez vos publications à l'avance. Visualisez tout votre contenu sur un calendrier intuitif.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>Sécurisé & Fiable</h3>
+        <p>Vos données sont protégées et vos tokens Facebook ne sont jamais partagés. Infrastructure cloud fiable.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" id="testimonials">
+    <h2 class="section-title">Ce que disent nos clients</h2>
+    <p class="section-subtitle">Des entrepreneurs comme vous qui ont transformé leur présence en ligne</p>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Incroyable ! J'ai créé ma page en 30 secondes et elle était déjà publiée sur Facebook. Je recommande à 100%."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">M</div>
+          <div>
+            <div class="testimonial-name">Marie L.</div>
+            <div class="testimonial-role">Entrepreneure</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Le Community Manager IA me fait gagner des heures chaque semaine. Mes pages sont actives sans que je m'en occupe."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">P</div>
+          <div>
+            <div class="testimonial-name">Pierre D.</div>
+            <div class="testimonial-role">Marketeur</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">⭐⭐⭐⭐⭐</div>
+        <p class="testimonial-text">"Simple, efficace, et le contenu généré par l'IA est vraiment de qualité. Mes engagements ont augmenté !"</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">S</div>
+          <div>
+            <div class="testimonial-name">Sophie M.</div>
+            <div class="testimonial-role">Influenceuse</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partenaires Affiliés -->
+  <div class="slider-logos">
+    <div class="slider-title">✨ Ils font confiance à Publication-Web ✨</div>
+    <div class="logo-track">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0bc865247_660494e7a0cf5065544c0ad5_zMLmTLSpnMorH4Hc-PJ_Rr2Rcyr9kYi7uERsxycWPFk.png" alt="Partenaire">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0bafe0d4f_hostgator-logo-600x338-52-1488290815.png" alt="HostGator">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0b9a78eef_bluehost-logo-600x338-30-1488294230.png" alt="Bluehost">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0b86711b1_Capcut-Logo-PNG.png" alt="CapCut">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0b7249002_TikTok_logo.svg.png" alt="TikTok">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0b5fe1bfb_png-clipart-logo-corel-videostudio-coreldraw-corel-painter-business-blue-text.png" alt="Corel">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0aefd81fa_Zoom-Logo.png" alt="Zoom">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0ac7a1d15_logo-systeme-io-removebg-preview__1_-removebg-preview-728x195.webp" alt="Systeme.io">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0a9839e4a_Shopify_logo_2018.svg.png" alt="Shopify">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168e2531d90_Manychat.png" alt="Manychat">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168e505c668_aweber.png" alt="AWeber">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168e62604a0_Car_Trawler-removebg-preview.png" alt="CarTrawler">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168e79b1562_CyberLink-removebg-preview.png" alt="CyberLink">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168e8edc93d_InterPromo_GmbH-removebg-preview.png" alt="InterPromo">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168ea621917_My_M_M_s-removebg-preview.png" alt="M&M's">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68169282b5559_Chocolat.png" alt="Chocolat">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/6816926ce79d7_Roxio.png" alt="Roxio">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68169252e532e_Botanic.png" alt="Botanic">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/6816903c4cd08_VIV_NETworks-removebg-preview.png" alt="VIV NETworks">
+      <!-- Répéter pour boucle fluide -->
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0bc865247_660494e7a0cf5065544c0ad5_zMLmTLSpnMorH4Hc-PJ_Rr2Rcyr9kYi7uERsxycWPFk.png" alt="Partenaire">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0bafe0d4f_hostgator-logo-600x338-52-1488290815.png" alt="HostGator">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0b9a78eef_bluehost-logo-600x338-30-1488294230.png" alt="Bluehost">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0b86711b1_Capcut-Logo-PNG.png" alt="CapCut">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0b7249002_TikTok_logo.svg.png" alt="TikTok">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0b5fe1bfb_png-clipart-logo-corel-videostudio-coreldraw-corel-painter-business-blue-text.png" alt="Corel">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0aefd81fa_Zoom-Logo.png" alt="Zoom">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0ac7a1d15_logo-systeme-io-removebg-preview__1_-removebg-preview-728x195.webp" alt="Systeme.io">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/680c0a9839e4a_Shopify_logo_2018.svg.png" alt="Shopify">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168e2531d90_Manychat.png" alt="Manychat">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168e505c668_aweber.png" alt="AWeber">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168e62604a0_Car_Trawler-removebg-preview.png" alt="CarTrawler">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168e79b1562_CyberLink-removebg-preview.png" alt="CyberLink">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168e8edc93d_InterPromo_GmbH-removebg-preview.png" alt="InterPromo">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68168ea621917_My_M_M_s-removebg-preview.png" alt="M&M's">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68169282b5559_Chocolat.png" alt="Chocolat">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/6816926ce79d7_Roxio.png" alt="Roxio">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/68169252e532e_Botanic.png" alt="Botanic">
+      <img src="https://d1yei2z3i6k35z.cloudfront.net/1872133/6816903c4cd08_VIV_NETworks-removebg-preview.png" alt="VIV NETworks">
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="cta-container">
+      <div class="cta-content">
+        <h2>Prêt à automatiser votre présence en ligne ?</h2>
+        <p>Rejoignez les centaines d'entrepreneurs qui économisent des heures chaque semaine grâce à Publication-Web.</p>
+        <a href="https://www.publication-web.com/affiliation/paiement" target="_blank" class="btn btn-primary" style="font-size: 18px; padding: 18px 40px;">
+          🚀 Commencer maintenant
+        </a>
+      </div>
+      <div class="cta-image">
+        <img src="/heureuse.png" alt="Entrepreneure heureuse avec Publication-Web">
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-social">
+      <a href="https://www.publication-web.com" target="_blank" class="social-btn web" title="Site Web">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </a>
+      <a href="https://www.facebook.com/PublicationWeb" target="_blank" class="social-btn facebook" title="Facebook">
+        <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/publication.web/" target="_blank" class="social-btn instagram" title="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@publicationweb" target="_blank" class="social-btn tiktok" title="TikTok">
+        <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
+      </a>
+    </div>
+    
+    <div class="footer-links">
+      <a href="https://www.publication-web.com" target="_blank">Site Web</a>
+      <a href="/privacy">Politique de confidentialité</a>
+      <a href="/mentions">Mentions légales</a>
+    </div>
+    <p class="footer-copy">© 2024 Publication-Web. Tous droits réservés.</p>
+  </footer>
+  
+  <!-- Affiliate Tracking -->
+  <script>
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const refCode = urlParams.get('ref');
+      
+      if (refCode) {
+        // Store ref code for 30 days
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + 30);
+        document.cookie = `affiliate_ref=${refCode}; expires=${expiry.toUTCString()}; path=/`;
+        localStorage.setItem('affiliate_ref', refCode);
+        
+        // Track click
+        fetch(`/api/affiliate/track?ref=${refCode}`).catch(() => {});
+        
+        console.log('Affiliate tracked:', refCode);
+      }
+    })();
+  </script>
+</body>
+</html>

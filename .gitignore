@@ -1,0 +1,10 @@
+node_modules/
+.next/
+.env
+*.log
+db/
+.dev/
+.zscripts/
+download/
+upload/
+*.db

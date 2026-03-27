@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AffiliationPro SAAS - Créez votre programme d'affiliation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #2B0F3A 50%, #0B1F3A 100%); color: white; }
+    
+    .nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid rgba(139,92,246,0.2); }
+    .logo { font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links { display: flex; gap: 20px; align-items: center; }
+    .nav-links a { color: #a5b4fc; text-decoration: none; font-size: 14px; }
+    .nav-links a:hover { color: white; }
+    .btn { padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600; text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+    
+    .hero { text-align: center; padding: 80px 20px; max-width: 900px; margin: 0 auto; }
+    .hero h1 { font-size: 3rem; font-weight: 800; margin-bottom: 20px; line-height: 1.2; }
+    .hero h1 span { background: linear-gradient(135deg, #10b981, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 1.2rem; color: #a5b4fc; margin-bottom: 40px; }
+    
+    .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 40px; max-width: 1200px; margin: 0 auto; }
+    .plan { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 35px; border: 1px solid rgba(139,92,246,0.2); transition: all 0.3s; }
+    .plan:hover { transform: translateY(-5px); border-color: rgba(16,185,129,0.5); }
+    .plan.popular { border-color: #10b981; background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(139,92,246,0.1)); }
+    .plan-badge { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 600; display: inline-block; margin-bottom: 15px; }
+    .plan h3 { font-size: 1.3rem; margin-bottom: 10px; }
+    .plan .price { font-size: 3rem; font-weight: 800; margin-bottom: 5px; }
+    .plan .price span { font-size: 1rem; color: #6b7280; font-weight: 400; }
+    .plan ul { list-style: none; margin: 25px 0; }
+    .plan ul li { padding: 10px 0; color: #c7d2fe; display: flex; align-items: center; gap: 10px; }
+    .plan ul li::before { content: '✓'; color: #10b981; font-weight: bold; }
+    .plan button { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .plan button.primary { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+    .plan button.secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+    
+    .features { padding: 60px 40px; max-width: 1200px; margin: 0 auto; }
+    .features h2 { text-align: center; font-size: 2rem; margin-bottom: 40px; }
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+    .feature { text-align: center; padding: 30px; }
+    .feature-icon { font-size: 3rem; margin-bottom: 15px; }
+    .feature h3 { font-size: 1.1rem; margin-bottom: 10px; }
+    .feature p { color: #a5b4fc; font-size: 14px; }
+    
+    footer { text-align: center; padding: 40px; border-top: 1px solid rgba(139,92,246,0.2); color: #6b7280; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="logo">💎 AffiliationPro</div>
+    <div class="nav-links">
+      <a href="/saas/login">Connexion</a>
+      <a href="/home">← Retour au site</a>
+    </div>
+  </nav>
+  
+  <section class="hero">
+    <h1>Lancez votre programme <span>d'affiliation</span> en quelques minutes</h1>
+    <p>Une plateforme complète pour gérer vos affiliés, suivre les ventes et verser les commissions automatiquement.</p>
+  </section>
+  
+  <section class="pricing">
+    <div class="plan">
+      <h3>🥉 Starter</h3>
+      <div class="price">27$<span>/mois</span></div>
+      <ul>
+        <li>Jusqu'à 50 affiliés</li>
+        <li>Tableau de bord basique</li>
+        <li>Suivi des ventes</li>
+        <li>Email support</li>
+      </ul>
+      <button class="secondary" onclick="selectPlan('starter')">Commencer</button>
+    </div>
+    
+    <div class="plan popular">
+      <span class="plan-badge">⭐ Populaire</span>
+      <h3>🥈 Pro</h3>
+      <div class="price">47$<span>/mois</span></div>
+      <ul>
+        <li>Jusqu'à 200 affiliés</li>
+        <li>Tableau de bord avancé</li>
+        <li>Analytics détaillés</li>
+        <li>Support prioritaire</li>
+        <li>Intégration PayPal</li>
+      </ul>
+      <button class="primary" onclick="selectPlan('pro')">Commencer</button>
+    </div>
+    
+    <div class="plan">
+      <h3>🥇 Enterprise</h3>
+      <div class="price">97$<span>/mois</span></div>
+      <ul>
+        <li>Affiliés illimités</li>
+        <li>API complète</li>
+        <li>Marque blanche</li>
+        <li>Account manager</li>
+        <li>Toutes les intégrations</li>
+      </ul>
+      <button class="secondary" onclick="selectPlan('enterprise')">Commencer</button>
+    </div>
+  </section>
+  
+  <section class="features">
+    <h2>🚀 Tout ce dont vous avez besoin</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <h3>Tableau de bord intuitif</h3>
+        <p>Visualisez vos ventes, commissions et performances en temps réel.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔗</div>
+        <h3>Liens uniques</h3>
+        <p>Chaque affilié reçoit son lien de suivi personnalisé.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💰</div>
+        <h3>Paiements automatiques</h3>
+        <p>Calculez et exportez les commissions en un clic.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📈</div>
+        <h3>Rapports détaillés</h3>
+        <p>Analysez la performance de chaque affilié.</p>
+      </div>
+    </div>
+  </section>
+  
+  <footer>
+    © 2024 AffiliationPro - Publication Cashflow. Tous droits réservés.
+  </footer>
+  
+  <script>
+    function selectPlan(plan) {
+      window.location.href = '/saas/register?plan=' + plan;
+    }
+  </script>
+</body>
+</html>

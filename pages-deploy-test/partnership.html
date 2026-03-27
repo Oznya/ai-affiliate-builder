@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programme de Partenariat - Publication Cashflow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #2B0F3A 50%, #0B1F3A 100%); color: white; }
+
+    .nav { position: fixed; top: 0; left: 0; right: 0; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; background: rgba(11, 31, 58, 0.95); backdrop-filter: blur(15px); z-index: 100; border-bottom: 1px solid rgba(139, 92, 246, 0.2); }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo img { height: 45px; width: auto; border-radius: 8px; }
+    .nav-links a { color: #a5b4fc; text-decoration: none; font-size: 14px; margin-left: 20px; transition: color 0.2s; }
+    .nav-links a:hover { color: white; }
+
+    .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 100px 20px 60px; text-align: center; }
+    .hero-container { max-width: 800px; }
+
+    .badge { display: inline-block; background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.3)); border: 1px solid rgba(168, 85, 247, 0.5); padding: 10px 25px; border-radius: 50px; font-size: 14px; color: #c4b5fd; margin-bottom: 25px; }
+
+    h1 { font-size: 2.8rem; font-weight: 800; margin-bottom: 25px; line-height: 1.2; }
+    h1 span { background: linear-gradient(135deg, #6366f1, #a855f7, #c4b5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .subtitle { font-size: 1.2rem; color: #c7d2fe; margin-bottom: 40px; line-height: 1.7; }
+
+    .benefits { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin: 50px 0; }
+
+    .benefit-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 16px; padding: 30px; text-align: left; transition: all 0.3s; }
+    .benefit-card:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(139, 92, 246, 0.4); transform: translateY(-5px); }
+    .benefit-icon { font-size: 2.5rem; margin-bottom: 15px; }
+    .benefit-card h3 { font-size: 1.2rem; margin-bottom: 10px; }
+    .benefit-card p { color: #a5b4fc; font-size: 14px; line-height: 1.6; }
+
+    .btn { display: inline-flex; align-items: center; gap: 10px; padding: 16px 40px; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; border-radius: 12px; font-size: 18px; font-weight: 600; text-decoration: none; transition: all 0.3s; box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4); }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 50px rgba(99, 102, 241, 0.5); }
+
+    .section { padding: 80px 20px; }
+    .section-title { text-align: center; font-size: 2rem; margin-bottom: 15px; }
+    .section-subtitle { text-align: center; color: #a5b4fc; margin-bottom: 50px; font-size: 1.1rem; }
+
+    .steps { max-width: 600px; margin: 0 auto; }
+    .step { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 25px; background: rgba(255, 255, 255, 0.03); padding: 25px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); }
+    .step-number { width: 45px; height: 45px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; flex-shrink: 0; }
+    .step-content h4 { font-size: 1.1rem; margin-bottom: 5px; }
+    .step-content p { color: #a5b4fc; font-size: 14px; }
+
+    .footer { padding: 40px 20px; text-align: center; border-top: 1px solid rgba(139, 92, 246, 0.2); }
+    .footer p { color: #6b7280; font-size: 14px; }
+    .footer a { color: #a5b4fc; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a href="/" class="nav-logo">
+      <img src="/publication-cashflow.png" alt="Publication Cashflow">
+    </a>
+    <div class="nav-links">
+      <a href="/">Accueil</a>
+      <a href="/home">Dashboard</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-container">
+      <div class="badge">💜 Programme de Partenariat</div>
+      <h1>Rejoignez notre <span>équipe</span></h1>
+      <p class="subtitle">
+        Vous êtes thérapeute, coach ou entrepreneur dans le bien-être ?<br>
+        Aidez d'autres entrepreneurs à développer leur présence en ligne tout en générant des revenus complémentaires.
+      </p>
+      <a href="https://www.publication-web.com/affiliation/paiement" class="btn">
+        🚀 Rejoindre l'équipe
+      </a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Pourquoi nous rejoindre ?</h2>
+    <p class="section-subtitle">Des avantages concrets pour vous aider à grandir</p>
+
+    <div class="benefits">
+      <div class="benefit-card">
+        <div class="benefit-icon">💰</div>
+        <h3>Revenus complémentaires</h3>
+        <p>Gagnez des commissions sur chaque personne que vous aidez à rejoindre notre plateforme.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🤝</div>
+        <h3>Créez votre équipe</h3>
+        <p>Formez votre propre réseau et grandissez ensemble. Plus vous aidez, plus vous gagnez.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">📈</div>
+        <h3>Aucune limite</h3>
+        <p>Construisez un revenu récurrent sans plafond. Votre succès dépend de votre engagement.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">🎓</div>
+        <h3>Formation incluse</h3>
+        <p>Accédez à des ressources et formations pour vous aider à réussir dans votre partenariat.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background: rgba(0,0,0,0.2);">
+    <h2 class="section-title">Comment ça fonctionne ?</h2>
+    <p class="section-subtitle">Simple comme 1-2-3</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Inscrivez-vous gratuitement</h4>
+          <p>Remplissez le formulaire et recevez votre lien unique de partenariat.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Partagez votre lien</h4>
+          <p>Faites découvrir Publication-Web à votre communauté, vos clients, vos contacts.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Gagnez des commissions</h4>
+          <p>Recevez des commissions sur chaque inscription réalisée via votre lien.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="https://www.publication-web.com/affiliation/paiement" class="btn">
+        🚀 Commencer maintenant
+      </a>
+      <p style="margin-top: 15px; color: #6b7280; font-size: 13px;">Gratuit • Aucun engagement • Support inclus</p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2024 Publication Cashflow. Tous droits réservés.</p>
+    <p style="margin-top: 10px;"><a href="/">← Retour à l'accueil</a></p>
+  </footer>
+</body>
+</html>

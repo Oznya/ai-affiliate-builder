@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Manager IA - Publication-Web</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #1a1a2e 50%, #2B0F3A 100%); color: white; padding: 20px; }
+    
+    .container { max-width: 850px; margin: 0 auto; }
+    h1 { font-size: 1.8rem; margin-bottom: 5px; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { opacity: 0.7; margin-bottom: 30px; text-align: center; }
+    .logo { width: 60px; height: 60px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 28px; }
+    
+    .card { background: rgba(255,255,255,0.08); border-radius: 16px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+    .card h2 { margin-bottom: 20px; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+    .card h2::before { content: ''; width: 4px; height: 20px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 2px; }
+    
+    label { display: block; margin-bottom: 6px; color: #c7d2fe; font-weight: 500; font-size: 14px; }
+    input, textarea, select { width: 100%; padding: 12px; border: 1px solid rgba(99,102,241,0.3); border-radius: 10px; background: rgba(0,0,0,0.3); color: white; font-size: 15px; margin-bottom: 15px; }
+    input::placeholder, textarea::placeholder { color: #6b7280; }
+    textarea { resize: vertical; min-height: 100px; font-family: inherit; }
+    select { cursor: pointer; }
+    select option { background: #1a1a2e; }
+    
+    button { padding: 14px 24px; border: none; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600; transition: all 0.2s; width: 100%; margin: 8px 0; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: linear-gradient(135deg, #1877f2, #166fe5); color: white; }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(24,119,242,0.4); }
+    .btn-success { background: linear-gradient(135deg, #4CAF50, #43A047); color: white; }
+    .btn-success:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(76,175,80,0.4); }
+    .btn-ai { background: linear-gradient(135deg, #8b5cf6, #6366f1); color: white; }
+    .btn-ai:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(139,92,246,0.4); }
+    .btn-danger { background: linear-gradient(135deg, #f44336, #d32f2f); color: white; }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+    .btn-secondary:hover:not(:disabled) { background: rgba(255,255,255,0.15); }
+    
+    .btn-row { display: flex; gap: 10px; }
+    .btn-row button { flex: 1; }
+    
+    .info { background: rgba(99,102,241,0.15); padding: 15px; border-radius: 10px; margin: 15px 0; font-size: 14px; border-left: 3px solid #6366f1; }
+    .success { background: rgba(76,175,80,0.15); border-left-color: #4CAF50; }
+    .error { background: rgba(244,67,54,0.15); border-left-color: #f44336; }
+    .warning { background: rgba(255,152,0,0.15); border-left-color: #ff9800; }
+    .ai-tip { background: rgba(139,92,246,0.15); border-left-color: #8b5cf6; }
+    
+    .back-link { display: inline-flex; align-items: center; gap: 8px; color: #a5b4fc; text-decoration: none; margin-bottom: 20px; font-size: 14px; }
+    .back-link:hover { color: white; }
+
+    /* Page items */
+    .page-item { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; margin: 8px 0; }
+    .page-item img { width: 40px; height: 40px; border-radius: 50%; background: rgba(99,102,241,0.3); }
+    .page-item .page-info { flex: 1; }
+    .page-item .page-name { font-weight: 600; color: white; }
+    .page-item .page-category { font-size: 12px; color: #6b7280; margin-top: 2px; }
+    .page-item .remove-btn { background: rgba(244, 67, 54, 0.2); color: #fca5a5; border: 1px solid rgba(244, 67, 54, 0.3); padding: 6px 12px; font-size: 12px; width: auto; border-radius: 6px; }
+
+    /* Page selector */
+    .page-selector { max-height: 350px; overflow-y: auto; margin: 15px 0; }
+    .page-option { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.05); border: 2px solid rgba(99,102,241,0.2); border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; }
+    .page-option:hover { background: rgba(255,255,255,0.1); border-color: rgba(99,102,241,0.4); }
+    .page-option.already-added { opacity: 0.5; cursor: not-allowed; }
+    .page-option img { width: 40px; height: 40px; border-radius: 50%; background: rgba(99,102,241,0.3); }
+    .page-option .page-name { font-weight: 600; flex: 1; }
+    .page-option .status-badge { font-size: 11px; padding: 4px 8px; border-radius: 4px; }
+    .page-option .status-badge.add { background: rgba(76, 175, 80, 0.3); color: #4ade80; }
+    .page-option .status-badge.exists { background: rgba(100, 100, 100, 0.3); color: #888; }
+
+    /* SÉLECTEUR DE JOUR */
+    .day-selector { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 20px; }
+    .day-btn { 
+      padding: 15px 10px; 
+      background: rgba(255,255,255,0.05); 
+      border: 2px solid rgba(255,255,255,0.1); 
+      border-radius: 12px; 
+      cursor: pointer; 
+      text-align: center; 
+      transition: all 0.2s;
+      color: white;
+    }
+    .day-btn:hover { background: rgba(255,255,255,0.1); }
+    .day-btn.active { 
+      border-color: #a855f7; 
+      background: rgba(168,85,247,0.2); 
+      box-shadow: 0 0 20px rgba(168,85,247,0.3);
+    }
+    .day-btn.today { border-color: #4CAF50; }
+    .day-btn .day-name { font-size: 12px; font-weight: 600; }
+    .day-btn .day-count { font-size: 11px; opacity: 0.7; margin-top: 4px; }
+
+    .day-content { display: none; }
+    .day-content.active { display: block; }
+    
+    .day-header-info { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 20px; 
+      padding: 15px; 
+      background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.2)); 
+      border-radius: 12px; 
+    }
+    .day-title { font-size: 1.3rem; font-weight: 700; }
+    .day-toggle { display: flex; align-items: center; gap: 10px; }
+    .day-toggle input { width: 50px; height: 26px; margin: 0; }
+    
+    /* SLOT GRAND ET COMPLET */
+    .slot { 
+      background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.2));
+      border-radius: 16px; 
+      padding: 25px; 
+      margin: 20px 0; 
+      border-left: 5px solid #a855f7;
+      position: relative;
+    }
+    .slot.inactive { opacity: 0.5; border-left-color: #444; }
+    
+    .slot-header { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between;
+      margin-bottom: 20px; 
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .slot-time { 
+      font-size: 1.8rem; 
+      font-weight: 800; 
+      color: #a855f7; 
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .slot-time select {
+      width: auto;
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+      padding: 10px 20px;
+    }
+    .slot-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .ai-btn { 
+      background: linear-gradient(135deg, #8b5cf6, #6366f1); 
+      color: white; 
+      border: none; 
+      padding: 12px 20px; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-size: 14px;
+      width: auto;
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ai-btn:hover { transform: scale(1.05); }
+    
+    .slot-remove { 
+      background: rgba(244,67,54,0.3); 
+      color: #fca5a5; 
+      border: 1px solid rgba(244,67,54,0.5);
+      padding: 12px 20px; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-size: 14px;
+      width: auto;
+      margin: 0;
+    }
+    .slot-remove:hover { background: rgba(244,67,54,0.5); }
+    
+    .slot-row { 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 15px; 
+      margin-bottom: 15px; 
+    }
+    .slot-row.full { grid-template-columns: 1fr; }
+    .slot-field { margin-bottom: 0; }
+    .slot-field label { font-size: 13px; margin-bottom: 8px; }
+    .slot-field input, .slot-field textarea { margin-bottom: 0; }
+    
+    .slot-textarea { 
+      min-height: 120px; 
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    /* IMAGE UPLOAD */
+    .image-upload-area {
+      border: 2px dashed rgba(99,102,241,0.4);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s;
+      background: rgba(99,102,241,0.05);
+    }
+    .image-upload-area:hover {
+      border-color: #6366f1;
+      background: rgba(99,102,241,0.1);
+    }
+    .image-upload-area.has-image {
+      border-style: solid;
+      border-color: #4CAF50;
+      background: rgba(76,175,80,0.1);
+    }
+    .image-upload-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .image-upload-text {
+      font-size: 14px;
+      color: #a5b4fc;
+    }
+    .image-upload-text small {
+      display: block;
+      margin-top: 5px;
+      opacity: 0.7;
+    }
+    
+    .image-preview {
+      margin-top: 15px;
+      position: relative;
+      display: none;
+    }
+    .image-preview.show {
+      display: block;
+    }
+    .image-preview img {
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+    .image-preview .remove-image {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: rgba(244,67,54,0.9);
+      color: white;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .upload-progress {
+      display: none;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #a5b4fc;
+    }
+    .upload-progress.show {
+      display: block;
+    }
+
+    /* Suggestions */
+    .suggestions-box { 
+      display: none; 
+      margin-top: 20px; 
+      padding: 20px; 
+      background: rgba(139,92,246,0.1); 
+      border-radius: 12px; 
+      border: 1px solid rgba(139,92,246,0.3); 
+    }
+    .suggestions-box.show { display: block; }
+    .suggestions-box h4 { font-size: 14px; margin-bottom: 15px; color: #c4b5fd; }
+    .suggestion-item { 
+      background: rgba(0,0,0,0.2); 
+      padding: 12px 15px; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-size: 14px; 
+      margin-bottom: 8px;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+    .suggestion-item:hover { 
+      background: rgba(139,92,246,0.2); 
+      border-left-color: #8b5cf6;
+    }
+
+    /* Section activité */
+    .activity-section { 
+      background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(99,102,241,0.15)); 
+      border: 2px solid rgba(139,92,246,0.3); 
+      border-radius: 12px; 
+      padding: 20px; 
+      margin-bottom: 20px; 
+    }
+    .activity-section h3 { font-size: 1rem; margin-bottom: 15px; color: #c4b5fd; display: flex; align-items: center; gap: 8px; }
+    .activity-saved { 
+      display: none;
+      background: rgba(76,175,80,0.2); 
+      color: #4ade80; 
+      padding: 8px 15px; 
+      border-radius: 6px; 
+      font-size: 13px;
+      margin-top: 10px;
+    }
+    .activity-saved.show { display: inline-block; }
+
+    .loading-dots::after { content: ''; animation: dots 1.5s infinite; }
+    @keyframes dots { 0%, 20% { content: '.'; } 40% { content: '..'; } 60%, 100% { content: '...'; } }
+
+    .preview-section {
+      background: rgba(0,0,0,0.2);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 15px;
+    }
+    .preview-section h4 { font-size: 14px; margin-bottom: 15px; color: #c4b5fd; }
+
+    .slot-toggle { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .slot-toggle input { width: 50px; height: 26px; margin: 0; }
+    
+    /* Indicateur image manquante */
+    .image-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+    .image-status-badge.has-image {
+      background: rgba(76, 175, 80, 0.2);
+      color: #4ade80;
+      border: 1px solid rgba(76, 175, 80, 0.4);
+    }
+    .image-status-badge.no-image {
+      background: rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      animation: pulse-warning 2s infinite;
+    }
+    @keyframes pulse-warning {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    
+    /* Section liens friendly */
+    .link-section {
+      background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.1));
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+    .link-section h4 {
+      font-size: 13px;
+      color: #c4b5fd;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .link-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+    }
+    .link-option-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.05);
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .link-option-toggle input { width: 18px; height: 18px; margin: 0; }
+    .link-option-toggle label { margin: 0; cursor: pointer; font-size: 13px; }
+    .link-input-row {
+      margin-top: 10px;
+    }
+    .link-input-row input {
+      margin-bottom: 0;
+    }
+    .link-hint {
+      font-size: 11px;
+      color: #a5b4fc;
+      margin-top: 6px;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 600px) {
+      .day-selector { grid-template-columns: repeat(4, 1fr); }
+      .slot-row { grid-template-columns: 1fr; }
+      .slot-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+      .slot-actions { width: 100%; }
+      .slot-actions button { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">← Retour à l'accueil</a>
+    <a href="/calendar" class="back-link" style="float: right;">📅 Calendrier →</a>
+    
+    <div class="logo">🤖</div>
+    <h1>Community Manager IA</h1>
+    <p class="subtitle">Publications différentes chaque jour à des heures différentes</p>
+
+    <!-- Pages Facebook -->
+    <div class="card">
+      <h2>📘 Pages Facebook connectées</h2>
+      <div id="connectionStatus"></div>
+      <div id="pagesList"></div>
+      <div id="pageSelector" class="page-selector"></div>
+      <div id="addPageBtn"></div>
+    </div>
+
+    <!-- Section Activité pour l'IA -->
+    <div class="activity-section">
+      <h3>🧠 Décrivez votre activité (pour des suggestions personnalisées)</h3>
+      <textarea id="activityDesc" placeholder="Ex: Je suis coach business. J'aide les entrepreneurs à développer leur CA avec des stratégies marketing efficaces. Mes services : coaching individuel, formations en ligne..."></textarea>
+      <div class="btn-row">
+        <button class="btn-ai" onclick="saveActivity()">✨ Enregistrer mon activité</button>
+        <button class="btn-secondary" onclick="testSuggestion()">💡 Tester une suggestion</button>
+      </div>
+      <div class="activity-saved" id="activitySaved">✓ Activité enregistrée ! L'IA utilisera ces infos pour personnaliser vos suggestions.</div>
+      
+      <div class="preview-section" id="previewSection" style="display: none;">
+        <h4>💡 Aperçu de suggestion basée sur votre activité :</h4>
+        <div id="previewContent"></div>
+      </div>
+    </div>
+
+    <!-- PLANNING -->
+    <div class="card">
+      <h2>📅 Choisis ta journée</h2>
+      
+      <div class="day-selector" id="daySelector"></div>
+      
+      <div id="dayContent"></div>
+      
+      <div id="saveSection" style="display: none;">
+        <div class="btn-row" style="margin-top: 20px;">
+          <button class="btn-success" onclick="saveConfiguration()">💾 Sauvegarder tout</button>
+        </div>
+        <div id="saveStatus"></div>
+      </div>
+    </div>
+
+    <!-- Publication immédiate -->
+    <div class="card">
+      <h2>📤 Publication immédiate</h2>
+      <p style="opacity: 0.7; font-size: 14px; margin-bottom: 15px;">Testez votre configuration en publiant instantanément.</p>
+      <button class="btn-primary" onclick="publishNow()">🚀 Publier maintenant</button>
+      <div id="publishStatus"></div>
+    </div>
+  </div>
+
+  <script>
+    let pages = [];
+    let pagesKey = null;
+    let availablePages = [];
+    let existingIds = [];
+    let selectedDay = new Date().getDay();
+    
+    let config = {
+      mode: 'weekly',
+      activityDesc: '',
+      weeklySlots: {}
+    };
+
+    const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+    const dayShort = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+
+    document.addEventListener('DOMContentLoaded', init);
+    
+    async function init() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const selectPages = urlParams.get('select_pages');
+      const pKey = urlParams.get('pages_key');
+      const error = urlParams.get('error');
+      
+      if (error) {
+        document.getElementById('connectionStatus').innerHTML = `<div class="info error">Erreur: ${decodeURIComponent(error)}</div>`;
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+      
+      if (selectPages === '1' && pKey) {
+        pagesKey = pKey;
+        await loadAvailablePages();
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+      
+      await loadStatus();
+      renderDaySelector();
+      renderDayContent();
+    }
+
+    async function loadAvailablePages() {
+      document.getElementById('pageSelector').innerHTML = '<div class="info">📖 Chargement de vos pages...</div>';
+      try {
+        const res = await fetch('/api/cm-available-pages?pages_key=' + pagesKey);
+        const data = await res.json();
+        if (data.pages && data.pages.length > 0) {
+          availablePages = data.pages;
+          existingIds = data.existingIds || [];
+          renderPageSelector();
+        } else {
+          document.getElementById('pageSelector').innerHTML = '<div class="info warning">Aucune page trouvée</div>';
+        }
+      } catch (e) {
+        document.getElementById('pageSelector').innerHTML = `<div class="info error">Erreur: ${e.message}</div>`;
+      }
+    }
+
+    async function loadStatus() {
+      try {
+        const r = await fetch('/api/cmstatus');
+        const data = await r.json();
+        pages = data.pages || [];
+        if (data.config) {
+          config = { ...config, ...data.config };
+          document.getElementById('activityDesc').value = config.activityDesc || '';
+        }
+        if (data.slots && Object.keys(config.weeklySlots || {}).length === 0) {
+          for (let i = 0; i < 7; i++) {
+            config.weeklySlots[i] = data.slots.map(s => ({
+              hour: s.hour,
+              topic: s.topic,
+              content: s.content || '',
+              imageUrl: s.imageUrl || '',
+              hashtags: s.hashtags || '',
+              type: 'free',
+              active: s.active
+            }));
+          }
+        }
+        renderPages();
+      } catch (e) {
+        document.getElementById('connectionStatus').innerHTML = '<div class="info error">Erreur: ' + e.message + '</div>';
+      }
+    }
+
+    function renderPages() {
+      const statusContainer = document.getElementById('connectionStatus');
+      const listContainer = document.getElementById('pagesList');
+      const addBtnContainer = document.getElementById('addPageBtn');
+      statusContainer.innerHTML = '';
+      if (pages.length > 0) {
+        statusContainer.innerHTML = `<div class="info success">✅ ${pages.length} page(s) connectée(s)</div>`;
+        let html = '';
+        pages.forEach(p => {
+          html += `
+            <div class="page-item">
+              <img src="${p.picture || ''}" alt="" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><rect fill=%22%236366f1%22 width=%2240%22 height=%2240%22/><text x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2218%22>📘</text></svg>'">
+              <div class="page-info">
+                <div class="page-name">${p.name}</div>
+                <div class="page-category">${p.category || 'Page Facebook'}</div>
+              </div>
+              <button class="remove-btn" onclick="removePage('${p.id}')">✕ Retirer</button>
+            </div>
+          `;
+        });
+        listContainer.innerHTML = html;
+      } else {
+        listContainer.innerHTML = '<div class="info warning">Aucune page connectée.</div>';
+      }
+      addBtnContainer.innerHTML = `<button class="btn-primary" onclick="connectFacebook()" style="margin-top:15px;">📘 ${pages.length > 0 ? 'Ajouter d\'autres pages' : 'Connecter mes Pages Facebook'}</button>`;
+    }
+
+    function renderPageSelector() {
+      const container = document.getElementById('pageSelector');
+      let html = '<p style="color: #a5b4fc; font-size: 14px; margin-bottom: 10px;">📌 Cliquez pour ajouter:</p>';
+      availablePages.forEach(page => {
+        const isExisting = existingIds.includes(page.id);
+        html += `
+          <div class="page-option ${isExisting ? 'already-added' : ''}" onclick="${isExisting ? '' : `addPage('${page.id}')`}" id="option-${page.id}">
+            <img src="${page.picture || ''}" alt="" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><rect fill=%22%236366f1%22 width=%2240%22 height=%2240%22/><text x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2218%22>📘</text></svg>'">
+            <div class="page-name">${page.name}</div>
+            <span class="status-badge ${isExisting ? 'exists' : 'add'}">${isExisting ? '✓ Connectée' : '+ Ajouter'}</span>
+          </div>
+        `;
+      });
+      html += `<button class="btn-secondary" onclick="closePageSelector()" style="margin-top:10px;">✕ Fermer</button>`;
+      container.innerHTML = html;
+    }
+
+    async function addPage(pageId) {
+      try {
+        const res = await fetch('/api/cm-add-page?pages_key=' + pagesKey + '&page_id=' + pageId);
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('option-' + pageId).classList.add('already-added');
+          document.getElementById('option-' + pageId).querySelector('.status-badge').className = 'status-badge exists';
+          document.getElementById('option-' + pageId).querySelector('.status-badge').textContent = '✓ Connectée';
+          document.getElementById('option-' + pageId).onclick = null;
+          existingIds.push(pageId);
+          await loadStatus();
+        } else {
+          alert('Erreur: ' + (data.error || 'Impossible d\'ajouter la page'));
+        }
+      } catch (e) {
+        alert('Erreur: ' + e.message);
+      }
+    }
+
+    async function removePage(pageId) {
+      if (!confirm('Retirer cette page ?')) return;
+      try {
+        const res = await fetch('/api/cm-remove-page?page_id=' + pageId);
+        const data = await res.json();
+        if (data.success) {
+          pages = pages.filter(p => p.id !== pageId);
+          renderPages();
+        }
+      } catch (e) {
+        alert('Erreur: ' + e.message);
+      }
+    }
+
+    function closePageSelector() {
+      pagesKey = null;
+      availablePages = [];
+      document.getElementById('pageSelector').innerHTML = '';
+    }
+
+    function connectFacebook() {
+      const clientId = '1489523952768079';
+      const redirectUri = encodeURIComponent(window.location.origin + '/auth/cm-callback');
+      const scope = encodeURIComponent('pages_manage_posts,pages_read_engagement,pages_show_list');
+      window.location.href = `https://www.facebook.com/v19.0/dialog/oauth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
+    }
+
+    // === ACTIVITÉ ===
+    function saveActivity() {
+      const activity = document.getElementById('activityDesc').value;
+      config.activityDesc = activity;
+      fetch('/api/cmstatus', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ config: config, slots: [] })
+      });
+      const savedDiv = document.getElementById('activitySaved');
+      savedDiv.classList.add('show');
+      setTimeout(() => savedDiv.classList.remove('show'), 3000);
+    }
+    
+    async function testSuggestion() {
+      const activity = document.getElementById('activityDesc').value;
+      const previewSection = document.getElementById('previewSection');
+      const previewContent = document.getElementById('previewContent');
+      previewSection.style.display = 'block';
+      previewContent.innerHTML = '<div style="color:#a5b4fc;">🤖 Génération en cours<span class="loading-dots"></span></div>';
+      try {
+        const res = await fetch('/api/ai-suggest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ activity: activity, dayOfWeek: new Date().getDay(), type: 'topics' })
+        });
+        const data = await res.json();
+        if (data.success && data.suggestions) {
+          let html = '<div style="display:grid;gap:8px;">';
+          data.suggestions.forEach(s => { html += `<div class="suggestion-item">${s}</div>`; });
+          html += '</div>';
+          previewContent.innerHTML = html;
+        } else if (data.text) {
+          previewContent.innerHTML = `<div class="suggestion-item">${data.text}</div>`;
+        } else {
+          previewContent.innerHTML = '<div style="opacity:0.7;">Aucune suggestion. Essayez de décrire mieux votre activité.</div>';
+        }
+      } catch (e) {
+        previewContent.innerHTML = `<div style="color:#fca5a5;">Erreur: ${e.message}</div>`;
+      }
+    }
+
+    // === SÉLECTEUR DE JOUR ===
+    function renderDaySelector() {
+      const container = document.getElementById('daySelector');
+      const today = new Date().getDay();
+      let html = '';
+      for (let i = 1; i <= 6; i++) {
+        const slots = config.weeklySlots[i] || [];
+        const count = slots.filter(s => s.active !== false).length;
+        html += `<div class="day-btn ${i === selectedDay ? 'active' : ''} ${i === today ? 'today' : ''}" onclick="selectDay(${i})">
+          <div class="day-name">${dayShort[i]}</div>
+          <div class="day-count">${count} créneau${count > 1 ? 'x' : ''}</div>
+        </div>`;
+      }
+      const slots0 = config.weeklySlots[0] || [];
+      const count0 = slots0.filter(s => s.active !== false).length;
+      html += `<div class="day-btn ${0 === selectedDay ? 'active' : ''} ${0 === today ? 'today' : ''}" onclick="selectDay(0)">
+        <div class="day-name">${dayShort[0]}</div>
+        <div class="day-count">${count0} créneau${count0 > 1 ? 'x' : ''}</div>
+      </div>`;
+      container.innerHTML = html;
+    }
+
+    function selectDay(day) {
+      selectedDay = day;
+      renderDaySelector();
+      renderDayContent();
+    }
+
+    function renderDayContent() {
+      const container = document.getElementById('dayContent');
+      const saveSection = document.getElementById('saveSection');
+      const slots = config.weeklySlots[selectedDay] || [];
+      const today = new Date().getDay();
+      const isToday = selectedDay === today;
+      
+      let html = `
+        <div class="day-header-info">
+          <span class="day-title">📅 ${dayNames[selectedDay]} ${isToday ? '(Aujourd\'hui)' : ''}</span>
+          <div class="day-toggle">
+            <input type="checkbox" ${slots.length > 0 ? 'checked' : ''} onchange="toggleDay(this.checked)" id="dayToggle">
+            <label>Jour actif</label>
+          </div>
+        </div>
+      `;
+      
+      if (slots.length === 0) {
+        html += `<div class="info">Aucun créneau configuré pour ce jour. Cliquez sur "Ajouter un créneau" pour commencer.</div>`;
+      } else {
+        slots.forEach((slot, index) => {
+          const inactive = slot.active === false ? 'inactive' : '';
+          const hasImage = slot.imageUrl && slot.imageUrl.trim() !== '';
+          const imageBadgeClass = hasImage ? 'has-image' : 'no-image';
+          const imageBadgeText = hasImage ? '🖼️ Image OK' : '⚠️ Pas d\'image';
+          const hasLink = slot.friendlyLink && slot.friendlyLink.trim() !== '';
+          const linkInComment = slot.linkInComment === true;
+          
+          html += `
+            <div class="slot ${inactive}">
+              <div class="slot-header">
+                <div class="slot-time">
+                  🕐 <select onchange="updateSlot(${index}, 'hour', this.value)">
+                    ${[6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22].map(h => 
+                      `<option value="${h}" ${slot.hour == h ? 'selected' : ''}>${h}h00</option>`
+                    ).join('')}
+                  </select>
+                  <span class="image-status-badge ${imageBadgeClass}">${imageBadgeText}</span>
+                </div>
+                <div class="slot-actions">
+                  <button class="ai-btn" onclick="suggestSlot(${index})">💡 Suggestion IA</button>
+                  <button class="slot-remove" onclick="removeSlot(${index})">🗑️ Supprimer</button>
+                </div>
+              </div>
+              
+              <div class="slot-row full">
+                <div class="slot-field">
+                  <label>📝 Titre / Sujet de la publication</label>
+                  <input type="text" value="${slot.topic || ''}" placeholder="Ex: 3 conseils pour booster votre business..." 
+                         onchange="updateSlot(${index}, 'topic', this.value)">
+                </div>
+              </div>
+              
+              <div class="slot-row full">
+                <div class="slot-field">
+                  <label>📄 Texte de la publication (optionnel - l'IA peut le générer)</label>
+                  <textarea class="slot-textarea" placeholder="Écrivez votre message ici ou laissez vide pour que l'IA le génère automatiquement..."
+                            onchange="updateSlot(${index}, 'content', this.value)">${slot.content || ''}</textarea>
+                </div>
+              </div>
+              
+              <!-- UPLOAD IMAGE SIMPLIFIÉ -->
+              <div class="slot-row full">
+                <div class="slot-field">
+                  <label>🖼️ Image (cliquez pour télécharger votre image)</label>
+                  <input type="file" id="imageInput${index}" accept="image/*" style="display:none" onchange="handleImageUpload(${index}, this)">
+                  <div class="image-upload-area ${hasImage ? 'has-image' : ''}" onclick="document.getElementById('imageInput${index}').click()" id="uploadArea${index}">
+                    <div class="image-upload-icon">📷</div>
+                    <div class="image-upload-text">
+                      ${hasImage ? '✅ Image chargée' : '⚠️ Ajouter une image pour plus d\'impact'}
+                      <small>Formats: JPG, PNG, GIF (max 15MB)</small>
+                    </div>
+                  </div>
+                  <div class="upload-progress" id="uploadProgress${index}">📤 Upload en cours...</div>
+                  <div class="image-preview ${hasImage ? 'show' : ''}" id="imagePreview${index}">
+                    ${hasImage ? `<img src="${slot.imageUrl}" alt="Image"><button class="remove-image" onclick="removeImage(${index})">✕</button>` : ''}
+                  </div>
+                </div>
+              </div>
+              
+              <div class="slot-row">
+                <div class="slot-field">
+                  <label>#️⃣ Hashtags (optionnel - l'IA en générera si vide)</label>
+                  <input type="text" value="${slot.hashtags || ''}" placeholder="#business #entrepreneur #success" 
+                         onchange="updateSlot(${index}, 'hashtags', this.value)">
+                </div>
+              </div>
+              
+              <!-- SECTION LIENS FRIENDLY -->
+              <div class="link-section">
+                <h4>🔗 Options de lien (friendly algorithme Meta)</h4>
+                <div class="link-options">
+                  <div class="link-option-toggle">
+                    <input type="checkbox" id="linkInComment${index}" ${linkInComment ? 'checked' : ''} onchange="updateSlot(${index}, 'linkInComment', this.checked)">
+                    <label for="linkInComment${index}">📝 Lien dans le 1er commentaire</label>
+                  </div>
+                </div>
+                <div class="link-input-row">
+                  <input type="url" value="${slot.friendlyLink || ''}" placeholder="🔗 Lien Messenger, Groupe FB, ou autre lien friendly..." 
+                         onchange="updateSlot(${index}, 'friendlyLink', this.value)">
+                  <div class="link-hint">💡 Mettre le lien ici évite de compromettre votre portée avec Meta. Cochez "Lien dans le 1er commentaire" pour l'ajouter automatiquement après publication.</div>
+                </div>
+              </div>
+              
+              <div class="slot-toggle">
+                <input type="checkbox" ${slot.active !== false ? 'checked' : ''} onchange="updateSlot(${index}, 'active', this.checked)" id="slotActive${index}">
+                <label for="slotActive${index}">✅ Créneau actif</label>
+              </div>
+              
+              <div class="suggestions-box" id="suggestions${index}">
+                <h4>💡 Suggestions basées sur votre activité (cliquez pour appliquer) :</h4>
+                <div id="suggestionList${index}"></div>
+              </div>
+            </div>
+          `;
+        });
+      }
+      
+      html += `
+        <div class="btn-row" style="margin-top: 20px;">
+          <button class="btn-secondary" onclick="addSlot()">➕ Ajouter un créneau</button>
+          <button class="btn-danger" onclick="resetDay()">🔄 Réinitialiser les créneaux</button>
+        </div>
+      `;
+      
+      container.innerHTML = html;
+      saveSection.style.display = 'block';
+    }
+
+    // === UPLOAD IMAGE ===
+    async function handleImageUpload(index, input) {
+      const file = input.files[0];
+      if (!file) return;
+      
+      const progressDiv = document.getElementById(`uploadProgress${index}`);
+      const previewDiv = document.getElementById(`imagePreview${index}`);
+      const uploadArea = document.getElementById(`uploadArea${index}`);
+      
+      progressDiv.classList.add('show');
+      progressDiv.textContent = '📤 Upload en cours...';
+      
+      try {
+        const formData = new FormData();
+        formData.append('image', file);
+        
+        const res = await fetch('/api/image', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await res.json();
+        
+        if (data.success) {
+          // Mettre à jour le slot avec l'URL
+          updateSlot(index, 'imageUrl', data.url);
+          
+          // Afficher la preview
+          progressDiv.textContent = '✅ Image uploadée !';
+          uploadArea.classList.add('has-image');
+          uploadArea.querySelector('.image-upload-text').innerHTML = '✅ Image chargée<small>Cliquez pour changer</small>';
+          
+          previewDiv.classList.add('show');
+          previewDiv.innerHTML = `<img src="${data.url}" alt="Image"><button class="remove-image" onclick="removeImage(${index})">✕</button>`;
+          
+          setTimeout(() => progressDiv.classList.remove('show'), 2000);
+        } else {
+          progressDiv.textContent = '❌ Erreur: ' + (data.error || 'Upload échoué');
+        }
+      } catch (e) {
+        progressDiv.textContent = '❌ Erreur: ' + e.message;
+      }
+    }
+    
+    function removeImage(index) {
+      updateSlot(index, 'imageUrl', '');
+      const previewDiv = document.getElementById(`imagePreview${index}`);
+      const uploadArea = document.getElementById(`uploadArea${index}`);
+      
+      previewDiv.classList.remove('show');
+      previewDiv.innerHTML = '';
+      uploadArea.classList.remove('has-image');
+      uploadArea.querySelector('.image-upload-text').innerHTML = 'Cliquez pour ajouter une image<small>Formats: JPG, PNG, GIF (max 15MB)</small>';
+    }
+
+    function addSlot() {
+      if (!config.weeklySlots[selectedDay]) {
+        config.weeklySlots[selectedDay] = [];
+      }
+      const usedHours = config.weeklySlots[selectedDay].map(s => s.hour);
+      let nextHour = 9;
+      for (let h = 6; h <= 22; h++) {
+        if (!usedHours.includes(h)) { nextHour = h; break; }
+      }
+      config.weeklySlots[selectedDay].push({
+        hour: nextHour,
+        topic: '',
+        content: '',
+        imageUrl: '',
+        hashtags: '',
+        type: 'free',
+        active: true
+      });
+      renderDaySelector();
+      renderDayContent();
+    }
+
+    function removeSlot(index) {
+      if (confirm('Supprimer ce créneau ?')) {
+        config.weeklySlots[selectedDay].splice(index, 1);
+        renderDaySelector();
+        renderDayContent();
+      }
+    }
+
+    function resetDay() {
+      if (!confirm('Réinitialiser tous les créneaux de ce jour ?')) return;
+      config.weeklySlots[selectedDay] = [];
+      renderDaySelector();
+      renderDayContent();
+    }
+
+    function updateSlot(index, field, value) {
+      if (!config.weeklySlots[selectedDay][index]) {
+        config.weeklySlots[selectedDay][index] = { hour: 9, topic: '', content: '', imageUrl: '', hashtags: '', type: 'free', active: true };
+      }
+      if (field === 'hour') value = parseInt(value);
+      if (field === 'active') value = value;
+      config.weeklySlots[selectedDay][index][field] = value;
+    }
+
+    function toggleDay(active) {
+      if (!config.weeklySlots[selectedDay] || config.weeklySlots[selectedDay].length === 0) {
+        if (active) { config.weeklySlots[selectedDay] = [{ hour: 9, topic: '', content: '', imageUrl: '', hashtags: '', type: 'free', active: true }]; }
+      } else {
+        config.weeklySlots[selectedDay].forEach(s => s.active = active);
+      }
+      renderDaySelector();
+      renderDayContent();
+    }
+
+    // === SUGGESTIONS IA ===
+    async function suggestSlot(index) {
+      const activity = document.getElementById('activityDesc').value;
+      const suggestionsDiv = document.getElementById(`suggestions${index}`);
+      const listDiv = document.getElementById(`suggestionList${index}`);
+      suggestionsDiv.classList.add('show');
+      listDiv.innerHTML = '<div style="padding:15px; color:#a5b4fc;">🤖 Génération en cours<span class="loading-dots"></span></div>';
+      try {
+        const res = await fetch('/api/ai-suggest', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ activity: activity, dayOfWeek: selectedDay, type: 'topics' })
+        });
+        const data = await res.json();
+        if (data.success && data.suggestions) {
+          let html = '';
+          data.suggestions.forEach(s => {
+            html += `<div class="suggestion-item" onclick="applySlotSuggestion(${index}, '${s.replace(/'/g, "\\'")}')">${s}</div>`;
+          });
+          listDiv.innerHTML = html;
+        } else if (data.text) {
+          listDiv.innerHTML = `<div class="suggestion-item" onclick="applySlotSuggestion(${index}, '${data.text.replace(/'/g, "\\'")}')">${data.text}</div>`;
+        } else {
+          listDiv.innerHTML = '<div style="padding:15px; opacity:0.7;">Aucune suggestion</div>';
+        }
+      } catch (e) {
+        listDiv.innerHTML = `<div style="padding:15px; color:#fca5a5;">Erreur</div>`;
+      }
+    }
+
+    function applySlotSuggestion(index, suggestion) {
+      config.weeklySlots[selectedDay][index].topic = suggestion;
+      renderDayContent();
+    }
+
+    // === SAUVEGARDE ===
+    async function saveConfiguration() {
+      const status = document.getElementById('saveStatus');
+      status.innerHTML = '<div class="info">Sauvegarde...</div>';
+      config.activityDesc = document.getElementById('activityDesc').value;
+      try {
+        const r = await fetch('/api/cmstatus', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ config: config, slots: [] })
+        });
+        const data = await r.json();
+        if (data.success) {
+          status.innerHTML = '<div class="info success">✅ Configuration sauvegardée !</div>';
+        } else {
+          status.innerHTML = '<div class="info error">Erreur: ' + data.error + '</div>';
+        }
+      } catch (e) {
+        status.innerHTML = '<div class="info error">Erreur: ' + e.message + '</div>';
+      }
+    }
+
+    async function publishNow() {
+      const status = document.getElementById('publishStatus');
+      status.innerHTML = '<div class="info">Publication en cours...</div>';
+      try {
+        const r = await fetch('/api/test-generate');
+        const data = await r.json();
+        let html = `<div class="info ${data.published > 0 ? 'success' : 'warning'}">✅ Publié: ${data.published} | ❌ Échoué: ${data.failed}</div>`;
+        if (data.posts) {
+          html += '<div style="margin-top:10px;font-size:13px;">';
+          data.posts.forEach(p => {
+            const icon = p.status === 'success' ? '✅' : '❌';
+            html += `<div>${icon} <strong>${p.page}</strong>: ${p.error || p.content}</div>`;
+          });
+          html += '</div>';
+        }
+        status.innerHTML = html;
+      } catch (e) {
+        status.innerHTML = '<div class="info error">Erreur: ' + e.message + '</div>';
+      }
+    }
+  </script>
+</body>
+<!-- Build: 1774627090 -->
+</html>

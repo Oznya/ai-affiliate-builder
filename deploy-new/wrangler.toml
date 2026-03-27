@@ -1,0 +1,7 @@
+name = "affiliate-builder"
+compatibility_date = "2024-01-01"
+pages_build_output_dir = "."
+
+[[kv_namespaces]]
+binding = "AFFILIATE_SITES"
+id = "226c34fbc23f49de8b8f3abbc269e1f4"

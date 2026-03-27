@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription - AffiliationPro SAAS</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #2B0F3A 50%, #0B1F3A 100%); color: white; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    
+    .register-container { max-width: 480px; width: 100%; }
+    
+    .logo { text-align: center; margin-bottom: 30px; }
+    .logo-icon { font-size: 3rem; }
+    .logo h1 { font-size: 1.5rem; margin-top: 10px; background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    .card { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 35px; border: 1px solid rgba(139, 92, 246, 0.2); }
+    
+    .plan-info { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 15px; margin-bottom: 20px; text-align: center; }
+    .plan-info h3 { color: #10b981; font-size: 1.1rem; }
+    .plan-info .price { color: #a5b4fc; font-size: 14px; }
+    
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; margin-bottom: 8px; color: #c7d2fe; font-size: 14px; font-weight: 500; }
+    .form-group input { width: 100%; padding: 14px 16px; border: 1px solid rgba(139,92,246,0.3); border-radius: 12px; background: rgba(0,0,0,0.3); color: white; font-size: 15px; }
+    .form-group input:focus { outline: none; border-color: #10b981; }
+    .form-group small { color: #6b7280; font-size: 12px; margin-top: 5px; display: block; }
+    
+    .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: 600; transition: all 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(16,185,129,0.4); }
+    
+    .error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; padding: 12px 15px; border-radius: 10px; font-size: 14px; margin-bottom: 20px; display: none; }
+    .success { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; padding: 12px 15px; border-radius: 10px; font-size: 14px; margin-bottom: 20px; display: none; }
+    
+    .links { text-align: center; margin-top: 20px; }
+    .links a { color: #a5b4fc; text-decoration: none; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <div class="logo">
+      <div class="logo-icon">💎</div>
+      <h1>Créer votre compte</h1>
+    </div>
+    
+    <div class="card">
+      <div class="plan-info">
+        <h3 id="planName">Plan Pro</h3>
+        <div class="price" id="planPrice">47$/mois</div>
+      </div>
+      
+      <div id="error" class="error"></div>
+      <div id="success" class="success"></div>
+      
+      <form onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label>🏢 Nom de votre business</label>
+          <input type="text" id="businessName" placeholder="Mon Business" required>
+        </div>
+        <div class="form-group">
+          <label>🔗 Slug (identifiant unique)</label>
+          <input type="text" id="slug" placeholder="monbusiness" required pattern="[a-z0-9-]+" minlength="3">
+          <small>Lettres minuscules, chiffres et tirets uniquement. Ex: mon-business</small>
+        </div>
+        <div class="form-group">
+          <label>👤 Votre nom</label>
+          <input type="text" id="name" placeholder="Jean Dupont" required>
+        </div>
+        <div class="form-group">
+          <label>📧 Email</label>
+          <input type="email" id="email" placeholder="votre@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>🔑 Mot de passe</label>
+          <input type="password" id="password" placeholder="Minimum 8 caractères" required minlength="8">
+        </div>
+        <button type="submit" class="btn btn-primary" id="registerBtn">Créer mon compte</button>
+      </form>
+      
+      <div class="links">
+        <a href="/saas/login">Déjà un compte? Se connecter</a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const plans = {
+      starter: { name: 'Plan Starter', price: '27$/mois' },
+      pro: { name: 'Plan Pro', price: '47$/mois' },
+      enterprise: { name: 'Plan Enterprise', price: '97$/mois' }
+    };
+    
+    // Récupérer le plan depuis l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const plan = urlParams.get('plan') || 'pro';
+    
+    document.getElementById('planName').textContent = plans[plan]?.name || plans.pro.name;
+    document.getElementById('planPrice').textContent = plans[plan]?.price || plans.pro.price;
+    
+    function showError(msg) {
+      document.getElementById('error').textContent = msg;
+      document.getElementById('error').style.display = 'block';
+      document.getElementById('success').style.display = 'none';
+    }
+    
+    function showSuccess(msg) {
+      document.getElementById('success').textContent = msg;
+      document.getElementById('success').style.display = 'block';
+      document.getElementById('error').style.display = 'none';
+    }
+    
+    document.getElementById('businessName').addEventListener('input', function() {
+      const slug = this.value.toLowerCase()
+        .replace(/[^a-z0-9-]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+      document.getElementById('slug').value = slug;
+    });
+    
+    async function handleRegister(e) {
+      e.preventDefault();
+      
+      const data = {
+        businessName: document.getElementById('businessName').value.trim(),
+        slug: document.getElementById('slug').value.trim().toLowerCase(),
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value,
+        plan: plan
+      };
+      
+      if (data.slug.length < 3) {
+        showError('Le slug doit contenir au moins 3 caractères');
+        return;
+      }
+      
+      const btn = document.getElementById('registerBtn');
+      btn.disabled = true;
+      btn.textContent = 'Création...';
+      
+      try {
+        const res = await fetch('/api/saas/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await res.json();
+        
+        if (result.success) {
+          showSuccess('Compte créé! Redirection...');
+          localStorage.setItem('saas_slug', data.slug);
+          localStorage.setItem('saas_email', data.email);
+          
+          setTimeout(() => {
+            window.location.href = '/saas/success';
+          }, 1500);
+        } else {
+          showError(result.error || 'Erreur lors de l\'inscription');
+          btn.disabled = false;
+          btn.textContent = 'Créer mon compte';
+        }
+      } catch (err) {
+        showError('Erreur: ' + err.message);
+        btn.disabled = false;
+        btn.textContent = 'Créer mon compte';
+      }
+    }
+  </script>
+</body>
+</html>

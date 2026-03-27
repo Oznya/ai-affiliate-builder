@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Devenir affilié - AffiliationPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #2B0F3A 50%, #0B1F3A 100%); color: white; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    
+    .container { max-width: 480px; width: 100%; }
+    
+    .logo { text-align: center; margin-bottom: 30px; }
+    .logo-icon { font-size: 3rem; }
+    .logo h1 { font-size: 1.5rem; margin-top: 10px; }
+    .logo p { color: #a5b4fc; margin-top: 5px; }
+    
+    .card { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 35px; border: 1px solid rgba(139, 92, 246, 0.2); }
+    
+    .commission-info { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; padding: 20px; margin-bottom: 25px; text-align: center; }
+    .commission-info h3 { color: #10b981; font-size: 1.3rem; margin-bottom: 5px; }
+    .commission-info p { color: #a5b4fc; font-size: 14px; }
+    
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; margin-bottom: 8px; color: #c7d2fe; font-size: 14px; font-weight: 500; }
+    .form-group input { width: 100%; padding: 14px 16px; border: 1px solid rgba(139,92,246,0.3); border-radius: 12px; background: rgba(0,0,0,0.3); color: white; font-size: 15px; }
+    .form-group input:focus { outline: none; border-color: #10b981; }
+    .form-group small { color: #6b7280; font-size: 12px; margin-top: 5px; display: block; }
+    
+    .btn { width: 100%; padding: 14px; border: none; border-radius: 12px; cursor: pointer; font-size: 16px; font-weight: 600; transition: all 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, #10b981, #059669); color: white; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(16,185,129,0.4); }
+    
+    .error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; padding: 12px 15px; border-radius: 10px; font-size: 14px; margin-bottom: 20px; display: none; }
+    .success { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; padding: 12px 15px; border-radius: 10px; font-size: 14px; margin-bottom: 20px; display: none; }
+    
+    .not-found { text-align: center; padding: 40px; }
+    .not-found-icon { font-size: 4rem; margin-bottom: 20px; }
+    .not-found h2 { margin-bottom: 10px; }
+    .not-found p { color: #a5b4fc; margin-bottom: 20px; }
+    .not-found a { color: #10b981; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="joinForm">
+      <div class="logo">
+        <div class="logo-icon">🤝</div>
+        <h1 id="businessTitle">Devenir affilié</h1>
+        <p id="businessSubtitle">Rejoignez le programme d'affiliation</p>
+      </div>
+      
+      <div class="card">
+        <div class="commission-info">
+          <h3>30% de commission</h3>
+          <p>Sur chaque vente générée</p>
+        </div>
+        
+        <div id="error" class="error"></div>
+        <div id="success" class="success"></div>
+        
+        <form onsubmit="handleJoin(event)">
+          <div class="form-group">
+            <label>👤 Votre nom</label>
+            <input type="text" id="name" placeholder="Jean Dupont" required>
+          </div>
+          <div class="form-group">
+            <label>📧 Email</label>
+            <input type="email" id="email" placeholder="votre@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>🔑 Mot de passe</label>
+            <input type="password" id="password" placeholder="Minimum 8 caractères" required minlength="8">
+          </div>
+          <div class="form-group">
+            <label>🔗 Votre code affiliate (optionnel)</label>
+            <input type="text" id="affiliateCode" placeholder="votrecode">
+            <small>Laissez vide pour un code automatique</small>
+          </div>
+          <button type="submit" class="btn btn-primary" id="joinBtn">🚀 Devenir affilié</button>
+        </form>
+      </div>
+    </div>
+    
+    <div id="notFound" style="display: none;">
+      <div class="logo">
+        <div class="logo-icon">❌</div>
+      </div>
+      <div class="card">
+        <div class="not-found">
+          <div class="not-found-icon">🔍</div>
+          <h2>Programme non trouvé</h2>
+          <p>Ce programme d'affiliation n'existe pas ou n'est plus actif.</p>
+          <a href="/saas">← Retour à l'accueil</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Récupérer le slug depuis l'URL
+    const path = window.location.pathname;
+    const match = path.match(/\/saas\/([^/]+)\/join/);
+    const slug = match ? match[1] : null;
+    
+    if (!slug) {
+      document.getElementById('joinForm').style.display = 'none';
+      document.getElementById('notFound').style.display = 'block';
+    } else {
+      // Charger les infos du marchand
+      loadMerchantInfo(slug);
+    }
+    
+    async function loadMerchantInfo(slug) {
+      try {
+        const res = await fetch('/api/saas/info?slug=' + slug);
+        const data = await res.json();
+        
+        if (data.success && data.merchant) {
+          document.getElementById('businessTitle').textContent = 'Devenir affilié de ' + data.merchant.businessName;
+          document.getElementById('businessSubtitle').textContent = 'Rejoignez le programme d\'affiliation de ' + data.merchant.businessName;
+          
+          if (data.merchant.commissionRate) {
+            document.querySelector('.commission-info h3').textContent = data.merchant.commissionRate + '% de commission';
+          }
+        }
+      } catch (err) {
+        console.error('Erreur:', err);
+      }
+    }
+    
+    function showError(msg) {
+      document.getElementById('error').textContent = msg;
+      document.getElementById('error').style.display = 'block';
+      document.getElementById('success').style.display = 'none';
+    }
+    
+    function showSuccess(msg) {
+      document.getElementById('success').textContent = msg;
+      document.getElementById('success').style.display = 'block';
+      document.getElementById('error').style.display = 'none';
+    }
+    
+    async function handleJoin(e) {
+      e.preventDefault();
+      
+      const data = {
+        slug: slug,
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value,
+        code: document.getElementById('affiliateCode').value.trim()
+      };
+      
+      const btn = document.getElementById('joinBtn');
+      btn.disabled = true;
+      btn.textContent = 'Inscription...';
+      
+      try {
+        const res = await fetch('/api/saas/join', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        const result = await res.json();
+        
+        if (result.success) {
+          showSuccess('Inscription réussie! Votre code: ' + result.code);
+          setTimeout(() => {
+            alert('Bienvenue! Votre lien d\'affiliation: https://www.publicationcashflow.com/?ref=' + result.code);
+          }, 1500);
+        } else {
+          showError(result.error || 'Erreur lors de l\'inscription');
+          btn.disabled = false;
+          btn.textContent = '🚀 Devenir affilié';
+        }
+      } catch (err) {
+        showError('Erreur: ' + err.message);
+        btn.disabled = false;
+        btn.textContent = '🚀 Devenir affilié';
+      }
+    }
+  </script>
+</body>
+</html>

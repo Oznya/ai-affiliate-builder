@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programme Affiliation - PublicationCashflow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #2B0F3A 50%, #0B1F3A 100%); color: white; }
+    
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    
+    /* Header */
+    .header { text-align: center; padding: 40px 20px; }
+    .logo { width: 80px; height: 80px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 2.5rem; }
+    h1 { font-size: 2rem; margin-bottom: 10px; background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { color: #a5b4fc; font-size: 1.1rem; }
+    
+    /* Cards */
+    .card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+    .card h2 { font-size: 1.2rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    
+    /* Forms */
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 6px; color: #c7d2fe; font-weight: 500; font-size: 14px; }
+    input { width: 100%; padding: 12px; border: 1px solid rgba(99,102,241,0.3); border-radius: 10px; background: rgba(0,0,0,0.3); color: white; font-size: 15px; }
+    input::placeholder { color: #6b7280; }
+    
+    /* Buttons */
+    button { padding: 14px 24px; border: none; border-radius: 10px; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.2s; }
+    .btn-primary { background: linear-gradient(135deg, #6366f1, #a855f7); color: white; width: 100%; }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(99,102,241,0.4); }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+    .btn-success { background: linear-gradient(135deg, #4CAF50, #43A047); color: white; }
+    
+    /* URL Box */
+    .url-box { background: rgba(0,0,0,0.4); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px; margin-bottom: 20px; border: 1px solid rgba(99,102,241,0.3); }
+    .url-box input { flex: 1; background: transparent; border: none; color: #4ade80; font-weight: 600; font-size: 14px; }
+    .url-box button { padding: 10px 20px; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; white-space: nowrap; }
+    
+    /* URL Box Variant */
+    .url-box.ambassador { border-color: rgba(168,85,247,0.5); background: rgba(168,85,247,0.1); }
+    .url-box.ambassador input { color: #f0abfc; }
+    .url-box.ambassador button { background: linear-gradient(135deg, #a855f7, #ec4899); }
+    
+    /* Stats Grid */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
+    .stat-card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+    .stat-value { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: 12px; color: #a5b4fc; margin-top: 5px; }
+    
+    /* Level Badges */
+    .level-badge { display: inline-flex; align-items: center; gap: 5px; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .level-1 { background: rgba(99,102,241,0.3); color: #a5b4fc; }
+    .level-2 { background: rgba(168,85,247,0.3); color: #f0abfc; }
+    .level-3 { background: rgba(236,72,153,0.3); color: #f9a8d4; }
+    
+    /* Progress bar */
+    .progress-section { margin: 20px 0; }
+    .progress-bar { height: 20px; background: rgba(0,0,0,0.3); border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #a855f7); border-radius: 10px; transition: width 0.5s; }
+    .progress-text { text-align: center; margin-top: 8px; font-size: 13px; color: #a5b4fc; }
+    
+    /* Tables */
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    th { background: rgba(99,102,241,0.2); font-weight: 600; color: #c4b5fd; }
+    tr:hover { background: rgba(255,255,255,0.05); }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .badge-success { background: rgba(76,175,80,0.3); color: #4ade80; }
+    .badge-warning { background: rgba(245,158,11,0.3); color: #fbbf24; }
+    .badge-info { background: rgba(99,102,241,0.3); color: #a5b4fc; }
+    .badge-purple { background: rgba(168,85,247,0.3); color: #f0abfc; }
+    
+    /* Tabs */
+    .tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab { padding: 12px 20px; background: rgba(255,255,255,0.05); border: none; border-radius: 10px; color: #a5b4fc; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+    .tab.active { background: linear-gradient(135deg, #6366f1, #a855f7); color: white; }
+    .tab:hover:not(.active) { background: rgba(255,255,255,0.1); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* Info box */
+    .info { background: rgba(99,102,241,0.15); padding: 15px 20px; border-radius: 10px; border-left: 4px solid #6366f1; margin: 15px 0; }
+    .info-success { background: rgba(76,175,80,0.15); border-left-color: #4CAF50; }
+    .info-purple { background: rgba(168,85,247,0.15); border-left-color: #a855f7; }
+    
+    /* Hidden */
+    .hidden { display: none; }
+    
+    /* Commission display */
+    .commission-badge { display: inline-flex; align-items: center; gap: 5px; background: linear-gradient(135deg, rgba(99,102,241,0.3), rgba(168,85,247,0.3)); padding: 8px 15px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+    .commission-badge span { font-size: 1.2rem; }
+    
+    /* Team Stats */
+    .team-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .team-stat { text-align: center; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px; }
+    .team-stat-value { font-size: 1.5rem; font-weight: 700; }
+    .team-stat-label { font-size: 11px; color: #a5b4fc; margin-top: 4px; }
+    .team-stat.l2 .team-stat-value { color: #f0abfc; }
+    .team-stat.l3 .team-stat-value { color: #f9a8d4; }
+    
+    /* Parent info */
+    .parent-info { background: rgba(168,85,247,0.15); padding: 12px 16px; border-radius: 10px; margin-bottom: 15px; font-size: 14px; }
+    .parent-info strong { color: #f0abfc; }
+    
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .team-stats { grid-template-columns: 1fr; }
+      .url-box { flex-direction: column; text-align: center; }
+      .url-box button { width: 100%; }
+      .tabs { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">💰</div>
+      <h1>Programme Affiliation</h1>
+      <p class="subtitle">Gagnez des commissions sur 3 niveaux!</p>
+    </div>
+    
+    <!-- Section Inscription -->
+    <div id="registerSection" class="card">
+      <h2>🚀 Devenez affilié</h2>
+      <p style="color: #a5b4fc; margin-bottom: 20px; font-size: 14px;">Inscrivez-vous gratuitement et commencez à gagner des commissions sur chaque vente.</p>
+      
+      <!-- Parrain info -->
+      <div id="referrerInfo" class="info-purple hidden" style="margin-bottom: 20px;">
+        🎉 Vous avez été invité par <strong id="referrerName">un affilié</strong>!
+      </div>
+      
+      <div class="form-group">
+        <label>Votre nom</label>
+        <input type="text" id="regName" placeholder="Votre nom ou pseudo">
+      </div>
+      <div class="form-group">
+        <label>Votre email *</label>
+        <input type="email" id="regEmail" placeholder="votre@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Email PayPal (pour recevoir vos paiements)</label>
+        <input type="email" id="regPaypal" placeholder="votre@paypal.com">
+      </div>
+      
+      <button class="btn-primary" onclick="register()">✨ S'inscrire comme affilié</button>
+      <p style="text-align: center; margin-top: 15px; color: #6b7280; font-size: 13px;">
+        Déjà inscrit? <a href="#" onclick="showLogin()" style="color: #a5b4fc;">Connectez-vous</a>
+      </p>
+    </div>
+    
+    <!-- Section Login -->
+    <div id="loginSection" class="card hidden">
+      <h2>🔐 Connexion affilié</h2>
+      <div class="form-group">
+        <label>Votre email</label>
+        <input type="email" id="loginEmail" placeholder="votre@email.com">
+      </div>
+      <button class="btn-primary" onclick="login()">Accéder à mon espace</button>
+      <p style="text-align: center; margin-top: 15px; color: #6b7280; font-size: 13px;">
+        Pas encore inscrit? <a href="#" onclick="showRegister()" style="color: #a5b4fc;">S'inscrire</a>
+      </p>
+    </div>
+    
+    <!-- Dashboard -->
+    <div id="dashboardSection" class="hidden">
+      
+      <!-- Header avec bouton déconnexion -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        <div class="commission-badge">
+          <span>💰</span> Votre commission: <strong id="commissionRate">25%</strong>
+        </div>
+        <button class="btn-secondary" onclick="logout()" style="padding: 10px 20px; background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.4);">
+          🚪 Déconnexion
+        </button>
+      </div>
+      
+      <!-- URL de référence -->
+      <div class="card">
+        <h2>🔗 Vos liens de parrainage</h2>
+        
+        <!-- Lien vente directe -->
+        <p style="font-size: 13px; color: #a5b4fc; margin-bottom: 10px;">📋 Lien de vente (gagnez <strong>25%</strong> sur chaque vente)</p>
+        <div class="url-box">
+          <input type="text" id="affiliateUrl" readonly>
+          <button onclick="copyUrl('affiliateUrl')">📋 Copier</button>
+        </div>
+        
+        <!-- Lien ambassadeur -->
+        <p style="font-size: 13px; color: #f0abfc; margin: 20px 0 10px;">👥 Lien ambassadeur (recrutez des affiliés et gagnez <strong>10%</strong> + <strong>5%</strong> sur leurs ventes)</p>
+        <div class="url-box ambassador">
+          <input type="text" id="ambassadorUrl" readonly>
+          <button onclick="copyUrl('ambassadorUrl')">📋 Copier</button>
+        </div>
+        
+        <div style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 15px;">
+          <div class="commission-badge">
+            <span>💰</span> Niveau 1: <strong>25%</strong>
+          </div>
+          <div class="commission-badge" style="background: linear-gradient(135deg, rgba(168,85,247,0.3), rgba(236,72,153,0.3));">
+            <span>👥</span> Niveau 2: <strong>10%</strong>
+          </div>
+          <div class="commission-badge" style="background: linear-gradient(135deg, rgba(236,72,153,0.3), rgba(244,114,182,0.3));">
+            <span>🌟</span> Niveau 3: <strong>5%</strong>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Stats -->
+      <div class="card">
+        <h2>📊 Vos statistiques</h2>
+        
+        <!-- Info parrain si applicable -->
+        <div id="parentInfo" class="parent-info hidden">
+          🎯 Parrain: <strong id="parentName">-</strong>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="statClicks">0</div>
+            <div class="stat-label">Clics</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statSignups">0</div>
+            <div class="stat-label">Inscriptions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statSales">0</div>
+            <div class="stat-label">Ventes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statBalance">0$</div>
+            <div class="stat-label">Solde</div>
+          </div>
+        </div>
+        
+        <!-- Team Stats -->
+        <div id="teamStatsSection" style="margin-top: 20px;">
+          <h3 style="font-size: 14px; color: #f0abfc; margin-bottom: 10px;">🏆 Gains équipe (Niveaux 2 & 3)</h3>
+          <div class="team-stats">
+            <div class="team-stat l2">
+              <div class="team-stat-value" id="statL2Earnings">0$</div>
+              <div class="team-stat-label">Niveau 2 (10%)</div>
+            </div>
+            <div class="team-stat l3">
+              <div class="team-stat-value" id="statL3Earnings">0$</div>
+              <div class="team-stat-label">Niveau 3 (5%)</div>
+            </div>
+            <div class="team-stat">
+              <div class="team-stat-value" id="statTeamSize">0</div>
+              <div class="team-stat-label">Affiliés recrutés</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Progress vers seuil -->
+        <div class="progress-section">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+          </div>
+          <div class="progress-text" id="progressText">Seuil de paiement: 100$</div>
+        </div>
+      </div>
+      
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="showTab('transactions')">💰 Transactions</button>
+        <button class="tab" onclick="showTab('team')">👥 Mon Équipe</button>
+        <button class="tab" onclick="showTab('referred')">📧 Référés</button>
+        <button class="tab" onclick="showTab('payments')">💸 Paiements</button>
+      </div>
+      
+      <!-- Transactions -->
+      <div id="tabTransactions" class="tab-content active card">
+        <h2>💰 Vos commissions</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Produit</th>
+                <th>Niveau</th>
+                <th>Montant</th>
+                <th>Commission</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody id="transactionsBody">
+              <tr><td colspan="6" style="text-align: center; color: #6b7280;">Aucune transaction</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Team -->
+      <div id="tabTeam" class="tab-content card">
+        <h2>👥 Mon équipe d'affiliés</h2>
+        
+        <div class="info-purple" style="margin-bottom: 20px;">
+          💡 Vous gagnez <strong>10%</strong> sur les ventes de vos affiliés directs (Niveau 2) et <strong>5%</strong> sur les ventes de leur équipe (Niveau 3)!
+        </div>
+        
+        <!-- Team Direct -->
+        <h3 style="font-size: 14px; color: #f0abfc; margin-bottom: 10px;">🎯 Niveau 2 - Vos affiliés directs</h3>
+        <div class="table-container" style="margin-bottom: 25px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Code</th>
+                <th>Ventes</th>
+                <th>Équipe</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="teamDirectBody">
+              <tr><td colspan="5" style="text-align: center; color: #6b7280;">Aucun affilié recruté</td></tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Team Indirect -->
+        <h3 style="font-size: 14px; color: #f9a8d4; margin-bottom: 10px;">🌟 Niveau 3 - L'équipe de votre équipe</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Nom</th>
+                <th>Parrain</th>
+                <th>Ventes</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="teamIndirectBody">
+              <tr><td colspan="4" style="text-align: center; color: #6b7280;">Aucun affilié indirect</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Référés -->
+      <div id="tabReferred" class="tab-content card">
+        <h2>📧 Vos référés (clients)</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Date</th>
+                <th>Acheté</th>
+              </tr>
+            </thead>
+            <tbody id="referredBody">
+              <tr><td colspan="3" style="text-align: center; color: #6b7280;">Aucun référé</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Paiements -->
+      <div id="tabPayments" class="tab-content card">
+        <h2>💸 Historique des paiements</h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Montant</th>
+                <th>Email PayPal</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody id="paymentsBody">
+              <tr><td colspan="4" style="text-align: center; color: #6b7280;">Aucun paiement</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <!-- Demande retrait -->
+      <div class="card">
+        <h2>💵 Demander un retrait</h2>
+        <div class="info">
+          Le seuil minimum de paiement est de <strong>100$</strong>. 
+          Les paiements sont effectués via PayPal.
+        </div>
+        <div class="form-group">
+          <label>Email PayPal</label>
+          <input type="email" id="withdrawPaypal" placeholder="votre@paypal.com">
+        </div>
+        <button class="btn-success" id="withdrawBtn" onclick="requestWithdraw()" disabled>💸 Demander un retrait</button>
+        <p id="withdrawStatus" style="margin-top: 10px; font-size: 13px; color: #a5b4fc;"></p>
+      </div>
+      
+    </div>
+    
+  </div>
+  
+  <script>
+    let affiliateEmail = null;
+    let affiliateData = null;
+    let referrerCode = null;
+    
+    // Check for referrer in URL (ambassador link)
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      referrerCode = urlParams.get('ref') || urlParams.get('ambassador');
+      
+      if (referrerCode) {
+        // Show referrer info
+        loadReferrerInfo(referrerCode);
+      }
+      
+      // Check for existing session
+      const savedEmail = localStorage.getItem('affiliateEmail');
+      if (savedEmail) {
+        affiliateEmail = savedEmail;
+        loadDashboard();
+      }
+    });
+    
+    async function loadReferrerInfo(code) {
+      try {
+        // Try to get affiliate info
+        const res = await fetch(`/api/affiliate/status?code=${code}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.affiliate) {
+            document.getElementById('referrerName').textContent = data.affiliate.name || 'un affilié';
+            document.getElementById('referrerInfo').classList.remove('hidden');
+          }
+        }
+      } catch (e) {
+        console.log('Could not load referrer info');
+      }
+    }
+    
+    function showLogin() {
+      document.getElementById('registerSection').classList.add('hidden');
+      document.getElementById('loginSection').classList.remove('hidden');
+    }
+    
+    function showRegister() {
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('registerSection').classList.remove('hidden');
+    }
+    
+    function logout() {
+      // Effacer les données locales
+      localStorage.removeItem('affiliateEmail');
+      affiliateEmail = null;
+      affiliateData = null;
+      
+      // Cacher le dashboard et montrer l'inscription
+      document.getElementById('dashboardSection').classList.add('hidden');
+      document.getElementById('registerSection').classList.remove('hidden');
+      
+      // Réinitialiser les formulaires
+      document.getElementById('regEmail').value = '';
+      document.getElementById('regName').value = '';
+      document.getElementById('regPaypal').value = '';
+      document.getElementById('loginEmail').value = '';
+    }
+    
+    async function register() {
+      const name = document.getElementById('regName').value;
+      const email = document.getElementById('regEmail').value;
+      const paypal = document.getElementById('regPaypal').value;
+      
+      if (!email) {
+        alert('Veuillez entrer votre email');
+        return;
+      }
+      
+      try {
+        const res = await fetch('/api/affiliate/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            email, 
+            name, 
+            paypalEmail: paypal,
+            referrerCode: referrerCode  // Pass referrer code for multi-level
+          })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          affiliateEmail = email.toLowerCase();
+          localStorage.setItem('affiliateEmail', affiliateEmail);
+          loadDashboard();
+        } else {
+          alert('Erreur: ' + data.error);
+        }
+      } catch (e) {
+        alert('Erreur: ' + e.message);
+      }
+    }
+    
+    async function login() {
+      const email = document.getElementById('loginEmail').value;
+      if (!email) {
+        alert('Veuillez entrer votre email');
+        return;
+      }
+      
+      affiliateEmail = email.toLowerCase();
+      localStorage.setItem('affiliateEmail', affiliateEmail);
+      await loadDashboard();
+    }
+    
+    async function loadDashboard() {
+      try {
+        const res = await fetch(`/api/affiliate/status?email=${encodeURIComponent(affiliateEmail)}`);
+        const data = await res.json();
+        
+        if (data.success) {
+          affiliateData = data;
+          showDashboard(data);
+          loadTeamData();
+        } else {
+          localStorage.removeItem('affiliateEmail');
+          alert('Compte non trouvé. Veuillez vous inscrire.');
+          showRegister();
+        }
+      } catch (e) {
+        alert('Erreur: ' + e.message);
+      }
+    }
+    
+    async function loadTeamData() {
+      try {
+        const res = await fetch(`/api/affiliate/team?email=${encodeURIComponent(affiliateEmail)}`);
+        const data = await res.json();
+        
+        if (data.success) {
+          renderTeam(data);
+        }
+      } catch (e) {
+        console.error('Error loading team:', e);
+      }
+    }
+    
+    function showDashboard(data) {
+      const aff = data.affiliate;
+      
+      // Hide registration, show dashboard
+      document.getElementById('registerSection').classList.add('hidden');
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('dashboardSection').classList.remove('hidden');
+      
+      // Set URLs
+      const baseUrl = window.location.origin;
+      document.getElementById('affiliateUrl').value = `${baseUrl}?ref=${aff.code}`;
+      document.getElementById('ambassadorUrl').value = `${baseUrl}/affiliate?ambassador=${aff.code}`;
+      
+      // Set stats
+      document.getElementById('statClicks').textContent = aff.clicks || 0;
+      document.getElementById('statSignups').textContent = aff.signups || 0;
+      document.getElementById('statSales').textContent = aff.sales || 0;
+      document.getElementById('statBalance').textContent = (aff.balance || 0).toFixed(2) + '$';
+      
+      // Team earnings
+      document.getElementById('statL2Earnings').textContent = (aff.totalEarnedL2 || 0).toFixed(2) + '$';
+      document.getElementById('statL3Earnings').textContent = (aff.totalEarnedL3 || 0).toFixed(2) + '$';
+      document.getElementById('statTeamSize').textContent = aff.teamSize || 0;
+      
+      // Commission rate in header
+      document.getElementById('commissionRate').textContent = aff.commission + '%';
+      
+      // Parent info
+      if (aff.parent1 && aff.parent1.name) {
+        document.getElementById('parentName').textContent = aff.parent1.name;
+        document.getElementById('parentInfo').classList.remove('hidden');
+      }
+      
+      // Progress bar
+      const progress = Math.min((aff.balance / 100) * 100, 100);
+      document.getElementById('progressFill').style.width = progress + '%';
+      document.getElementById('progressText').textContent = `${(aff.balance || 0).toFixed(2)}$ / 100$ pour le retrait`;
+      
+      // Withdraw button
+      document.getElementById('withdrawBtn').disabled = aff.balance < 100;
+      document.getElementById('withdrawPaypal').value = aff.paypalEmail || aff.email;
+      
+      // Transactions
+      renderTransactions(data.transactions, aff.code);
+      
+      // Referred
+      renderReferred(data.referred);
+      
+      // Payments
+      renderPayments(data.payments);
+    }
+    
+    function renderTransactions(transactions, myCode) {
+      const tbody = document.getElementById('transactionsBody');
+      if (!transactions || transactions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #6b7280;">Aucune transaction</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = transactions.map(t => {
+        const level = t.level || 1;
+        const levelBadge = level === 1 ? '<span class="badge badge-info">N1 - Direct</span>' :
+                          level === 2 ? '<span class="badge badge-purple">N2 - Équipe</span>' :
+                          '<span class="badge badge-warning">N3 - Sous-équipe</span>';
+        
+        return `
+          <tr>
+            <td>${new Date(t.createdAt).toLocaleDateString('fr-FR')}</td>
+            <td>${t.product || 'Produit'}</td>
+            <td>${levelBadge}</td>
+            <td>${t.amount}$</td>
+            <td style="color: #4ade80; font-weight: 600;">${t.commission.toFixed(2)}$</td>
+            <td><span class="badge ${t.status === 'paid' ? 'badge-success' : 'badge-warning'}">${t.status === 'paid' ? 'Payé' : 'En attente'}</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+    
+    function renderTeam(data) {
+      // Team Direct
+      const directBody = document.getElementById('teamDirectBody');
+      if (data.teamDirect && data.teamDirect.length > 0) {
+        directBody.innerHTML = data.teamDirect.map(m => `
+          <tr>
+            <td>${m.name}</td>
+            <td><code style="color: #f0abfc;">${m.code}</code></td>
+            <td>${m.sales || 0}</td>
+            <td>${m.teamSize || 0}</td>
+            <td>${new Date(m.joinedAt).toLocaleDateString('fr-FR')}</td>
+          </tr>
+        `).join('');
+      }
+      
+      // Team Indirect
+      const indirectBody = document.getElementById('teamIndirectBody');
+      if (data.teamIndirect && data.teamIndirect.length > 0) {
+        indirectBody.innerHTML = data.teamIndirect.map(m => `
+          <tr>
+            <td>${m.name}</td>
+            <td>${m.parentName}</td>
+            <td>${m.sales || 0}</td>
+            <td>${new Date(m.joinedAt).toLocaleDateString('fr-FR')}</td>
+          </tr>
+        `).join('');
+      }
+      
+      // Update team stats
+      if (data.stats) {
+        document.getElementById('statTeamSize').textContent = data.stats.directCount || 0;
+      }
+    }
+    
+    function renderReferred(referred) {
+      const tbody = document.getElementById('referredBody');
+      if (!referred || referred.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #6b7280;">Aucun référé</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = referred.map(r => `
+        <tr>
+          <td>${r.email.substring(0, 3)}***@${r.email.split('@')[1]}</td>
+          <td>${new Date(r.createdAt).toLocaleDateString('fr-FR')}</td>
+          <td><span class="badge ${r.purchased ? 'badge-success' : 'badge-info'}">${r.purchased ? '✓ Oui' : 'Non'}</span></td>
+        </tr>
+      `).join('');
+    }
+    
+    function renderPayments(payments) {
+      const tbody = document.getElementById('paymentsBody');
+      if (!payments || payments.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #6b7280;">Aucun paiement</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = payments.map(p => `
+        <tr>
+          <td>${new Date(p.createdAt).toLocaleDateString('fr-FR')}</td>
+          <td style="color: #4ade80; font-weight: 600;">${p.amount.toFixed(2)}$</td>
+          <td>${p.paypalEmail}</td>
+          <td><span class="badge badge-success">✓ Payé</span></td>
+        </tr>
+      `).join('');
+    }
+    
+    function showTab(tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      
+      event.target.classList.add('active');
+      document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).classList.add('active');
+    }
+    
+    function copyUrl(inputId) {
+      const url = document.getElementById(inputId);
+      url.select();
+      document.execCommand('copy');
+      
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = '✓ Copié!';
+      setTimeout(() => btn.textContent = originalText, 2000);
+    }
+    
+    function requestWithdraw() {
+      const paypalEmail = document.getElementById('withdrawPaypal').value;
+      if (!paypalEmail) {
+        alert('Veuillez entrer votre email PayPal');
+        return;
+      }
+      
+      document.getElementById('withdrawStatus').textContent = '✅ Demande envoyée! Vous serez payé sous 7 jours ouvrables.';
+      document.getElementById('withdrawBtn').disabled = true;
+    }
+  </script>
+</body>
+<!-- Build: 1774627090 -->
+</html>

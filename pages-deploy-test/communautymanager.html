@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Manager IA - Publication Automatique</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #1a1a2e 50%, #2B0F3A 100%); color: white; }
+    
+    .hero { padding: 60px 20px; text-align: center; }
+    .logo { width: 80px; height: 80px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px; font-size: 40px; box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4); }
+    h1 { font-size: 2.5rem; margin-bottom: 15px; background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { font-size: 1.2rem; color: #a5b4fc; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+    
+    .container { max-width: 800px; margin: 0 auto; padding: 0 20px 60px; }
+    
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
+    .feature { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 25px; text-align: center; }
+    .feature-icon { font-size: 40px; margin-bottom: 15px; }
+    .feature h3 { font-size: 1.1rem; margin-bottom: 10px; color: #c7d2fe; }
+    .feature p { font-size: 14px; color: #a5b4fc; line-height: 1.6; }
+    
+    .card { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 35px; margin-bottom: 30px; }
+    .card h2 { font-size: 1.4rem; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .card h2::before { content: ''; width: 4px; height: 24px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 2px; }
+    
+    .step { display: flex; gap: 20px; margin-bottom: 25px; align-items: flex-start; }
+    .step-number { width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+    .step-content h4 { font-size: 1rem; margin-bottom: 5px; color: #e0e7ff; }
+    .step-content p { font-size: 14px; color: #a5b4fc; }
+    
+    .btn { display: inline-block; padding: 18px 40px; background: linear-gradient(135deg, #6366f1, #a855f7); color: white; text-decoration: none; border-radius: 12px; font-weight: 600; font-size: 1.1rem; transition: all 0.3s; box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4); }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(99, 102, 241, 0.5); }
+    
+    .cta { text-align: center; margin: 40px 0; }
+    
+    .pricing { background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.2)); border: 1px solid rgba(99,102,241,0.3); }
+    .price { font-size: 2.5rem; font-weight: 700; margin: 20px 0; }
+    .price span { font-size: 1rem; opacity: 0.7; font-weight: 400; }
+    
+    .back-link { display: inline-flex; align-items: center; gap: 8px; color: #a5b4fc; text-decoration: none; margin-bottom: 30px; font-size: 14px; }
+    .back-link:hover { color: white; }
+    
+    .highlight { color: #a855f7; font-weight: 600; }
+    
+    @media (max-width: 600px) {
+      h1 { font-size: 1.8rem; }
+      .features { grid-template-columns: 1fr; }
+      .step { flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">← Retour au générateur d'affiliation</a>
+    
+    <div class="hero">
+      <div class="logo">🤖</div>
+      <h1>Community Manager IA</h1>
+      <p class="subtitle">Votre assistant de publication automatique. Configurez une fois, publiez tous les jours sans effort.</p>
+    </div>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">✍️</div>
+        <h3>Contenu IA Généré</h3>
+        <p>Titres, descriptions et hashtags créés automatiquement par l'IA selon votre style.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📘</div>
+        <h3>Multi-Pages</h3>
+        <p>Connectez plusieurs pages Facebook et publiez sur toutes simultanément.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⏰</div>
+        <h3>Cron Quotidien</h3>
+        <p>Choisissez l'heure de publication. Le système publie automatiquement chaque jour.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Comment ça fonctionne ?</h2>
+      
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h4>Configurez votre contenu</h4>
+          <p>Définissez le sujet, le style, le ton et les hashtags. L'IA s'adapte à votre marque.</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h4>Connectez vos Pages Facebook</h4>
+          <p>Sélectionnez une ou plusieurs pages sur lesquelles vous souhaitez publier automatiquement.</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h4>Choisissez l'heure</h4>
+          <p>Sélectionnez l'heure de publication quotidienne (6h, 8h, 12h, 18h...). C'est vous qui décidez.</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h4>Laissez la magie opérer</h4>
+          <p>Chaque jour, un nouveau post est généré et publié automatiquement sur vos pages sélectionnées.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card pricing">
+      <h2>💎 Tarification</h2>
+      <div class="price">Service inclus <span>• Done For You</span></div>
+      <p style="color: #a5b4fc; margin-bottom: 20px;">Ce service fait partie de notre offre globale "Done For You" pour les entrepreneurs ambitieux.</p>
+      <p style="font-size: 13px; opacity: 0.7;">* Génération d'images IA disponible prochainement</p>
+    </div>
+
+    <div class="cta">
+      <a href="/publication" class="btn">🚀 Accéder au Community Manager IA</a>
+      <p style="margin-top: 15px; font-size: 14px; color: #6b7280;">Configuration en 2 minutes</p>
+    </div>
+
+  </div>
+</body>
+</html>

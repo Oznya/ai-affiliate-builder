@@ -1,0 +1,8 @@
+name = "affiliate-facebook-cron"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+account_id = "07468e90032185025d9a0f30d032314a"
+
+# Cron Trigger - toutes les heures
+[triggers]
+crons = ["0 * * * *"]

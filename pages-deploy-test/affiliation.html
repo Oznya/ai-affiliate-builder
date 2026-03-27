@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Générateur de Pages d'Affiliation - Publication-Web</title>
+    <!-- v2.1 - Preview templates with iframes -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #2B0F3A 50%, #0B1F3A 100%); color: white; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+    .container { max-width: 650px; width: 100%; margin-top: 20px; }
+    .back-link { display: inline-flex; align-items: center; gap: 8px; color: #a5b4fc; text-decoration: none; margin-bottom: 20px; font-size: 14px; }
+    .back-link:hover { color: white; }
+    .logo { width: 60px; height: 60px; background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 26px; }
+    h1 { font-size: 2rem; text-align: center; margin-bottom: 10px; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .subtitle { text-align: center; color: #a5b4fc; margin-bottom: 30px; }
+    .ai-banner { background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.2)); border: 1px solid rgba(99,102,241,0.3); border-radius: 12px; padding: 15px 20px; text-align: center; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .ai-banner span { font-size: 24px; }
+    .ai-banner p { color: #c4b5fd; font-weight: 600; }
+    .card { background: rgba(18, 18, 42, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(99, 102, 241, 0.15); border-radius: 16px; padding: 25px; margin-bottom: 15px; }
+    .card h2 { font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+    .step-number { background: linear-gradient(135deg, #6366f1, #a855f7); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+    label { display: block; margin-bottom: 6px; color: #c7d2fe; font-weight: 500; font-size: 14px; }
+    input, textarea { width: 100%; padding: 12px; border: 1px solid rgba(99,102,241,0.3); border-radius: 8px; background: rgba(0,0,0,0.3); color: white; font-size: 15px; margin-bottom: 15px; }
+    input::placeholder, textarea::placeholder { color: #6b7280; }
+    textarea { resize: vertical; min-height: 80px; font-family: inherit; }
+    button { width: 100%; padding: 14px; background: linear-gradient(135deg, #6366f1, #a855f7); border: none; border-radius: 8px; color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+    button:hover:not(:disabled) { transform: scale(1.02); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .fb-btn { background: #1877f2; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .fb-btn:hover { background: #166fe5; }
+    .result { margin-top: 15px; padding: 15px; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 8px; display: none; }
+    .result a { color: #4ade80; word-break: break-all; }
+    .error { margin-top: 15px; padding: 12px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; color: #fca5a5; display: none; }
+    .section-title { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 1px solid rgba(99,102,241,0.1); }
+    .footer-text { text-align: center; color: #6b7280; font-size: 12px; margin-top: 20px; }
+    .status-success { background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); padding: 15px; border-radius: 8px; margin-top: 15px; }
+    .status-success p { color: #4ade80; }
+    .disconnect-btn { background: rgba(239, 68, 68, 0.8); padding: 8px 16px; font-size: 13px; margin-top: 10px; width: auto; display: inline-block; }
+    .hidden { display: none; }
+    .image-preview { margin-top: 10px; text-align: center; display: none; }
+    .image-preview img { max-width: 200px; max-height: 150px; border-radius: 8px; border: 2px solid rgba(99,102,241,0.3); }
+    .copy-btn { margin-top: 10px; padding: 8px; font-size: 13px; background: rgba(99,102,241,0.3); }
+    
+    /* Templates grid avec VRAI aperçu */
+    .templates-section { margin: 15px 0; }
+    .templates-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    @media (max-width: 600px) { .templates-grid { grid-template-columns: repeat(2, 1fr); } }
+    
+    .template-card { 
+      background: rgba(255,255,255,0.03); 
+      border: 2px solid rgba(99,102,241,0.15); 
+      border-radius: 12px; 
+      overflow: hidden;
+      cursor: pointer; 
+      transition: all 0.3s;
+      position: relative;
+    }
+    .template-card:hover { 
+      border-color: rgba(99,102,241,0.5); 
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(99,102,241,0.2);
+    }
+    .template-card.active { 
+      border-color: #a855f7; 
+      box-shadow: 0 0 25px rgba(168,85,247,0.4);
+    }
+    .template-card.active::after {
+      content: '✓';
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      background: #a855f7;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      z-index: 10;
+    }
+    
+    .template-preview {
+      height: 120px;
+      position: relative;
+      overflow: hidden;
+      background: #1a1a2e;
+    }
+    
+    .template-preview iframe {
+      width: 400px;
+      height: 300px;
+      border: none;
+      transform: scale(0.4);
+      transform-origin: top left;
+      pointer-events: none;
+    }
+    
+    .template-info { 
+      padding: 10px; 
+      text-align: center; 
+      background: rgba(0,0,0,0.4);
+      border-top: 1px solid rgba(99,102,241,0.1);
+    }
+    .template-name { 
+      font-size: 11px; 
+      font-weight: 600; 
+      color: #c4b5fd; 
+      text-transform: uppercase; 
+      letter-spacing: 0.5px; 
+    }
+    .template-action {
+      font-size: 9px;
+      color: #6b7280;
+      margin-top: 3px;
+    }
+
+    /* Preview button */
+    .preview-btn {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 10px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: auto;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.2);
+      z-index: 5;
+    }
+    .template-card:hover .preview-btn {
+      opacity: 1;
+    }
+    
+    /* Modal preview */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: rgba(20,20,40,0.95);
+      border-radius: 16px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow: hidden;
+      border: 1px solid rgba(99,102,241,0.3);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid rgba(99,102,241,0.2);
+    }
+    .modal-title { font-size: 1.2rem; font-weight: 600; }
+    .modal-close {
+      background: rgba(239,68,68,0.3);
+      border: none;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      padding: 8px;
+    }
+    .modal-close:hover { background: rgba(239,68,68,0.5); }
+    .modal-body {
+      padding: 0;
+      max-height: calc(90vh - 130px);
+      overflow-y: auto;
+    }
+    .modal-body iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+    .modal-footer {
+      padding: 15px 20px;
+      border-top: 1px solid rgba(99,102,241,0.2);
+      display: flex;
+      gap: 10px;
+    }
+    .modal-footer button { flex: 1; }
+    .btn-select {
+      background: linear-gradient(135deg, #4CAF50, #43A047);
+    }
+    .btn-cancel {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    /* Page selector */
+    .page-selector { max-height: 300px; overflow-y: auto; margin-top: 15px; }
+    .page-option { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.05); border: 2px solid rgba(99,102,241,0.2); border-radius: 10px; margin-bottom: 8px; cursor: pointer; transition: all 0.2s; }
+    .page-option:hover { background: rgba(255,255,255,0.1); border-color: rgba(99,102,241,0.4); }
+    .page-option.selected { border-color: #4ade80; background: rgba(74, 222, 128, 0.1); }
+    .page-option img { width: 40px; height: 40px; border-radius: 50%; background: rgba(99,102,241,0.3); }
+    .page-option .page-name { font-weight: 600; color: white; }
+    .page-option .page-id { font-size: 11px; color: #6b7280; margin-top: 2px; }
+    .page-option .check-icon { margin-left: auto; width: 24px; height: 24px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; color: transparent; }
+    .page-option.selected .check-icon { background: #4ade80; border-color: #4ade80; color: white; }
+    .loading { text-align: center; padding: 20px; color: #a5b4fc; }
+    .upload-btn:hover { background: linear-gradient(135deg, rgba(99,102,241,0.5), rgba(168,85,247,0.5)) !important; border-color: rgba(168,85,247,0.6) !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">← Retour à l'accueil</a>
+    
+    <div class="logo">⚡</div>
+    <h1>Générateur d'Affiliation</h1>
+    <p class="subtitle">Créez votre page et publiez sur Facebook en 1 clic</p>
+    
+    <div class="ai-banner">
+      <span>🤖</span>
+      <p>Contenu généré automatiquement par l'IA</p>
+    </div>
+
+    <!-- ÉTAPE 1: Connexion Facebook -->
+    <div class="card">
+      <h2><span class="step-number">1</span> 📘 Connectez votre Page Facebook</h2>
+      <p style="color: #a5b4fc; font-size: 14px; margin-bottom: 15px;">Connectez votre page en premier pour une publication instantanée après création.</p>
+      
+      <div id="fbNotConnected">
+        <button class="fb-btn" onclick="connectFacebookFirst()">
+          <span>📘</span> Connecter mes Pages Facebook
+        </button>
+      </div>
+      
+      <div id="fbStatus"></div>
+      <div id="pageSelector" class="page-selector"></div>
+    </div>
+
+    <!-- ÉTAPE 2: Création de la page -->
+    <div class="card">
+      <h2><span class="step-number">2</span> ⚡ Créez votre page d'affiliation</h2>
+      
+      <label>🔗 Votre lien affilié *</label>
+      <input type="url" id="link" placeholder="https://votre-lien-affilie.com">
+      
+      <label>📦 Nom du produit</label>
+      <input type="text" id="name" placeholder="Ex: iPhone 15 Pro Max">
+      
+      <label>🖼️ Image du produit</label>
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+        <input type="url" id="image" placeholder="https://exemple.com/image.jpg" onchange="previewImage()" style="flex: 1; margin-bottom: 0;">
+        <label class="upload-btn" style="background: linear-gradient(135deg, rgba(99,102,241,0.3), rgba(168,85,247,0.3)); border: 1px solid rgba(99,102,241,0.4); padding: 12px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; color: #c4b5fd; white-space: nowrap; transition: all 0.3s; margin-bottom: 0;">
+          📁 Choisir
+          <input type="file" id="imageFile" accept="image/*" onchange="uploadImage()" style="display: none;">
+        </label>
+      </div>
+      <div id="uploadStatus" style="font-size: 12px; margin-bottom: 10px; display: none;"></div>
+      <div id="imagePreview" class="image-preview">
+        <img id="previewImg" src="" alt="Aperçu">
+      </div>
+      
+      <label>📂 Niche</label>
+      <input type="text" id="niche" placeholder="Ex: Fitness, Santé, Technologie">
+      
+      <label>✍️ Description personnalisée <span style="color:#6b7280;font-weight:normal">(optionnel)</span></label>
+      <textarea id="customDescription" placeholder="Décrivez votre produit..." rows="3"></textarea>
+      
+      <label>🎯 Points forts <span style="color:#6b7280;font-weight:normal">(optionnel - un par ligne)</span></label>
+      <textarea id="customFeatures" placeholder="Ex:&#10;100% naturel&#10;Livraison gratuite" rows="3"></textarea>
+      
+      <div class="section-title">🎨 Choisissez votre design (cliquez pour sélectionner, survolez pour agrandir)</div>
+      <div class="templates-section">
+        <div class="templates-grid" id="templatesGrid">
+          <!-- Templates générés par JS -->
+        </div>
+      </div>
+      
+      <button id="generateBtn" onclick="generate()">⚡ Générer et Publier</button>
+      
+      <div id="error" class="error"></div>
+      
+      <div id="result" class="result">
+        <p style="margin-bottom:8px; color: #4ade80;">✅ Votre page est prête!</p>
+        <a id="resultUrl" href="" target="_blank"></a>
+        <button class="copy-btn" onclick="copyUrl()">📋 Copier le lien</button>
+      </div>
+    </div>
+    
+    <p class="footer-text">Propulsé par l'IA • Créé par Publication-Web</p>
+  </div>
+  
+  <!-- Modal Preview -->
+  <div class="modal-overlay" id="previewModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modalTitle">Aperçu du design</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <iframe id="previewFrame" src=""></iframe>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal()">Fermer</button>
+        <button class="btn-select" onclick="selectFromModal()">✓ Sélectionner ce design</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+  let selectedTemplate = 'modern';
+  let fbConnected = false;
+  let fbPageId = null;
+  let fbPageName = null;
+  let fbPageToken = null;
+  let allPages = [];
+  let pagesKey = null;
+  let previewingTemplate = null;
+  
+  const templates = [
+    { id: 'modern', name: 'Moderne' },
+    { id: 'dark', name: 'Dark Pro' },
+    { id: 'minimal', name: 'Minimal' },
+    { id: 'gradient', name: 'Gradient' },
+    { id: 'zen', name: 'Zen' },
+    { id: 'coach', name: 'Coach' },
+    { id: 'business', name: 'Business' },
+    { id: 'tarologue', name: 'Tarologue' },
+    { id: 'numerologue', name: 'Numérologue' },
+    { id: 'astrologue', name: 'Astrologue' },
+    { id: 'soin', name: 'Soin' },
+    { id: 'meditation', name: 'Méditation' }
+  ];
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    renderTemplates();
+    checkOAuthReturn();
+  });
+  
+  function renderTemplates() {
+    const grid = document.getElementById('templatesGrid');
+    let html = '';
+    
+    templates.forEach(t => {
+      const isActive = t.id === selectedTemplate ? 'active' : '';
+      html += `
+        <div class="template-card ${isActive}" data-template="${t.id}">
+          <div class="template-preview">
+            <iframe src="/api/preview?t=${t.id}" loading="lazy"></iframe>
+            <button class="preview-btn" onclick="event.stopPropagation(); openPreview('${t.id}')">👁️ Agrandir</button>
+          </div>
+          <div class="template-info">
+            <span class="template-name">${t.name}</span>
+            <div class="template-action">Cliquez pour sélectionner</div>
+          </div>
+        </div>
+      `;
+    });
+    
+    grid.innerHTML = html;
+    
+    // Add click handlers
+    document.querySelectorAll('.template-card').forEach(card => {
+      card.addEventListener('click', function() {
+        selectTemplate(this.dataset.template);
+      });
+    });
+  }
+  
+  function selectTemplate(id) {
+    selectedTemplate = id;
+    document.querySelectorAll('.template-card').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.template-card[data-template="${id}"]`).classList.add('active');
+  }
+  
+  function openPreview(id) {
+    previewingTemplate = id;
+    const template = templates.find(t => t.id === id);
+    document.getElementById('modalTitle').textContent = 'Aperçu: ' + template.name;
+    document.getElementById('previewFrame').src = '/api/preview?t=' + id;
+    document.getElementById('previewModal').classList.add('active');
+  }
+  
+  function closeModal() {
+    document.getElementById('previewModal').classList.remove('active');
+    document.getElementById('previewFrame').src = '';
+  }
+  
+  function selectFromModal() {
+    if (previewingTemplate) {
+      selectTemplate(previewingTemplate);
+    }
+    closeModal();
+  }
+  
+  function previewImage() {
+    const url = document.getElementById('image').value;
+    const preview = document.getElementById('imagePreview');
+    const img = document.getElementById('previewImg');
+    if (url) {
+      img.src = url;
+      preview.style.display = 'block';
+      img.onerror = function() { preview.style.display = 'none'; };
+    } else {
+      preview.style.display = 'none';
+    }
+  }
+  
+  async function uploadImage() {
+    const fileInput = document.getElementById('imageFile');
+    const file = fileInput.files[0];
+    const statusEl = document.getElementById('uploadStatus');
+    const urlInput = document.getElementById('image');
+    
+    if (!file) return;
+    
+    // Afficher le statut
+    statusEl.style.display = 'block';
+    statusEl.innerHTML = '<span style="color: #a5b4fc;">⏳ Upload en cours...</span>';
+    
+    // Vérifier la taille (max 15MB)
+    if (file.size > 15 * 1024 * 1024) {
+      statusEl.innerHTML = '<span style="color: #fca5a5;">❌ Image trop volumineuse (max 15MB)</span>';
+      return;
+    }
+    
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      const response = await fetch('/api/affiliation-upload', {
+        method: 'POST',
+        body: formData
+      });
+      
+      const data = await response.json();
+      
+      if (data.success && data.url) {
+        // Mettre l'URL dans le champ
+        urlInput.value = data.url;
+        statusEl.innerHTML = '<span style="color: #4ade80;">✅ Image uploadée!</span>';
+        
+        // Afficher la preview
+        const preview = document.getElementById('imagePreview');
+        const img = document.getElementById('previewImg');
+        img.src = data.url;
+        preview.style.display = 'block';
+        
+        // Masquer le statut après 3 secondes
+        setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+      } else {
+        statusEl.innerHTML = '<span style="color: #fca5a5;">❌ ' + (data.error || 'Erreur lors de l\'upload') + '</span>';
+      }
+    } catch (e) {
+      statusEl.innerHTML = '<span style="color: #fca5a5;">❌ Erreur: ' + e.message + '</span>';
+    }
+    
+    // Reset le file input
+    fileInput.value = '';
+  }
+  
+  function connectFacebookFirst() {
+    const clientId = '1489523952768079';
+    const redirectUri = encodeURIComponent(window.location.origin + '/auth/affiliation-callback');
+    const scope = encodeURIComponent('pages_manage_posts,pages_read_engagement,pages_show_list');
+    window.location.href = 'https://www.facebook.com/v19.0/dialog/oauth?client_id=' + clientId + '&redirect_uri=' + redirectUri + '&scope=' + scope + '&response_type=code';
+  }
+  
+  async function checkOAuthReturn() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const showPages = urlParams.get('show_pages');
+    const pKey = urlParams.get('pages_key');
+    const error = urlParams.get('error');
+    
+    if (error) {
+      document.getElementById('fbStatus').innerHTML = '<div class="error" style="display:block;">Erreur: ' + error + '</div>';
+      return;
+    }
+    
+    if (showPages === '1' && pKey) {
+      pagesKey = pKey;
+      document.getElementById('fbNotConnected').classList.add('hidden');
+      document.getElementById('pageSelector').innerHTML = '<div class="loading">📖 Chargement de vos pages...</div>';
+      
+      try {
+        const res = await fetch('/api/affiliation-pages?pages_key=' + pagesKey);
+        const data = await res.json();
+        if (data.pages && data.pages.length > 0) {
+          allPages = data.pages;
+          renderPageSelector();
+        } else {
+          document.getElementById('pageSelector').innerHTML = '<div class="error" style="display:block;">Aucune page trouvée</div>';
+        }
+      } catch (e) {
+        document.getElementById('pageSelector').innerHTML = '<div class="error" style="display:block;">Erreur: ' + e.message + '</div>';
+      }
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+  
+  function renderPageSelector() {
+    const container = document.getElementById('pageSelector');
+    let html = '<p style="color: #a5b4fc; font-size: 14px; margin-bottom: 10px;">📌 Sélectionnez la page où publier:</p>';
+    for (let i = 0; i < allPages.length; i++) {
+      const page = allPages[i];
+      const escapedName = page.name.replace(/'/g, "\\'").replace(/"/g, '\\"');
+      html += '<div class="page-option" onclick="selectPage(\'' + page.id + '\', \'' + escapedName + '\')" id="page-' + page.id + '">';
+      html += '<img src="' + (page.picture || '') + '" alt="" onerror="this.style.display=\'none\'">';
+      html += '<div><div class="page-name">' + page.name + '</div><div class="page-id">ID: ' + page.id + '</div></div>';
+      html += '<div class="check-icon">✓</div></div>';
+    }
+    container.innerHTML = html;
+  }
+  
+  async function selectPage(pageId, pageName) {
+    document.querySelectorAll('.page-option').forEach(el => el.classList.remove('selected'));
+    document.getElementById('page-' + pageId).classList.add('selected');
+    
+    try {
+      const res = await fetch('/api/affiliation-select-page?pages_key=' + pagesKey + '&page_id=' + pageId);
+      const data = await res.json();
+      if (data.success && data.page) {
+        fbConnected = true;
+        fbPageId = pageId;
+        fbPageName = pageName;
+        fbPageToken = data.page.token;
+        showSelectedPage(pageName);
+      } else {
+        alert('Erreur: ' + (data.error || 'Impossible de sélectionner cette page'));
+      }
+    } catch (e) {
+      alert('Erreur: ' + e.message);
+    }
+  }
+  
+  function showSelectedPage(pageName) {
+    document.getElementById('fbNotConnected').classList.add('hidden');
+    document.getElementById('pageSelector').innerHTML = '';
+    document.getElementById('fbStatus').innerHTML = '<div class="status-success"><p>✅ Page Facebook connectée: <strong>' + pageName + '</strong></p><p style="font-size:12px;margin-top:5px;opacity:0.8;">Votre publication sera automatiquement postée après création de la page.</p><button class="disconnect-btn" onclick="disconnectFb()">❌ Changer de page</button></div>';
+  }
+  
+  function disconnectFb() {
+    fbConnected = false;
+    fbPageId = null;
+    fbPageToken = null;
+    fbPageName = null;
+    allPages = [];
+    pagesKey = null;
+    document.getElementById('fbNotConnected').classList.remove('hidden');
+    document.getElementById('fbStatus').innerHTML = '';
+    document.getElementById('pageSelector').innerHTML = '';
+  }
+  
+  async function generate() {
+    const link = document.getElementById('link').value;
+    const name = document.getElementById('name').value;
+    const image = document.getElementById('image').value;
+    const niche = document.getElementById('niche').value;
+    const customDescription = document.getElementById('customDescription').value;
+    const customFeatures = document.getElementById('customFeatures').value;
+    const btn = document.getElementById('generateBtn');
+    const result = document.getElementById('result');
+    const errorEl = document.getElementById('error');
+    
+    if (!link) {
+      errorEl.textContent = 'Veuillez entrer un lien affilié';
+      errorEl.style.display = 'block';
+      return;
+    }
+    
+    btn.disabled = true;
+    btn.textContent = '⏳ Génération en cours...';
+    errorEl.style.display = 'none';
+    result.style.display = 'none';
+    
+    try {
+      const res = await fetch('/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          link: link,
+          name: name || null,
+          image: image || null,
+          niche: niche || null,
+          template: selectedTemplate,
+          customDescription: customDescription || null,
+          customFeatures: customFeatures || null,
+          fbPageId: fbPageId || null,
+          fbPageToken: fbPageToken || null,
+          fbPageName: fbPageName || null
+        })
+      });
+      
+      const data = await res.json();
+      
+      if (data.success) {
+        result.style.display = 'block';
+        let resultHtml = '<p style="margin-bottom:8px; color: #4ade80;">✅ Page créée!</p>';
+        resultHtml += '<a id="resultUrl" href="' + data.url + '" target="_blank">' + data.url + '</a>';
+        if (data.published) {
+          resultHtml = '<p style="margin-bottom:8px; color: #4ade80;">✅ Page créée et publiée sur Facebook!</p>';
+          resultHtml += '<a id="resultUrl" href="' + data.url + '" target="_blank">' + data.url + '</a>';
+        } else if (data.publishError) {
+          resultHtml += '<p style="font-size:11px;color:#fca5a5;margin-top:8px;">⚠️ Facebook: ' + data.publishError + '</p>';
+        }
+        resultHtml += '<button class="copy-btn" onclick="copyUrl()">📋 Copier le lien</button>';
+        result.innerHTML = resultHtml;
+      } else {
+        errorEl.textContent = data.error || 'Erreur lors de la génération';
+        errorEl.style.display = 'block';
+      }
+    } catch (e) {
+      errorEl.textContent = 'Erreur: ' + e.message;
+      errorEl.style.display = 'block';
+    }
+    
+    btn.disabled = false;
+    btn.textContent = '⚡ Générer et Publier';
+  }
+  
+  function copyUrl() {
+    const url = document.getElementById('resultUrl').textContent;
+    navigator.clipboard.writeText(url);
+    alert('✅ Lien copié!');
+  }
+  </script>
+</body>
+</html>
+<!-- Build: 1774460864 -->

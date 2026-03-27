@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<!-- Version 2.0 - Deployed: 2026-03-26T16:00:00Z -->
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Cashflow Ecosystem | PublicationCashflow</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #1a1a2e 50%, #2B0F3A 100%); color: white; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    
+    /* Header */
+    .header { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap; gap: 10px; }
+    .header h1 { font-size: 1.5rem; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header-actions { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+    .header-info { font-size: 14px; color: #a5b4fc; }
+    
+    /* Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; }
+    .stat-card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
+    .stat-value { font-size: 2.2rem; font-weight: 800; }
+    .stat-value.purple { background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-value.green { color: #4ade80; }
+    .stat-value.yellow { color: #fbbf24; }
+    .stat-value.blue { color: #60a5fa; }
+    .stat-label { font-size: 13px; color: #a5b4fc; margin-top: 5px; }
+    
+    /* Cards */
+    .card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+    .card h2 { font-size: 1.1rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    
+    /* Tabs */
+    .tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab { padding: 12px 24px; background: rgba(255,255,255,0.05); border: none; border-radius: 10px; color: #a5b4fc; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+    .tab.active { background: linear-gradient(135deg, #6366f1, #a855f7); color: white; }
+    .tab:hover:not(.active) { background: rgba(255,255,255,0.1); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* Tables */
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 12px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    th { background: rgba(99,102,241,0.2); font-weight: 600; color: #c4b5fd; white-space: nowrap; }
+    tr:hover { background: rgba(255,255,255,0.03); }
+    
+    /* Badges */
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-block; }
+    .badge-success { background: rgba(76,175,80,0.3); color: #4ade80; }
+    .badge-warning { background: rgba(245,158,11,0.3); color: #fbbf24; }
+    .badge-danger { background: rgba(239,68,68,0.3); color: #fca5a5; }
+    .badge-info { background: rgba(99,102,241,0.3); color: #a5b4fc; }
+    .badge-purple { background: rgba(168,85,247,0.3); color: #c084fc; }
+    .badge-main { background: rgba(236,72,153,0.3); color: #f472b6; }
+    
+    /* Buttons */
+    button { padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+    .btn-small { padding: 6px 12px; font-size: 12px; }
+    .btn-primary { background: linear-gradient(135deg, #6366f1, #a855f7); color: white; }
+    .btn-success { background: linear-gradient(135deg, #4CAF50, #43A047); color: white; }
+    .btn-danger { background: rgba(239,68,68,0.8); color: white; }
+    .btn-secondary { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); }
+    button:hover { transform: translateY(-1px); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    
+    /* Action buttons */
+    .action-buttons { display: flex; gap: 5px; }
+    
+    /* Modal */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #1a1a2e; border-radius: 16px; max-width: 500px; width: 100%; border: 1px solid rgba(99,102,241,0.3); max-height: 90vh; overflow-y: auto; }
+    .modal-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; }
+    .modal-title { font-size: 1.1rem; font-weight: 600; }
+    .modal-close { background: rgba(239,68,68,0.3); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; color: white; font-size: 16px; }
+    .modal-close:hover { background: rgba(239,68,68,0.5); }
+    .modal-body { padding: 20px; }
+    .modal-footer { padding: 15px 20px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 10px; justify-content: flex-end; }
+    
+    /* Forms */
+    .form-group { margin-bottom: 15px; }
+    label { display: block; margin-bottom: 6px; color: #c7d2fe; font-weight: 500; font-size: 13px; }
+    input, select { width: 100%; padding: 10px; border: 1px solid rgba(99,102,241,0.3); border-radius: 8px; background: rgba(0,0,0,0.3); color: white; font-size: 14px; }
+    input:readonly { opacity: 0.7; }
+    select option { background: #1a1a2e; }
+    
+    /* Login */
+    .login-container { max-width: 400px; margin: 100px auto; }
+    .login-card { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 40px; border: 1px solid rgba(255,255,255,0.1); }
+    .login-card h2 { text-align: center; margin-bottom: 30px; }
+    
+    /* Settings */
+    .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: end; }
+    
+    /* Info */
+    .info-box { background: rgba(99,102,241,0.15); padding: 15px 20px; border-radius: 10px; border-left: 4px solid #6366f1; margin-top: 15px; font-size: 13px; color: #a5b4fc; }
+    .success-box { background: rgba(74,222,128,0.15); padding: 15px 20px; border-radius: 10px; border-left: 4px solid #4ade80; margin-top: 15px; font-size: 13px; color: #86efac; }
+    
+    /* Webhook Config */
+    .webhook-config { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; margin-top: 15px; }
+    .webhook-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    .webhook-label { min-width: 80px; font-size: 12px; color: #a5b4fc; font-weight: 500; }
+    .webhook-value { flex: 1; font-family: monospace; background: rgba(99,102,241,0.2); padding: 8px 12px; border-radius: 6px; font-size: 12px; word-break: break-all; }
+    .copy-btn { background: rgba(99,102,241,0.3); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; color: white; border: none; }
+    .copy-btn:hover { background: rgba(99,102,241,0.5); }
+    
+    /* Domain link generator */
+    .link-generator { background: rgba(0,0,0,0.3); border-radius: 12px; padding: 15px; margin-top: 10px; }
+    .link-output { font-family: monospace; background: rgba(74,222,128,0.15); padding: 10px 15px; border-radius: 8px; font-size: 12px; word-break: break-all; color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+    
+    /* Commission editor inline */
+    .commission-edit { display: flex; align-items: center; gap: 5px; }
+    .commission-edit input { width: 60px; padding: 4px 8px; font-size: 12px; text-align: center; }
+    .commission-edit button { padding: 4px 8px; font-size: 11px; }
+    
+    /* Domain type badges */
+    .domain-main { color: #f472b6; }
+    .domain-subdomain { color: #60a5fa; }
+    .domain-custom { color: #4ade80; }
+    
+    /* Hidden */
+    .hidden { display: none; }
+    
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .settings-grid { grid-template-columns: 1fr; }
+      .header { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Login Section -->
+  <div id="loginSection" class="container login-container">
+    <div class="login-card">
+      <h2>🔐 Admin Affiliation</h2>
+      <div class="form-group">
+        <label>Mot de passe admin</label>
+        <input type="password" id="adminPassword" placeholder="Entrez le mot de passe" onkeypress="if(event.key==='Enter')login()">
+      </div>
+      <button class="btn-primary" style="width: 100%;" onclick="login()">Accéder</button>
+    </div>
+  </div>
+  
+  <!-- Dashboard -->
+  <div id="dashboardSection" class="container hidden">
+    
+    <div class="header">
+      <h1>👑 Admin - Cashflow Ecosystem</h1>
+      <div class="header-actions">
+        <button class="btn-secondary btn-small" onclick="openPasswordModal()">🔐 Mot de passe</button>
+        <div class="header-info" id="currentDate"></div>
+      </div>
+    </div>
+    
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value purple" id="statDomains">0</div>
+        <div class="stat-label">Domaines connectés</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value blue" id="statAffiliates">0</div>
+        <div class="stat-label">Affiliés actifs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value green" id="statSales">0</div>
+        <div class="stat-label">Ventes totales</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value yellow" id="statDue">0$</div>
+        <div class="stat-label">Commissions dues</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value purple" id="statTeams">0</div>
+        <div class="stat-label">Équipes formées</div>
+      </div>
+    </div>
+    
+    <!-- Webhook Configuration -->
+    <div class="card">
+      <h2>🔗 Configuration Webhook Systeme.io</h2>
+      <p style="color: #a5b4fc; font-size: 13px; margin-bottom: 15px;">
+        Configure ce webhook dans ton compte Systeme.io pour recevoir les notifications de ventes.
+      </p>
+      <div class="webhook-config">
+        <div class="webhook-row">
+          <span class="webhook-label">URL :</span>
+          <code class="webhook-value" id="webhookUrl">https://24-7ia.publicationcashflow.com/api/affiliate/webhook</code>
+          <button class="copy-btn" onclick="copyToClipboard('webhookUrl')">📋 Copier</button>
+        </div>
+        <div class="webhook-row">
+          <span class="webhook-label">Secret :</span>
+          <code class="webhook-value" id="webhookSecret">pubcash_webhook_2026_secure_X7K9M2</code>
+          <button class="copy-btn" onclick="copyToClipboard('webhookSecret')">📋 Copier</button>
+        </div>
+      </div>
+      <div class="success-box">
+        ✅ <strong>Événement à activer :</strong> "Nouvelle vente" - Le webhook créditera automatiquement l'affilié si un code de parrainage est détecté.
+      </div>
+    </div>
+    
+    <!-- Paramètres -->
+    <div class="card">
+      <h2>⚙️ Paramètres des commissions</h2>
+      <div class="settings-grid">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label>Commission par défaut (%)</label>
+          <input type="number" id="defaultCommission" value="25" min="1" max="100">
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label>Seuil de paiement ($)</label>
+          <input type="number" id="paymentThreshold" value="100" min="1">
+        </div>
+        <button class="btn-primary" onclick="saveSettings()">💾 Enregistrer</button>
+      </div>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('domains')">🌐 Domaines</button>
+      <button class="tab" onclick="showTab('affiliates')">👥 Affiliés</button>
+      <button class="tab" onclick="showTab('transactions')">💰 Transactions</button>
+      <button class="tab" onclick="showTab('payments')">💸 Paiements</button>
+    </div>
+    
+    <!-- Domaines -->
+    <div id="tabDomains" class="tab-content active card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        <h2 style="margin: 0;">🌐 Gestion des domaines</h2>
+        <button class="btn-primary" onclick="openAddDomainModal()">➕ Ajouter un domaine</button>
+      </div>
+      
+      <div class="info-box" style="margin-bottom: 20px;">
+        💡 <strong>Comment ça fonctionne :</strong> Tous tes domaines sont connectés au système d'affiliation centralisé. Les affiliés peuvent partager leurs liens sur n'importe quel domaine et les commissions sont créditées automatiquement.
+      </div>
+      
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Domaine</th>
+              <th>Type</th>
+              <th>Statut</th>
+              <th>Clics</th>
+              <th>Ventes</th>
+              <th>Lien exemple</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="domainsBody">
+            <tr><td colspan="7" style="text-align: center; color: #6b7280;">Chargement...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Affiliés -->
+    <div id="tabAffiliates" class="tab-content card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+        <h2 style="margin: 0;">👥 Gestion des affiliés</h2>
+      </div>
+      
+      <div class="info-box" style="margin-bottom: 20px;">
+        💰 <strong>Système 3 niveaux:</strong> 
+        Niveau 1 = <span style="color:#4ade80">25%</span> (ventes directes) | 
+        Niveau 2 = <span style="color:#f0abfc">10%</span> (équipe directe) | 
+        Niveau 3 = <span style="color:#f9a8d4">5%</span> (sous-équipe)
+      </div>
+      
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Parrain</th>
+              <th>Commission</th>
+              <th>Équipe</th>
+              <th>Solde</th>
+              <th>Ventes</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="affiliatesBody">
+            <tr><td colspan="10" style="text-align: center; color: #6b7280;">Chargement...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Transactions -->
+    <div id="tabTransactions" class="tab-content card">
+      <h2>💰 Toutes les transactions</h2>
+      <div style="margin-bottom: 15px;">
+        <button class="btn-secondary btn-small" onclick="loadTransactions('all')">Toutes</button>
+        <button class="btn-secondary btn-small" onclick="loadTransactions('due')">En attente</button>
+        <button class="btn-secondary btn-small" onclick="loadTransactions('paid')">Payées</button>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Affilié</th>
+              <th>Acheteur</th>
+              <th>Produit</th>
+              <th>Montant</th>
+              <th>Commission</th>
+              <th>Statut</th>
+            </tr>
+          </thead>
+          <tbody id="transactionsBody">
+            <tr><td colspan="7" style="text-align: center; color: #6b7280;">Chargement...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Paiements -->
+    <div id="tabPayments" class="tab-content card">
+      <h2>💸 Historique des paiements</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Affilié</th>
+              <th>Montant</th>
+              <th>PayPal</th>
+              <th>Transaction ID</th>
+            </tr>
+          </thead>
+          <tbody id="paymentsBody">
+            <tr><td colspan="5" style="text-align: center; color: #6b7280;">Chargement...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+  </div>
+  
+  <!-- Modal Add Domain -->
+  <div class="modal-overlay" id="addDomainModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">🌐 Ajouter un domaine</span>
+        <button class="modal-close" onclick="closeAddDomainModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Nom de domaine</label>
+          <input type="text" id="newDomainName" placeholder="Ex: monsite.com ou www.monsite.com">
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select id="newDomainType">
+            <option value="custom">Site personnel</option>
+            <option value="subdomain">Sous-domaine</option>
+          </select>
+        </div>
+        <div class="info-box">
+          💡 <strong>Configuration DNS :</strong> Après avoir ajouté le domaine, tu devras le configurer dans Cloudflare pour qu'il pointe vers ce système.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeAddDomainModal()">Annuler</button>
+        <button class="btn-primary" onclick="addDomain()">Ajouter</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal View Domain Links -->
+  <div class="modal-overlay" id="domainLinksModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">🔗 Liens d'affiliation</span>
+        <button class="modal-close" onclick="closeDomainLinksModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Domaine</label>
+          <input type="text" id="viewDomainName" readonly>
+        </div>
+        <div class="form-group">
+          <label>Code affilié (optionnel)</label>
+          <input type="text" id="viewDomainRefCode" placeholder="Ex: DIANE2026">
+        </div>
+        <div class="form-group">
+          <label>Lien généré</label>
+          <div class="link-output" id="viewDomainLink">-</div>
+        </div>
+        <button class="btn-primary" style="width: 100%;" onclick="copyDomainLink()">📋 Copier le lien</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Edit Affiliate -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">✏️ Modifier l'affilié</span>
+        <button class="modal-close" onclick="closeEditModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="editAffiliateEmail">
+        <div class="form-group">
+          <label>Nom</label>
+          <input type="text" id="editAffiliateName">
+        </div>
+        <div class="form-group">
+          <label>Email PayPal</label>
+          <input type="email" id="editAffiliatePaypal">
+        </div>
+        <div class="form-group">
+          <label>Commission personnalisée (%)</label>
+          <input type="number" id="editAffiliateCommission" min="1" max="100" placeholder="Ex: 30">
+          <small style="color: #6b7280; font-size: 11px;">Laisser vide pour utiliser la commission par défaut (25%)</small>
+        </div>
+        <div class="form-group">
+          <label>Statut</label>
+          <select id="editAffiliateStatus">
+            <option value="active">Actif</option>
+            <option value="inactive">Inactif</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeEditModal()">Annuler</button>
+        <button class="btn-primary" onclick="saveAffiliate()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Pay Affiliate -->
+  <div class="modal-overlay" id="payModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">💸 Payer l'affilié</span>
+        <button class="modal-close" onclick="closePayModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="payAffiliateEmail">
+        <div class="form-group">
+          <label>Affilié</label>
+          <input type="text" id="payAffiliateName" readonly>
+        </div>
+        <div class="form-group">
+          <label>Solde dû</label>
+          <input type="text" id="payAffiliateBalance" readonly>
+        </div>
+        <div class="form-group">
+          <label>Montant à payer ($)</label>
+          <input type="number" id="payAffiliateAmount" step="0.01">
+        </div>
+        <div class="form-group">
+          <label>Email PayPal</label>
+          <input type="email" id="payAffiliatePaypalEmail" readonly>
+        </div>
+        <div class="form-group">
+          <label>ID Transaction PayPal (optionnel)</label>
+          <input type="text" id="payTransactionId" placeholder="Ex: 7GH12345AB678901C">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closePayModal()">Annuler</button>
+        <button class="btn-success" onclick="confirmPayment()">✓ Confirmer le paiement</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Change Password -->
+  <div class="modal-overlay" id="passwordModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">🔐 Changer le mot de passe</span>
+        <button class="modal-close" onclick="closePasswordModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Mot de passe actuel</label>
+          <input type="password" id="currentPassword" placeholder="Entrez le mot de passe actuel">
+        </div>
+        <div class="form-group">
+          <label>Nouveau mot de passe</label>
+          <input type="password" id="newPassword" placeholder="Entrez le nouveau mot de passe">
+        </div>
+        <div class="form-group">
+          <label>Confirmer le nouveau mot de passe</label>
+          <input type="password" id="confirmPassword" placeholder="Confirmez le nouveau mot de passe">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closePasswordModal()">Annuler</button>
+        <button class="btn-primary" onclick="changePassword()">Changer</button>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Mot de passe par défaut - sera remplacé si changé
+    let ADMIN_SECRET = localStorage.getItem('admin_password') || 'pubcash_admin_2026';
+    let domains = [];
+    let affiliates = [];
+    let transactions = [];
+    let payments = [];
+    
+    // Check login on load
+    document.addEventListener('DOMContentLoaded', () => {
+      const saved = sessionStorage.getItem('adminAuth');
+      if (saved === ADMIN_SECRET) {
+        showDashboard();
+      }
+      document.getElementById('currentDate').textContent = new Date().toLocaleDateString('fr-FR', { 
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+      });
+      
+      // Update webhook URL based on current domain
+      const currentDomain = window.location.origin;
+      document.getElementById('webhookUrl').textContent = currentDomain + '/api/affiliate/webhook';
+      
+      // Load saved settings
+      const savedCommission = localStorage.getItem('affiliate_default_commission');
+      const savedThreshold = localStorage.getItem('affiliate_payment_threshold');
+      if (savedCommission) document.getElementById('defaultCommission').value = savedCommission;
+      if (savedThreshold) document.getElementById('paymentThreshold').value = savedThreshold;
+    });
+    
+    function login() {
+      const password = document.getElementById('adminPassword').value;
+      if (password === ADMIN_SECRET) {
+        sessionStorage.setItem('adminAuth', ADMIN_SECRET);
+        showDashboard();
+      } else {
+        alert('Mot de passe incorrect');
+      }
+    }
+    
+    function showDashboard() {
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('dashboardSection').classList.remove('hidden');
+      loadAllData();
+    }
+    
+    async function loadAllData() {
+      await Promise.all([
+        loadDomains(),
+        loadAffiliates(),
+        loadTransactions('all'),
+        loadPayments()
+      ]);
+    }
+    
+    // ============ DOMAINS ============
+    async function loadDomains() {
+      try {
+        const res = await fetch('/api/admin/domains?secret=' + ADMIN_SECRET);
+        const data = await res.json();
+        
+        if (data.success) {
+          domains = data.domains || [];
+          document.getElementById('statDomains').textContent = domains.length;
+          renderDomains();
+        }
+      } catch (e) {
+        console.error('Load domains error:', e);
+        // Show default domains if API fails
+        domains = [
+          { name: 'publicationcashflow.com', type: 'main', status: 'active', clicks: 0, sales: 0 },
+          { name: '24-7ia.publicationcashflow.com', type: 'subdomain', status: 'active', clicks: 0, sales: 0 }
+        ];
+        document.getElementById('statDomains').textContent = domains.length;
+        renderDomains();
+      }
+    }
+    
+    function renderDomains() {
+      const tbody = document.getElementById('domainsBody');
+      
+      if (domains.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #6b7280; padding: 30px;">Aucun domaine configuré</td></tr>';
+        return;
+      }
+      
+      let html = '';
+      domains.forEach(d => {
+        const typeClass = d.type === 'main' ? 'badge-main' : (d.type === 'subdomain' ? 'badge-info' : 'badge-success');
+        const typeText = d.type === 'main' ? 'Principal' : (d.type === 'subdomain' ? 'Sous-domaine' : 'Personnel');
+        const statusClass = d.status === 'active' ? 'badge-success' : 'badge-danger';
+        const statusText = d.status === 'active' ? 'Actif' : 'Inactif';
+        const canDelete = d.type !== 'main' ? '' : 'disabled';
+        
+        html += '<tr>';
+        html += '<td><code style="color: #4ade80; background: rgba(74,222,128,0.1); padding: 3px 8px; border-radius: 4px; font-size: 12px;">' + d.name + '</code></td>';
+        html += '<td><span class="badge ' + typeClass + '">' + typeText + '</span></td>';
+        html += '<td><span class="badge ' + statusClass + '">' + statusText + '</span></td>';
+        html += '<td>' + (d.clicks || 0) + '</td>';
+        html += '<td>' + (d.sales || 0) + '</td>';
+        html += '<td><button class="btn-small btn-secondary" onclick="viewDomainLinks(\'' + d.name + '\')">🔗 Voir liens</button></td>';
+        html += '<td><div class="action-buttons">';
+        if (d.type !== 'main') {
+          html += '<button class="btn-small btn-danger" onclick="removeDomain(\'' + d.name + '\')" title="Supprimer">🗑️</button>';
+        }
+        html += '</div></td>';
+        html += '</tr>';
+      });
+      
+      tbody.innerHTML = html;
+    }
+    
+    function openAddDomainModal() {
+      document.getElementById('newDomainName').value = '';
+      document.getElementById('newDomainType').value = 'custom';
+      document.getElementById('addDomainModal').classList.add('active');
+    }
+    
+    function closeAddDomainModal() {
+      document.getElementById('addDomainModal').classList.remove('active');
+    }
+    
+    async function addDomain() {
+      const domain = document.getElementById('newDomainName').value.trim();
+      const domainType = document.getElementById('newDomainType').value;
+      
+      if (!domain) {
+        alert('Veuillez entrer un nom de domaine');
+        return;
+      }
+      
+      try {
+        const res = await fetch('/api/admin/domains', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            secret: ADMIN_SECRET,
+            action: 'add',
+            domain: domain,
+            domainType: domainType
+          })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          closeAddDomainModal();
+          loadDomains();
+          alert('✅ Domaine ajouté: ' + data.domain);
+        } else {
+          alert('Erreur: ' + data.error);
+        }
+      } catch (e) {
+        // Add locally if API fails
+        domains.push({
+          name: domain.toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, ''),
+          type: domainType,
+          status: 'active',
+          clicks: 0,
+          sales: 0,
+          addedAt: new Date().toISOString()
+        });
+        closeAddDomainModal();
+        renderDomains();
+        alert('✅ Domaine ajouté localement: ' + domain);
+      }
+    }
+    
+    async function removeDomain(domain) {
+      if (!confirm('Supprimer le domaine ' + domain + ' ?')) return;
+      
+      try {
+        const res = await fetch('/api/admin/domains', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            secret: ADMIN_SECRET,
+            action: 'remove',
+            domain: domain
+          })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          loadDomains();
+        } else {
+          alert('Erreur: ' + data.error);
+        }
+      } catch (e) {
+        // Remove locally if API fails
+        domains = domains.filter(d => d.name !== domain);
+        renderDomains();
+      }
+    }
+    
+    function viewDomainLinks(domainName) {
+      document.getElementById('viewDomainName').value = domainName;
+      document.getElementById('viewDomainRefCode').value = '';
+      document.getElementById('viewDomainLink').textContent = 'https://' + domainName;
+      document.getElementById('domainLinksModal').classList.add('active');
+      
+      // Update link on input change
+      document.getElementById('viewDomainRefCode').oninput = function() {
+        updateDomainLink(domainName);
+      };
+    }
+    
+    function updateDomainLink(domainName) {
+      const refCode = document.getElementById('viewDomainRefCode').value.trim();
+      const link = refCode ? 'https://' + domainName + '/?ref=' + refCode : 'https://' + domainName;
+      document.getElementById('viewDomainLink').textContent = link;
+    }
+    
+    function closeDomainLinksModal() {
+      document.getElementById('domainLinksModal').classList.remove('active');
+    }
+    
+    function copyDomainLink() {
+      const link = document.getElementById('viewDomainLink').textContent;
+      navigator.clipboard.writeText(link).then(() => {
+        alert('✅ Lien copié: ' + link);
+      }).catch(err => {
+        alert('Erreur: ' + err);
+      });
+    }
+    
+    // ============ AFFILIATES ============
+    async function loadAffiliates() {
+      try {
+        const res = await fetch('/api/admin/affiliates?secret=' + ADMIN_SECRET);
+        const data = await res.json();
+        
+        if (data.success) {
+          affiliates = data.affiliates || [];
+          
+          // Update stats
+          document.getElementById('statAffiliates').textContent = affiliates.length;
+          
+          let totalDue = 0, totalSales = 0;
+          affiliates.forEach(a => {
+            totalDue += a.balance || 0;
+            totalSales += a.sales || 0;
+          });
+          
+          document.getElementById('statDue').textContent = totalDue.toFixed(2) + '$';
+          document.getElementById('statSales').textContent = totalSales;
+          
+          renderAffiliates();
+        }
+      } catch (e) {
+        console.error('Load affiliates error:', e);
+        document.getElementById('affiliatesBody').innerHTML = '<tr><td colspan="10" style="text-align: center; color: #fca5a5;">Erreur de chargement</td></tr>';
+      }
+    }
+    
+    function renderAffiliates() {
+      const tbody = document.getElementById('affiliatesBody');
+      
+      if (affiliates.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; color: #6b7280; padding: 30px;">Aucun affilié inscrit pour le moment<br><small style="opacity: 0.7;">Les affiliés apparaîtront ici après leur inscription</small></td></tr>';
+        return;
+      }
+      
+      const defaultCommission = parseInt(localStorage.getItem('affiliate_default_commission') || '25');
+      let totalTeams = 0;
+      
+      let html = '';
+      affiliates.forEach(a => {
+        const balance = a.balance || 0;
+        const commission = a.commission || defaultCommission;
+        const isCustom = a.customCommission === true;
+        const badgeClass = isCustom ? 'badge-purple' : 'badge-info';
+        const statusClass = a.status === 'active' ? 'badge-success' : 'badge-danger';
+        const statusText = a.status === 'active' ? 'Actif' : 'Inactif';
+        const balanceColor = balance >= 100 ? '#4ade80' : '#a5b4fc';
+        const canPay = balance >= 100 ? '' : 'disabled';
+        const teamSize = a.teamSize || 0;
+        totalTeams += teamSize > 0 ? 1 : 0;
+        
+        // Trouver le parrain
+        let parrainHtml = '-';
+        if (a.parent1 && a.parent1.name) {
+          parrainHtml = '<span style="color:#f0abfc;">' + a.parent1.name + '</span>';
+          if (a.parent1.code) {
+            parrainHtml += ' <code style="font-size:10px; background:rgba(168,85,247,0.2); padding:1px 4px; border-radius:3px;">' + a.parent1.code + '</code>';
+          }
+        }
+        
+        html += '<tr>';
+        html += '<td><code style="color: #4ade80; background: rgba(74,222,128,0.1); padding: 2px 6px; border-radius: 4px;">' + a.code + '</code></td>';
+        html += '<td>' + (a.name || '-') + '</td>';
+        html += '<td>' + a.email + '</td>';
+        html += '<td>' + parrainHtml + '</td>';
+        html += '<td>';
+        html += '<div class="commission-edit">';
+        html += '<span class="badge ' + badgeClass + '">' + commission + '%</span>';
+        if (isCustom) {
+          html += '<small style="color: #c084fc;" title="Commission personnalisée">★</small>';
+        }
+        html += '</div>';
+        html += '</td>';
+        html += '<td style="text-align: center;">';
+        if (teamSize > 0) {
+          html += '<span class="badge badge-purple">' + teamSize + ' 👥</span>';
+        } else {
+          html += '<span style="color: #6b7280;">-</span>';
+        }
+        html += '</td>';
+        html += '<td style="color: ' + balanceColor + '; font-weight: 700;">' + balance.toFixed(2) + '$</td>';
+        html += '<td>' + (a.sales || 0) + '</td>';
+        html += '<td><span class="badge ' + statusClass + '">' + statusText + '</span></td>';
+        html += '<td><div class="action-buttons">';
+        html += '<button class="btn-small btn-secondary" onclick="openEditModal(\'' + a.email + '\')" title="Modifier">✏️</button>';
+        html += '<button class="btn-small btn-success" onclick="openPayModal(\'' + a.email + '\')" ' + canPay + ' title="Payer">💸</button>';
+        html += '</div></td>';
+        html += '</tr>';
+      });
+      
+      tbody.innerHTML = html;
+      document.getElementById('statTeams').textContent = totalTeams;
+    }
+    
+    // ============ TRANSACTIONS ============
+    async function loadTransactions(status) {
+      try {
+        const res = await fetch('/api/admin/transactions?secret=' + ADMIN_SECRET + '&status=' + status);
+        const data = await res.json();
+        
+        if (data.success) {
+          transactions = data.transactions || [];
+          renderTransactions();
+        }
+      } catch (e) {
+        console.error('Load transactions error:', e);
+      }
+    }
+    
+    function renderTransactions() {
+      const tbody = document.getElementById('transactionsBody');
+      
+      if (transactions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #6b7280; padding: 30px;">Aucune transaction</td></tr>';
+        return;
+      }
+      
+      let html = '';
+      transactions.slice(0, 100).forEach(t => {
+        const statusClass = t.status === 'paid' ? 'badge-success' : 'badge-warning';
+        const statusText = t.status === 'paid' ? 'Payé' : 'En attente';
+        
+        html += '<tr>';
+        html += '<td>' + new Date(t.createdAt).toLocaleDateString('fr-FR') + '</td>';
+        html += '<td>' + t.affiliateEmail + '</td>';
+        html += '<td>' + (t.buyerEmail ? t.buyerEmail.substring(0,3) + '***' : 'N/A') + '</td>';
+        html += '<td>' + (t.product || 'Produit') + '</td>';
+        html += '<td>' + t.amount + '$</td>';
+        html += '<td style="color: #4ade80; font-weight: 600;">' + t.commission.toFixed(2) + '$</td>';
+        html += '<td><span class="badge ' + statusClass + '">' + statusText + '</span></td>';
+        html += '</tr>';
+      });
+      
+      tbody.innerHTML = html;
+    }
+    
+    // ============ PAYMENTS ============
+    async function loadPayments() {
+      try {
+        const res = await fetch('/api/admin/payments?secret=' + ADMIN_SECRET);
+        const data = await res.json();
+        
+        if (data.success) {
+          payments = data.payments || [];
+          renderPayments();
+        }
+      } catch (e) {
+        console.error('Load payments error:', e);
+      }
+    }
+    
+    function renderPayments() {
+      const tbody = document.getElementById('paymentsBody');
+      
+      if (payments.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6b7280; padding: 30px;">Aucun paiement effectué</td></tr>';
+        return;
+      }
+      
+      let html = '';
+      payments.forEach(p => {
+        html += '<tr>';
+        html += '<td>' + new Date(p.createdAt).toLocaleDateString('fr-FR') + '</td>';
+        html += '<td>' + p.affiliateEmail + '</td>';
+        html += '<td style="color: #4ade80; font-weight: 600;">' + p.amount.toFixed(2) + '$</td>';
+        html += '<td>' + p.paypalEmail + '</td>';
+        html += '<td><code style="font-size: 11px;">' + (p.paypalTransactionId || 'N/A') + '</code></td>';
+        html += '</tr>';
+      });
+      
+      tbody.innerHTML = html;
+    }
+    
+    // ============ TABS ============
+    function showTab(tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      
+      event.target.classList.add('active');
+      const tabId = 'tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1);
+      document.getElementById(tabId).classList.add('active');
+    }
+    
+    function saveSettings() {
+      const commission = document.getElementById('defaultCommission').value;
+      const threshold = document.getElementById('paymentThreshold').value;
+      localStorage.setItem('affiliate_default_commission', commission);
+      localStorage.setItem('affiliate_payment_threshold', threshold);
+      alert('✅ Paramètres enregistrés!\n\nCommission par défaut: ' + commission + '%\nSeuil de paiement: ' + threshold + '$');
+    }
+    
+    // ============ EDIT AFFILIATE ============
+    function openEditModal(email) {
+      const aff = affiliates.find(a => a.email === email);
+      if (!aff) return;
+      
+      document.getElementById('editAffiliateEmail').value = aff.email;
+      document.getElementById('editAffiliateName').value = aff.name || '';
+      document.getElementById('editAffiliatePaypal').value = aff.paypalEmail || '';
+      document.getElementById('editAffiliateCommission').value = aff.customCommission ? aff.commission : '';
+      document.getElementById('editAffiliateStatus').value = aff.status || 'active';
+      
+      document.getElementById('editModal').classList.add('active');
+    }
+    
+    function closeEditModal() {
+      document.getElementById('editModal').classList.remove('active');
+    }
+    
+    async function saveAffiliate() {
+      const email = document.getElementById('editAffiliateEmail').value;
+      const name = document.getElementById('editAffiliateName').value;
+      const paypal = document.getElementById('editAffiliatePaypal').value;
+      const commission = document.getElementById('editAffiliateCommission').value;
+      const status = document.getElementById('editAffiliateStatus').value;
+      
+      try {
+        const res = await fetch('/api/admin/update-affiliate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            secret: ADMIN_SECRET,
+            email,
+            name,
+            paypalEmail: paypal,
+            commission: commission || null,
+            status
+          })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          closeEditModal();
+          loadAffiliates();
+          alert('✅ Affilié mis à jour!\n\nCommission: ' + (commission || 'par défaut') + '%');
+        } else {
+          alert('Erreur: ' + data.error);
+        }
+      } catch (e) {
+        alert('Erreur: ' + e.message);
+      }
+    }
+    
+    // ============ PAY AFFILIATE ============
+    function openPayModal(email) {
+      const aff = affiliates.find(a => a.email === email);
+      if (!aff) return;
+      
+      document.getElementById('payAffiliateEmail').value = aff.email;
+      document.getElementById('payAffiliateName').value = aff.name || aff.email;
+      document.getElementById('payAffiliateBalance').value = (aff.balance || 0).toFixed(2) + '$';
+      document.getElementById('payAffiliateAmount').value = aff.balance || 0;
+      document.getElementById('payAffiliatePaypalEmail').value = aff.paypalEmail || aff.email;
+      document.getElementById('payTransactionId').value = '';
+      
+      document.getElementById('payModal').classList.add('active');
+    }
+    
+    function closePayModal() {
+      document.getElementById('payModal').classList.remove('active');
+    }
+    
+    async function confirmPayment() {
+      const email = document.getElementById('payAffiliateEmail').value;
+      const amount = parseFloat(document.getElementById('payAffiliateAmount').value);
+      const transactionId = document.getElementById('payTransactionId').value;
+      
+      if (!confirm('Confirmer le paiement de ' + amount.toFixed(2) + '$ à ' + email + '?')) return;
+      
+      try {
+        const res = await fetch('/api/admin/pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            secret: ADMIN_SECRET,
+            email,
+            amount,
+            paypalTransactionId: transactionId || null
+          })
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          closePayModal();
+          loadAllData();
+          alert('✅ Paiement de ' + amount.toFixed(2) + '$ effectué!');
+        } else {
+          alert('Erreur: ' + data.error);
+        }
+      } catch (e) {
+        alert('Erreur: ' + e.message);
+      }
+    }
+    
+    // ============ PASSWORD ============
+    function openPasswordModal() {
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+      document.getElementById('passwordModal').classList.add('active');
+    }
+    
+    function closePasswordModal() {
+      document.getElementById('passwordModal').classList.remove('active');
+    }
+    
+    function changePassword() {
+      const current = document.getElementById('currentPassword').value;
+      const newPass = document.getElementById('newPassword').value;
+      const confirm = document.getElementById('confirmPassword').value;
+      
+      if (current !== ADMIN_SECRET) {
+        alert('Le mot de passe actuel est incorrect');
+        return;
+      }
+      
+      if (newPass.length < 8) {
+        alert('Le nouveau mot de passe doit contenir au moins 8 caractères');
+        return;
+      }
+      
+      if (newPass !== confirm) {
+        alert('Les mots de passe ne correspondent pas');
+        return;
+      }
+      
+      // Save new password
+      localStorage.setItem('admin_password', newPass);
+      ADMIN_SECRET = newPass;
+      sessionStorage.setItem('adminAuth', newPass);
+      
+      closePasswordModal();
+      alert('✅ Mot de passe changé avec succès!\n\nN\'oublie pas ton nouveau mot de passe: ' + newPass);
+    }
+    
+    // ============ CLIPBOARD ============
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        // Show feedback
+        const btn = event.target;
+        const originalText = btn.textContent;
+        btn.textContent = '✓ Copié!';
+        btn.style.background = 'rgba(74,222,128,0.3)';
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.background = '';
+        }, 2000);
+      }).catch(err => {
+        alert('Erreur lors de la copie: ' + err);
+      });
+    }
+  </script>
+</body>
+<!-- Build: 1774627090 -->
+</html>

@@ -1,0 +1,24 @@
+# Redirections pour AffiliationPro SAAS
+
+# Admin pages - Rewrite pour servir le contenu HTML (status 200 = rewrite, pas redirect)
+/admin-saas           /admin-saas.html     200
+/admin-saas/          /admin-saas.html     200
+/admin-users          /admin-users.html    200
+/admin-users/         /admin-users.html    200
+/admin-affiliates     /admin-affiliates.html 200
+/admin-affiliates/    /admin-affiliates.html 200
+
+# Pages SAAS dynamiques pour les marchands
+/saas/*/admin         /saas/admin.html     200
+/saas/*/admin/        /saas/admin.html     200
+/saas/*/join          /saas/join.html      200
+/saas/*/join/         /saas/join.html      200
+
+# Pages SAAS statiques
+/saas                 /saas/index.html     200
+/saas/                /saas/index.html     200
+/saas/admin           /saas/admin.html     200
+/saas/login           /saas/login.html     200
+/saas/register        /saas/register.html  200
+/saas/success         /saas/success.html   200
+/saas/join            /saas/join.html      200

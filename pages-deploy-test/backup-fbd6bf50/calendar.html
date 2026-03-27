@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📅 Calendrier Éditorial</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; background: linear-gradient(135deg, #0B1F3A 0%, #1a1a2e 50%, #2B0F3A 100%); color: white; padding: 20px; }
+    
+    .container { max-width: 1000px; margin: 0 auto; }
+    
+    /* HEADER */
+    .header { text-align: center; margin-bottom: 30px; padding: 30px; background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(168,85,247,0.2)); border-radius: 20px; border: 1px solid rgba(168,85,247,0.3); }
+    .header h1 { font-size: 2.5rem; margin-bottom: 10px; background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 40px rgba(168,85,247,0.5); }
+    .header .emoji { font-size: 4rem; margin-bottom: 15px; }
+    .header p { opacity: 0.8; font-size: 1.1rem; }
+    
+    .back-link { display: inline-flex; align-items: center; gap: 8px; color: #a5b4fc; text-decoration: none; margin-bottom: 20px; font-size: 14px; padding: 10px 15px; background: rgba(255,255,255,0.05); border-radius: 10px; }
+    .back-link:hover { background: rgba(255,255,255,0.1); }
+    
+    .card { background: rgba(255,255,255,0.08); border-radius: 16px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+    .card h2 { margin-bottom: 20px; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+    
+    /* CALENDRIER */
+    .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+    .nav-buttons { display: flex; gap: 10px; }
+    .nav-buttons button { background: linear-gradient(135deg, #6366f1, #a855f7); border: none; color: white; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-size: 16px; font-weight: 600; transition: all 0.2s; }
+    .nav-buttons button:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(99,102,241,0.4); }
+    .month-title { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    .weekdays { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-bottom: 15px; }
+    .weekday { text-align: center; padding: 15px 10px; font-size: 14px; font-weight: 700; color: #a5b4fc; text-transform: uppercase; background: rgba(99,102,241,0.15); border-radius: 10px; }
+    
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+    
+    .day { min-height: 100px; background: rgba(0,0,0,0.3); border-radius: 10px; padding: 8px; position: relative; transition: all 0.2s; border: 2px solid transparent; overflow: hidden; }
+    .day:hover { background: rgba(0,0,0,0.4); border-color: rgba(99,102,241,0.3); }
+    .day.other-month { opacity: 0.3; }
+    .day.today { border-color: #a855f7; background: rgba(168,85,247,0.1); }
+    .day-number { font-weight: 700; font-size: 14px; margin-bottom: 6px; color: #a5b4fc; }
+    .day.today .day-number { background: linear-gradient(135deg, #6366f1, #a855f7); color: white; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    
+    /* POSTS DANS LE CALENDRIER */
+    .post-item { font-size: 10px; padding: 3px 6px; background: linear-gradient(135deg, rgba(99,102,241,0.4), rgba(168,85,247,0.4)); border-radius: 4px; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; border-left: 2px solid #a855f7; max-width: 100%; }
+    .post-item:hover { background: linear-gradient(135deg, rgba(99,102,241,0.6), rgba(168,85,247,0.6)); }
+    .post-item.inactive { opacity: 0.4; background: rgba(100,100,100,0.2); border-left-color: #666; }
+    .post-time { color: #c4b5fd; font-weight: 700; margin-right: 3px; }
+    
+    /* Types de contenu avec couleurs */
+    .post-item.type-conseil { border-left-color: #6366f1; background: rgba(99,102,241,0.3); }
+    .post-item.type-motivation { border-left-color: #f59e0b; background: rgba(245,158,11,0.2); }
+    .post-item.type-engagement { border-left-color: #10b981; background: rgba(16,185,129,0.2); }
+    .post-item.type-rendez-vous { border-left-color: #ec4899; background: rgba(236,72,153,0.2); }
+    .post-item.type-promo { border-left-color: #f97316; background: rgba(249,115,22,0.2); }
+    .post-item.type-story { border-left-color: #8b5cf6; background: rgba(139,92,246,0.2); }
+    .post-item.type-evenement { border-left-color: #06b6d4; background: rgba(6,182,212,0.2); }
+    .post-item.type-nurturing { border-left-color: #22c55e; background: rgba(34,197,94,0.2); }
+    
+    /* POSTS D'AUJOURD'HUI */
+    .today-section { margin-top: 30px; }
+    .today-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+    .today-header h2 { font-size: 1.5rem; }
+    .today-badge { background: linear-gradient(135deg, #6366f1, #a855f7); padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+    
+    .post-card { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 20px; margin: 15px 0; border-left: 5px solid #a855f7; display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: center; }
+    .post-card.inactive { border-left-color: #444; opacity: 0.5; }
+    .post-card-time { font-size: 2rem; font-weight: 800; color: #a855f7; min-width: 80px; text-align: center; }
+    .post-card-content { flex: 1; }
+    .post-card-topic { font-size: 1.1rem; font-weight: 600; margin-bottom: 5px; }
+    .post-card-details { font-size: 13px; opacity: 0.7; }
+    .post-card-status { padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+    .post-card-status.active { background: rgba(76,175,80,0.3); color: #4CAF50; }
+    .post-card-status.inactive { background: rgba(100,100,100,0.3); color: #888; }
+    
+    .info { background: rgba(99,102,241,0.15); padding: 20px; border-radius: 12px; margin: 20px 0; font-size: 15px; border-left: 4px solid #6366f1; }
+    .info code { background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 6px; font-family: monospace; display: block; margin-top: 10px; word-break: break-all; }
+    
+    /* STATS */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+    .stat-card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; text-align: center; }
+    .stat-number { font-size: 2.5rem; font-weight: 800; background: linear-gradient(135deg, #6366f1, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: 14px; opacity: 0.7; margin-top: 5px; }
+    
+    /* LÉGENDE */
+    .legend { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+    .legend-color { width: 12px; height: 12px; border-radius: 3px; }
+    
+    /* MODE INFO */
+    .mode-info { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+    .mode-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .mode-badge.theme { background: rgba(168,85,247,0.3); color: #c4b5fd; }
+    .mode-badge.weekly { background: rgba(99,102,241,0.3); color: #a5b4fc; }
+    .mode-badge.legacy { background: rgba(100,100,100,0.3); color: #888; }
+
+    /* BOUTON PUBLIER RAPIDE */
+    .publish-btn-header {
+      background: linear-gradient(135deg, #4CAF50, #43A047);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+    .publish-btn-header:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(76, 175, 80, 0.4);
+    }
+    .publish-btn-header:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .header-actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .btn-edit {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    .btn-edit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(99, 102, 241, 0.4);
+    }
+
+    /* MODAL JOUR */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-content {
+      background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(11, 31, 58, 0.98));
+      border-radius: 20px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 85vh;
+      overflow: hidden;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 25px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2));
+      border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+    }
+    .modal-title { font-size: 1.3rem; font-weight: 700; }
+    .modal-close {
+      background: rgba(239, 68, 68, 0.3);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .modal-close:hover { background: rgba(239, 68, 68, 0.5); }
+    .modal-body {
+      padding: 25px;
+      max-height: calc(85vh - 150px);
+      overflow-y: auto;
+    }
+    .modal-footer {
+      padding: 15px 25px;
+      background: rgba(0, 0, 0, 0.3);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 10px;
+    }
+    .modal-footer button { flex: 1; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; }
+    .btn-modal-primary { background: linear-gradient(135deg, #6366f1, #a855f7); color: white; }
+    .btn-modal-secondary { background: rgba(255, 255, 255, 0.1); color: white; }
+    .btn-modal-success { background: linear-gradient(135deg, #4CAF50, #43A047); color: white; }
+
+    /* POST DETAIL IN MODAL */
+    .post-detail {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 15px;
+      border-left: 4px solid #a855f7;
+    }
+    .post-detail-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .post-detail-time {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #a855f7;
+    }
+    .post-detail-status {
+      padding: 4px 10px;
+      border-radius: 15px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .post-detail-status.active { background: rgba(76, 175, 80, 0.3); color: #4ade80; }
+    .post-detail-status.inactive { background: rgba(100, 100, 100, 0.3); color: #888; }
+    .post-detail-topic {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .post-detail-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    .post-detail-meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .badge-image { background: rgba(76, 175, 80, 0.3); color: #4ade80; padding: 2px 8px; border-radius: 10px; }
+    .badge-no-image { background: rgba(245, 158, 11, 0.3); color: #fbbf24; padding: 2px 8px; border-radius: 10px; }
+    .badge-link { background: rgba(99, 102, 241, 0.3); color: #a5b4fc; padding: 2px 8px; border-radius: 10px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .day { min-height: 80px; padding: 5px; }
+      .post-item { font-size: 10px; padding: 3px 5px; }
+      .post-card { grid-template-columns: 1fr; text-align: center; }
+      .post-card-time { font-size: 1.5rem; }
+      .header-actions { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/publication" class="back-link">← Retour au Community Manager</a>
+    
+    <!-- HEADER -->
+    <div class="header">
+      <div class="emoji">📅</div>
+      <h1>Calendrier Éditorial</h1>
+      <p>Visualisez et gérez toutes vos publications planifiées</p>
+      <div class="header-actions">
+        <button class="publish-btn-header" onclick="publishNow()" id="publishBtn">
+          🚀 Publier maintenant
+        </button>
+        <a href="/publication" class="btn-edit">
+          ✏️ Modifier le planning
+        </a>
+      </div>
+    </div>
+
+    <!-- MODE INFO -->
+    <div class="card">
+      <div class="mode-info" id="modeInfo"></div>
+      <div class="legend" id="legend">
+        <div class="legend-item"><div class="legend-color" style="background: #6366f1;"></div> Conseils</div>
+        <div class="legend-item"><div class="legend-color" style="background: #f59e0b;"></div> Motivation</div>
+        <div class="legend-item"><div class="legend-color" style="background: #10b981;"></div> Engagement</div>
+        <div class="legend-item"><div class="legend-color" style="background: #ec4899;"></div> Rendez-vous</div>
+        <div class="legend-item"><div class="legend-color" style="background: #f97316;"></div> Promotions</div>
+        <div class="legend-item"><div class="legend-color" style="background: #8b5cf6;"></div> Storytelling</div>
+        <div class="legend-item"><div class="legend-color" style="background: #06b6d4;"></div> Événements</div>
+        <div class="legend-item"><div class="legend-color" style="background: #22c55e;"></div> Nurturing</div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <!-- CALENDRIER -->
+    <div class="card">
+      <div class="calendar-nav">
+        <div class="nav-buttons">
+          <button onclick="prevMonth()">◀ Précédent</button>
+          <button onclick="goToday()">📍 Aujourd'hui</button>
+          <button onclick="nextMonth()">Suivant ▶</button>
+        </div>
+        <div class="month-title" id="monthTitle">Janvier 2024</div>
+      </div>
+      
+      <div class="weekdays">
+        <div class="weekday">Dim</div>
+        <div class="weekday">Lun</div>
+        <div class="weekday">Mar</div>
+        <div class="weekday">Mer</div>
+        <div class="weekday">Jeu</div>
+        <div class="weekday">Ven</div>
+        <div class="weekday">Sam</div>
+      </div>
+      
+      <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+
+    <!-- POSTS D'AUJOURD'HUI -->
+    <div class="card today-section">
+      <div class="today-header">
+        <h2>📌 Publications d'aujourd'hui</h2>
+        <span class="today-badge" id="todayDate"></span>
+      </div>
+      <div id="todayPosts"></div>
+    </div>
+
+    <!-- INFO CRON -->
+    <div class="card">
+      <h2>⚙️ Configuration automatique</h2>
+      <div class="info">
+        💡 <strong>Vos publications sont configurées !</strong><br><br>
+        Utilisez <strong>cron-job.org</strong> pour automatiser les publications à l'URL suivante :
+        <code>https://services-affiliation-programme.publication-web.com/api/test-generate</code>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentDate = new Date();
+    let config = null;
+    let slots = [];
+    let pages = [];
+
+    const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 
+                        'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+    const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+
+    async function loadData() {
+      try {
+        const r = await fetch('/api/cmstatus');
+        const data = await r.json();
+        config = data.config;
+        slots = data.slots || [];
+        pages = data.pages || [];
+        
+        renderModeInfo();
+        renderStats();
+        renderCalendar();
+        renderTodayPosts();
+      } catch (e) {
+        document.getElementById('calendarGrid').innerHTML = '<div class="info">Erreur de chargement: ' + e.message + '</div>';
+      }
+    }
+
+    function renderModeInfo() {
+      const container = document.getElementById('modeInfo');
+      
+      if (!config) {
+        container.innerHTML = '<span class="mode-badge legacy">Configuration par défaut</span>';
+        return;
+      }
+      
+      let html = '';
+      if (config.mode === 'theme') {
+        html = `<span class="mode-badge theme">🎯 Mode Thème IA</span>`;
+        if (config.mainTheme) {
+          html += `<span style="opacity:0.7;">Thème: ${config.mainTheme}</span>`;
+        }
+      } else if (config.mode === 'weekly') {
+        html = `<span class="mode-badge weekly">📅 Mode Planning Hebdomadaire</span>`;
+      } else {
+        html = `<span class="mode-badge legacy">Mode standard</span>`;
+      }
+      
+      container.innerHTML = html;
+    }
+
+    function renderStats() {
+      let totalSlots = 0;
+      let activeSlots = 0;
+      
+      if (config && config.weeklySlots) {
+        for (const day in config.weeklySlots) {
+          const daySlots = config.weeklySlots[day] || [];
+          totalSlots += daySlots.length;
+          activeSlots += daySlots.filter(s => s.active !== false).length;
+        }
+      } else {
+        totalSlots = slots.length;
+        activeSlots = slots.filter(s => s.active).length;
+      }
+
+      const html = `
+        <div class="stat-card">
+          <div class="stat-number">${pages.length}</div>
+          <div class="stat-label">Pages connectées</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${totalSlots}</div>
+          <div class="stat-label">Créneaux configurés</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${activeSlots}</div>
+          <div class="stat-label">Publications actives</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">${activeSlots * pages.length}</div>
+          <div class="stat-label">Posts totaux/semaine</div>
+        </div>
+      `;
+      document.getElementById('statsGrid').innerHTML = html;
+    }
+
+    function getPostsForDay(dayOfWeek) {
+      // Nouveau système avec config
+      if (config && config.weeklySlots && config.weeklySlots[dayOfWeek]) {
+        return config.weeklySlots[dayOfWeek].map(s => ({
+          ...s,
+          day: dayOfWeek
+        }));
+      }
+      
+      // Fallback ancien système
+      return slots.map(s => ({
+        ...s,
+        day: dayOfWeek
+      }));
+    }
+
+    function renderCalendar() {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      
+      document.getElementById('monthTitle').textContent = monthNames[month] + ' ' + year;
+      
+      const firstDay = new Date(year, month, 1);
+      const lastDay = new Date(year, month + 1, 0);
+      const today = new Date();
+      const startDayOfWeek = firstDay.getDay();
+      const daysInMonth = lastDay.getDate();
+      const prevMonthLastDay = new Date(year, month, 0).getDate();
+      
+      let html = '';
+      let dayCount = 1;
+      let nextMonthDay = 1;
+      
+      for (let i = 0; i < 42; i++) {
+        let dayNum, isOtherMonth = false, isToday = false;
+        
+        if (i < startDayOfWeek) {
+          dayNum = prevMonthLastDay - startDayOfWeek + i + 1;
+          isOtherMonth = true;
+        } else if (dayCount > daysInMonth) {
+          dayNum = nextMonthDay++;
+          isOtherMonth = true;
+        } else {
+          dayNum = dayCount++;
+          if (year === today.getFullYear() && month === today.getMonth() && dayNum === today.getDate()) {
+            isToday = true;
+          }
+        }
+        
+        const classes = ['day'];
+        if (isOtherMonth) classes.push('other-month');
+        if (isToday) classes.push('today');
+        
+        // Jour de la semaine pour ce jour du calendrier
+        const dayOfWeek = new Date(year, month, dayNum).getDay();
+        const dayPosts = isOtherMonth ? [] : getPostsForDay(dayOfWeek);
+        
+        let postsHtml = '';
+        dayPosts.slice(0, 3).forEach(post => {
+          const inactive = !post.active ? 'inactive' : '';
+          const typeClass = post.type ? `type-${post.type}` : '';
+          postsHtml += `<div class="post-item ${inactive} ${typeClass}" title="${post.topic || 'Publication'}">
+            <span class="post-time">${post.hour}h</span>${post.topic || 'Publication'}
+          </div>`;
+        });
+        
+        if (dayPosts.length > 3) {
+          postsHtml += `<div class="post-item" style="background: rgba(255,255,255,0.1); text-align: center;">+${dayPosts.length - 3} autres</div>`;
+        }
+        
+        // Rendre le jour cliquable
+        const clickHandler = isOtherMonth ? '' : `onclick="openDayModal(${dayOfWeek}, '${dayNames[dayOfWeek]} ${dayNum} ${monthNames[month]}')"`;
+        const cursorStyle = isOtherMonth ? '' : 'cursor: pointer;';
+        
+        html += `<div class="${classes.join(' ')}" ${clickHandler} style="${cursorStyle}">
+          <div class="day-number">${dayNum}</div>
+          ${postsHtml}
+        </div>`;
+        
+        if (dayCount > daysInMonth && i >= 34) break;
+      }
+      
+      document.getElementById('calendarGrid').innerHTML = html;
+    }
+
+    function renderTodayPosts() {
+      const container = document.getElementById('todayPosts');
+      const today = new Date();
+      const dayOfWeek = today.getDay();
+      
+      // Date d'aujourd'hui
+      document.getElementById('todayDate').textContent = 
+        dayNames[dayOfWeek] + ' ' + today.getDate() + ' ' + monthNames[today.getMonth()];
+      
+      const todaySlots = getPostsForDay(dayOfWeek);
+      
+      if (todaySlots.length === 0) {
+        container.innerHTML = '<div class="info">Aucune publication planifiée pour aujourd\'hui. <a href="/publication" style="color:#a5b4fc;font-weight:600;">→ Configurez vos créneaux</a></div>';
+        return;
+      }
+      
+      const sortedSlots = [...todaySlots].sort((a, b) => a.hour - b.hour);
+      
+      let html = '';
+      sortedSlots.forEach(slot => {
+        const statusClass = slot.active !== false ? 'active' : 'inactive';
+        const statusText = slot.active !== false ? '✅ Actif' : '⏸️ Inactif';
+        const cardClass = slot.active !== false ? '' : 'inactive';
+        
+        const typeEmoji = {
+          'conseil': '💡',
+          'motivation': '🔥',
+          'engagement': '💬',
+          'rendez-vous': '🎯',
+          'promo': '📢',
+          'story': '📖',
+          'evenement': '📅',
+          'nurturing': '💚',
+          'free': '✨'
+        };
+        const emoji = typeEmoji[slot.type] || '📝';
+        
+        html += `
+          <div class="post-card ${cardClass}">
+            <div class="post-card-time">${slot.hour}h00</div>
+            <div class="post-card-content">
+              <div class="post-card-topic">${emoji} ${slot.topic || 'Publication automatique'}</div>
+              <div class="post-card-details">
+                Type: <strong>${slot.type || 'libre'}</strong>
+                ${slot.imageUrl ? ' • 🖼️ Image configurée' : ''}
+              </div>
+            </div>
+            <div class="post-card-status ${statusClass}">${statusText}</div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html;
+    }
+
+    function prevMonth() {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar();
+    }
+
+    function nextMonth() {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar();
+    }
+
+    function goToday() {
+      currentDate = new Date();
+      renderCalendar();
+    }
+
+    // === MODAL JOUR ===
+    let currentModalDay = null;
+    
+    function openDayModal(dayOfWeek, dayName) {
+      currentModalDay = dayOfWeek;
+      const daySlots = getPostsForDay(dayOfWeek);
+      
+      document.getElementById('modalDayTitle').textContent = `📅 ${dayName}`;
+      
+      let html = '';
+      if (daySlots.length === 0) {
+        html = `<div class="info">Aucune publication planifiée pour ce jour.</div>`;
+      } else {
+        const sortedSlots = [...daySlots].sort((a, b) => a.hour - b.hour);
+        sortedSlots.forEach(slot => {
+          const statusClass = slot.active !== false ? 'active' : 'inactive';
+          const statusText = slot.active !== false ? '✅ Actif' : '⏸️ Inactif';
+          const hasImage = slot.imageUrl && slot.imageUrl.trim() !== '';
+          const hasLink = slot.friendlyLink && slot.friendlyLink.trim() !== '';
+          
+          const typeEmoji = {
+            'conseil': '💡', 'motivation': '🔥', 'engagement': '💬',
+            'rendez-vous': '🎯', 'promo': '📢', 'story': '📖',
+            'evenement': '📅', 'nurturing': '💚', 'free': '✨'
+          };
+          const emoji = typeEmoji[slot.type] || '📝';
+          
+          html += `
+            <div class="post-detail">
+              <div class="post-detail-header">
+                <div class="post-detail-time">${slot.hour}h00</div>
+                <span class="post-detail-status ${statusClass}">${statusText}</span>
+              </div>
+              <div class="post-detail-topic">${emoji} ${slot.topic || 'Publication automatique'}</div>
+              <div class="post-detail-meta">
+                <span class="${hasImage ? 'badge-image' : 'badge-no-image'}">
+                  ${hasImage ? '🖼️ Image' : '⚠️ Pas d\'image'}
+                </span>
+                ${slot.hashtags ? '<span>#️⃣ Hashtags</span>' : ''}
+                ${hasLink ? '<span class="badge-link">🔗 Lien configuré</span>' : ''}
+                ${slot.linkInComment ? '<span class="badge-link">📝 Lien en commentaire</span>' : ''}
+              </div>
+            </div>
+          `;
+        });
+      }
+      
+      document.getElementById('modalDayBody').innerHTML = html;
+      document.getElementById('dayModal').classList.add('active');
+    }
+    
+    function closeModal() {
+      document.getElementById('dayModal').classList.remove('active');
+      currentModalDay = null;
+    }
+    
+    function goToEdit() {
+      if (currentModalDay !== null) {
+        window.location.href = '/publication?day=' + currentModalDay;
+      }
+    }
+
+    // === PUBLICATION RAPIDE ===
+    async function publishNow() {
+      const btn = document.getElementById('publishBtn');
+      btn.disabled = true;
+      btn.innerHTML = '⏳ Publication...';
+      
+      try {
+        const res = await fetch('/api/test-generate');
+        const data = await res.json();
+        
+        let html = `<div class="info ${data.published > 0 ? 'success' : 'warning'}">`;
+        html += `✅ Publié: ${data.published} | ❌ Échoué: ${data.failed}`;
+        html += '</div>';
+        
+        if (data.posts && data.posts.length > 0) {
+          html += '<div style="margin-top:15px;font-size:13px;">';
+          data.posts.forEach(p => {
+            const icon = p.status === 'success' ? '✅' : '❌';
+            html += `<div style="margin:5px 0;">${icon} <strong>${p.page}</strong>`;
+            if (p.error) html += `: ${p.error}`;
+            if (p.linkComment) html += ' 🔗';
+            html += '</div>';
+          });
+          html += '</div>';
+        }
+        
+        // Afficher le résultat dans une alerte stylée
+        const resultDiv = document.createElement('div');
+        resultDiv.className = 'info';
+        resultDiv.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:2000;max-width:400px;width:90%;';
+        resultDiv.innerHTML = html;
+        document.body.appendChild(resultDiv);
+        
+        setTimeout(() => resultDiv.remove(), 5000);
+        
+      } catch (e) {
+        alert('Erreur: ' + e.message);
+      }
+      
+      btn.disabled = false;
+      btn.innerHTML = '🚀 Publier maintenant';
+    }
+
+    // Fermer modal en cliquant à l'extérieur
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal-overlay')) {
+        closeModal();
+      }
+    });
+
+    loadData();
+  </script>
+  
+  <!-- MODAL JOUR -->
+  <div class="modal-overlay" id="dayModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title" id="modalDayTitle">📅 Jour</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body" id="modalDayBody"></div>
+      <div class="modal-footer">
+        <button class="btn-modal-secondary" onclick="closeModal()">Fermer</button>
+        <button class="btn-modal-success" onclick="publishNow()">🚀 Publier ce jour</button>
+        <button class="btn-modal-primary" onclick="goToEdit()">✏️ Modifier</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

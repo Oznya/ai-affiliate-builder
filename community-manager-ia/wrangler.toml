@@ -1,0 +1,23 @@
+name = "community-manager-ia"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+workers_dev = true
+
+# KV pour stocker les configurations et tokens
+[[kv_namespaces]]
+binding = "CM_DATA"
+id = "226c34fbc23f49de8b8f3abbc269e1f4"
+
+# Variables d'environnement
+[vars]
+GROQ_API_KEY = "YOUR_GROQ_API_KEY"
+FB_APP_ID = "1489523952768079"
+
+# Cron Triggers - Toutes les heures
+[triggers]
+crons = ["0 * * * *"]
+
+# Routes pour le custom domain
+[[routes]]
+pattern = "automatisationcommunautymanager.publication-web.com/*"
+zone_name = "publication-web.com"
